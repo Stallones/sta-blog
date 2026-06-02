@@ -1,0 +1,26 @@
+import { defineStore } from "pinia"
+
+const usePaginationStore = defineStore("pagination", {
+  state: () => ({
+    // 文章分页
+    articlePagination: {
+      // 当前页
+      current: 1,
+      // 每页条数
+      pageSize: 10,
+      // 总条数
+      total: 0,
+    },
+    //评论分页
+    commentPagination: {
+      // 当前页
+      current: 1,
+      // 每页条数
+      pageSize: 2,
+      // 总条数
+      total: 0,
+    },
+  }),
+})
+
+export { usePaginationStore }

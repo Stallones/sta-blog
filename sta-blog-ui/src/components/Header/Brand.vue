@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="brand-container">
     <div class="brand">
       <!-- 标题 Glitch -->
@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import useWebsiteStore from "@/store/modules/website.ts";
+import { useWebsiteStore } from "@/store/useWebsiteStore";
 import { onMounted, onUnmounted } from "vue";
 import { GlitchText, GradientText, useTypewriter } from "@/components/TextTech";
 

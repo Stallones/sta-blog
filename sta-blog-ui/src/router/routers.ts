@@ -11,7 +11,6 @@ export const constantRouter = [
                 name: 'home',
                 meta: {
                     headerType: 'home',
-                    showFooter: true,
                     sidebarType: 'default',
                     title: 'marcus-blog | 不断追求完美的开源博客',
                 }
@@ -22,10 +21,9 @@ export const constantRouter = [
                 component: () => import('@/views/Article.vue'),
                 name: 'article',
                 meta: {
-                    headerType: 'article',
-                    showFooter: true,
-                    sidebarType: 'article',
                     title: '文章详情',
+                    headerType: 'article',
+                    sidebarType: 'article',
                 }
             },
             // ── 分类 ──
@@ -37,7 +35,6 @@ export const constantRouter = [
                     title: '文章分类',
                     headerType: 'page',
                     sidebarType: 'default',
-                    showFooter: true,
                 }
             },
             // ── 标签 ──
@@ -48,7 +45,7 @@ export const constantRouter = [
                 meta: {
                     title: '文章标签',
                     headerType: 'page',
-                    showFooter: true,
+                    sidebarType: 'default',
                 }
             },
             // ── 时间轴：横幅模式 ──
@@ -57,20 +54,20 @@ export const constantRouter = [
                 component: () => import('@/views/Archive/TimeLine.vue'),
                 name: 'timeline',
                 meta: {
-                    headerType: 'page',
-                    showFooter: true,
                     title: '时间轴',
                     subtitle: 'TimeLine',
+                    headerType: 'page',
                 }
             },
             // ── 树洞 ──
             {
                 path: '/tree-hole',
-                component: () => import('@/views/Amusement/TreeHole.vue'),
+                component: () => import('@/views/Others/TreeHole.vue'),
                 name: 'treeHole',
                 meta: {
                     title: '心灵树洞',
                     headerType: 'none',
+                    showWrapper: false,
                     showFooter: false,
                 }
             },
@@ -82,7 +79,6 @@ export const constantRouter = [
                 meta: {
                     title: '留言板',
                     headerType: 'page',
-                    showFooter: true,
                     sidebarType: 'default',
                 },
                 children: [
@@ -108,7 +104,6 @@ export const constantRouter = [
                 meta: {
                     title: '博客友链',
                     headerType: 'page',
-                    showFooter: true,
                 }
             },
             // ── 音乐 ──
@@ -119,7 +114,6 @@ export const constantRouter = [
                 meta: {
                     title: '音乐',
                     headerType: 'page',
-                    showFooter: true,
                 }
             },
             // ── 关于 ──
@@ -130,7 +124,6 @@ export const constantRouter = [
                 meta: {
                     title: '关于网站',
                     headerType: 'page',
-                    showFooter: true,
                 }
             },
             // ── 相册 ──
@@ -141,7 +134,6 @@ export const constantRouter = [
                 meta: {
                     title: '相册',
                     headerType: 'page',
-                    showFooter: true,
                 }
             },            
         ]

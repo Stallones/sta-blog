@@ -1,26 +1,29 @@
 // 重写浏览器滚动条
 
-::-webkit-scrollbar-track
+:-webkit-scrollbar-track
 {
   background-color: transparent;
 }
 
-::-webkit-scrollbar
+:-webkit-scrollbar
 {
   width: 6px;
   height: 6px;
   background-color: transparent;
 }
 
-::-webkit-scrollbar-thumb
+:-webkit-scrollbar-thumb
 {
   border-radius: 10px;
   background: var(--scroll-bar-color);
 }
 
-body{
-  @media screen and (max-width: 910px) {
-    overflow-x: hidden; /* 隐藏水平滚动条 */
-  }
+// ── 防止双滚动条：html 统一管理滚动 ──
+html {
+  overflow-y: auto;   // 仅 html 层产生垂直滚动条，body 不再独立滚动
 }
 
+body {
+  margin: 0;
+  // 水平溢出控制已移到 .layout-shell { overflow-x: hidden } 统一处理
+}

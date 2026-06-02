@@ -40,7 +40,7 @@ import { Setting, Promotion } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { logout } from '@/apis/user'
 import { REMOVE_TOKEN } from '@/utils/auth.ts'
-import useUserStore from '@/store/modules/user.ts'
+import { useUserStore } from '@/store/useUserStore'
 import router from '@/router'
 
 defineProps<{ isServiceAvailable: boolean }>()

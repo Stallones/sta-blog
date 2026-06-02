@@ -82,11 +82,10 @@ function loadContent() {
 <template>
   <!-- 随机文章 -->
   <Card
+    variant="refresh"
     :title="title"
     :prefix-icon="prefixIcon"
     :suffix-icon="title === '相关推荐' ? '' : 'rotate'"
-    :isRotate="true"
-    :isScale="true"
     @invoke="randomArticleBtn"
     v-view-request="{ callback: loadContent }"
   >

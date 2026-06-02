@@ -49,7 +49,7 @@ function onHtmlChanged(htmlText: string) {
     }
   }
 
-  @media screen and (max-width: 910px) {
+  @media screen and (max-width: 900px) {
     padding: 0.2rem;
   }
 }

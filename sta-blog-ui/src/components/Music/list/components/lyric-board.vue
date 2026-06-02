@@ -1,6 +1,6 @@
-<script setup>
+﻿<script setup>
 import { watch, onMounted, onBeforeUnmount, nextTick, ref } from "vue";
-import { music } from "@/store/modules/music";
+import { useMusicStore } from "@/store/useMusicStore";
 import { storeToRefs } from "pinia";
 import { gsapTransLyric } from "@/utils/transform";
 
@@ -17,7 +17,7 @@ const {
   getCurrentLyticIndex,
   getShowLyricBoard,
   getLyricType,
-} = storeToRefs(music());
+} = storeToRefs(useMusicStore());
 
 const replaceUrl = ref("");
 const fileList = ref([]);
@@ -26,17 +26,17 @@ const showControl = ref(false);
 const isMobile = ref(false);
 
 const play = () => {
-  music().togglePlay();
+  useMusicStore().togglePlay();
 };
 
 // 上一首
 const prev = async () => {
-  music().setNext(false);
+  useMusicStore().setNext(false);
 };
 
 // 下一首
 const next = async () => {
-  music().setNext(true);
+  useMusicStore().setNext(true);
 };
 
 const scrollToMiddle = () => {
@@ -70,11 +70,11 @@ const fullScreen = () => {
 };
 
 const goToIndex = (index) => {
-  music().setCurrentTimeByClickLyric(index);
+  useMusicStore().setCurrentTimeByClickLyric(index);
 };
 
 const toggleLyricType = (type) => {
-  music().setLyricType(type);
+  useMusicStore().setLyricType(type);
 
   if (type == "COMMON") {
     nextTick(() => {
@@ -150,11 +150,11 @@ const replaceImage = (file) => {
   replaceUrl.value = URL.createObjectURL(file.raw);
 };
 const closeBoard = () => {
-  music().setShowLyricBoard(false);
+  useMusicStore().setShowLyricBoard(false);
 };
 
 const toggleDisc = () => {
-  music().setIsShow();
+  useMusicStore().setIsShow();
 };
 const changeBrightness = (flag) => {
   if (flag) {

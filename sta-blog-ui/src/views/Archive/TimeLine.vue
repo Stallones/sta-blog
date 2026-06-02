@@ -1,8 +1,8 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import {ref, onMounted, nextTick} from 'vue';
 import {getTimeLine} from "@/apis/article";
 import {readTimeLine} from "@/utils/file-reader";
-import {useServiceStore} from "@/store/modules/service";
+import {useServiceStore} from "@/store/useServiceStore";
 
 
 function handleData(data: any[]) : Record<string, any[]> {

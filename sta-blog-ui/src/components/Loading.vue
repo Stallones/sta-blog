@@ -1,7 +1,7 @@
-<template>
+﻿<template>
   <!-- 调试用：强制显示 loading，调整完成后改回 v-show="loadingStore.isLoading" -->
   <!-- <div class="loading" style="display: flex !important"> -->
-  <div class="loading" v-show="loadingStore.isLoading">
+  <div class="loading" v-show="isLoading">
     <div class="loading-container">
       <!-- 渐变进度条 -->
       <div class="progress-bar">
@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import useLoadingStore from "@/store/modules/loading.ts";
-const loadingStore = useLoadingStore()
+import { useLoading } from "@/composables/useLoading";
+const { isLoading } = useLoading();
 </script>
 
 <style scoped lang="scss">

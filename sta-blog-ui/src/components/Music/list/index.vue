@@ -1,13 +1,13 @@
-<script setup>
+﻿<script setup>
 import { defineComponent, onMounted, watch, ref, reactive, onBeforeUnmount, h } from "vue";
 
-import { music } from "@/store/modules/music";
+import { useMusicStore } from "@/store/useMusicStore";
 import { reqToplist, reqTopDetaliList } from "@/apis/music/index";
 import { PLAYTYPE } from "../musicTool";
 import { storeToRefs } from "pinia";
 import { ElNotification } from "element-plus";
 
-const { getCustomerMusicList } = storeToRefs(music());
+const { getCustomerMusicList } = storeToRefs(useMusicStore());
 
 const topList = ref([]);
 
@@ -67,7 +67,7 @@ const reqTopMusicList = async (id) => {
       }
       currentMusicList.value =
         params.offset == 0 ? res.songs : currentMusicList.value.concat(res.songs);
-      music().setMusicList(currentMusicList.value);
+      useMusicStore().setMusicList(currentMusicList.value);
       observeBox();
     }
   } finally {
@@ -98,8 +98,8 @@ const observeBox = () => {
 
 const playMusic = (item) => {
   // 设置当前音乐信息
-  music().setMusicInfo(item.id);
-  music().setPlayType(PLAYTYPE.TOP);
+  useMusicStore().setMusicInfo(item.id);
+  useMusicStore().setPlayType(PLAYTYPE.TOP);
 };
 
 // 切换排行榜置空数据
@@ -109,15 +109,15 @@ const clickTopMusicList = (item) => {
   params.offset = 0;
   params.loadMore = true;
   currentMusicList.value = [];
-  music().setMusicList([]);
+  useMusicStore().setMusicList([]);
   reqTopMusicList();
 };
 
 // 添加歌曲
 const customerAddMusic = (item) => {
   if (isActive(item.id)) return;
-  music().setCustomerMusicList("add", item);
-  music().setPlayType(PLAYTYPE.CUSTOM);
+  useMusicStore().setCustomerMusicList("add", item);
+  useMusicStore().setPlayType(PLAYTYPE.CUSTOM);
   ElNotification({
     offset: 60,
     title: "提示",

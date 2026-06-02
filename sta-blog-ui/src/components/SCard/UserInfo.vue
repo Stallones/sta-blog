@@ -1,5 +1,5 @@
-<script setup lang="ts">
-import useWebsiteStore from "@/store/modules/website.ts";
+﻿<script setup lang="ts">
+import { useWebsiteStore } from "@/store/useWebsiteStore";
 
 const useWebsite = useWebsiteStore()
 </script>

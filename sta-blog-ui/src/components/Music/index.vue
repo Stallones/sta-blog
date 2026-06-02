@@ -1,19 +1,81 @@
-<!--
+﻿<!--
 * @Author: Zhang Yuming
 * @Date: 2023-07-03 11:35:38
 * @Description: 播放器首页
 -->
+<template>
+  <div
+    :class="[
+      'music',
+      getIsShow ? 'show-music' : '',
+      !getIsShow && clickFlag ? 'hide-music' : '',
+    ]"
+  >
+    <div class="flex justify-center items-center !w-[100%] !h-[100%]">
+      <div class="music-box flex flex-col justify-center items-center">
+        <i
+          v-if="!getShowLyricBoard"
+          class="iconfont icon-off-search dark-close change-color"
+          @click="toggleDisc"
+        ></i>
+        <!-- 播放器列表 -->
+        <MusicList class="list" />
+        <!-- 播放器控制器 -->
+        <MusicControl />
+      </div>
+    </div>
+  </div>
+  <div
+    v-if="!getIsShow"
+    :class="['music-disc', getIsPaused ? 'music-left' : '']"
+  >
+    <img
+      @click="toggleDisc"
+      :class="[
+        'music-img',
+        getIsToggleImg ? '' : 'disc-rotate',
+        getIsPaused ? 'paused' : '',
+      ]"
+      :src="getMusicDescription?.al?.picUrl || blogAvatar"
+      alt="music cover"
+    />
+    <div class="info-box">
+      <div class="info">
+        <div class="text-sm whitespace-nowrap">
+          {{ getMusicDescription?.name }}
+        </div>
+        <div class="text-sm whitespace-nowrap">
+          {{ getMusicDescription?.ar[0]?.name || "歌手走丢了" }}
+        </div>
+      </div>
+      <i
+        :class="[
+          'change-color',
+          'iconfont',
+          getIsPaused ? 'icon-zanting' : 'icon-bofangzhong ',
+        ]"
+        @click="playMusic"
+      ></i>
+    </div>
+  </div>
+</template>
+
 <script setup>
 import MusicList from "./list/index.vue";
 import MusicControl from "./controls/index.vue";
 import { defineComponent, ref, watch } from "vue";
 import blogAvatar from "@/assets/images/blogAvatar.svg";
 
-import { music } from "@/store/modules/music";
+import { useMusicStore } from "@/store/useMusicStore";
 import { storeToRefs } from "pinia";
 
-const { getIsShow, getShowLyricBoard, getIsPaused, getIsToggleImg, getMusicDescription } =
-  storeToRefs(music());
+const {
+  getIsShow,
+  getShowLyricBoard,
+  getIsPaused,
+  getIsToggleImg,
+  getMusicDescription,
+} = storeToRefs(useMusicStore());
 
 defineComponent({
   name: "MusicPlayer",
@@ -23,14 +85,14 @@ defineComponent({
 const clickFlag = ref(false);
 
 const toggleDisc = () => {
-  music().setIsShow();
+  useMusicStore().setIsShow();
   if (!clickFlag.value) {
     clickFlag.value = true;
   }
 };
 
 const playMusic = () => {
-  music().togglePlay();
+  useMusicStore().togglePlay();
 };
 
 // 在弹出遮罩层的时候 让body不能滚动
@@ -48,48 +110,6 @@ watch(
   }
 );
 </script>
-
-<template>
-  <div
-    :class="['music', getIsShow ? 'show-music' : '', !getIsShow && clickFlag ? 'hide-music' : '']"
-  >
-    <div class="flex justify-center items-center !w-[100%] !h-[100%]">
-      <div class="music-box flex flex-col justify-center items-center">
-        <i
-          v-if="!getShowLyricBoard"
-          class="iconfont icon-off-search dark-close change-color"
-          @click="toggleDisc"
-        ></i>
-        <!-- 播放器列表 -->
-        <MusicList class="list" />
-        <!-- 播放器控制器 -->
-        <MusicControl />
-      </div>
-    </div>
-  </div>
-  <div v-if="!getIsShow" :class="['music-disc', getIsPaused ? 'music-left' : '']">
-    <img
-      @click="toggleDisc"
-      :class="['music-img', getIsToggleImg ? '' : 'disc-rotate', getIsPaused ? 'paused' : '']"
-      :src="getMusicDescription?.al?.picUrl || blogAvatar"
-      alt="music cover"
-    />
-    <div class="info-box">
-      <div class="info">
-        <div class="text-sm whitespace-nowrap">
-          {{ getMusicDescription?.name }}
-        </div>
-        <div class="text-sm whitespace-nowrap">
-          {{ getMusicDescription?.ar[0]?.name || "歌手走丢了" }}
-        </div>
-      </div>
-      <i
-        :class="['change-color', 'iconfont', getIsPaused ? 'icon-zanting' : 'icon-bofangzhong ']"
-        @click="playMusic"
-      ></i>
-    </div>
-  </div>
-</template>
 
 <style lang="scss" scoped>
 .music {

@@ -1,29 +1,25 @@
-<template>
+﻿<template>
   <div class="home-content">
-    <div class="announcement">
-      <SvgIcon style="min-width: 30px" name="notice" color="#409EFF" />
-      <GradientText weight="600" size="1.05rem">{{ useWebsite?.webInfo?.headerNotification }}</GradientText>
+    <!-- 搜索 + 公告 重叠区域 -->
+    <div class="home-header">
+      <!-- 公告：底层，被搜索展开后遮挡 -->
+      <div class="announcement">
+        <SvgIcon style="min-width: 30px" name="notice" color="#409EFF" />
+        <GradientText :text=" useWebsite?.webInfo?.headerNotification || '公告'" />
+      </div>
+      <!-- 搜索：上层，可展开覆盖公告 -->
+      <OfflineSearch
+        v-if="!useService.isServiceAvailable"
+        class="search-layer"
+      />
     </div>
     <RecommendArticle />
-    <OfflineSearch v-if="!useService.isServiceAvailable" />
-    <div class="essay_title">
-      <el-divider border-style="dashed" content-position="left">
-        <div>
-          <SvgIcon name="essay_icon" color="#409EFF" class="icon" />
-          <span>文章</span>
-        </div>
-      </el-divider>
-    </div>
+
     <div>
       <CardEssay />
     </div>
     <div>
       <Pagination />
-    </div>
-    <div>
-      <el-divider border-style="dashed" content-position="center">
-        <div style="font-weight: bold">~~到达底部啦~~</div>
-      </el-divider>
     </div>
   </div>
 </template>
@@ -31,8 +27,8 @@
 <script setup lang="ts">
 import RecommendArticle from "@/components/RecommendArticle.vue";
 import OfflineSearch from "@/components/OfflineSearch.vue";
-import useWebsiteStore from "@/store/modules/website.ts";
-import { useServiceStore } from "@/store/modules/service";
+import { useWebsiteStore } from "@/store/useWebsiteStore";
+import { useServiceStore } from "@/store/useServiceStore";
 
 const useWebsite = useWebsiteStore();
 const useService = useServiceStore();
@@ -40,23 +36,30 @@ const useService = useServiceStore();
 
 <style lang="scss" scoped>
 .home-content {
-  @media screen and (max-width: 910px) {
-    width: 100vw;
+  @media screen and (max-width: 900px) {
   }
+}
+
+// 重叠容器：相对定位，搜索层叠于公告之上
+.home-header {
+  position: relative;
+  margin-bottom: 16px;
+  justify-content: center;
+  // align-items: center;
 }
 
 .announcement {
   display: flex;
-  height: 45px;
+  height: 50px;
   padding: 0 16px;
-  margin: 16px 0;
-  border-radius: 8px;
+  border-radius: 50px;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: var(--secondary-bg, #f1f3f5);
-  border: 1px solid var(--border-color-light, #e9ecef);
-  transition: all 0.2s ease;
-  
+  background: var(--mao-background-color);
+  border: 1px solid var(--border-color-light);
+  transition: all 0.3s ease;
+  // 底层：被搜索展开后遮挡
+  width: 100%;
 }
 </style>

@@ -1,8 +1,8 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import vueDanmaku from "vue3-danmaku";
 import { addTreeHole, getTreeHoleList } from "@/apis/treeHole";
 import { ElMessage } from "element-plus";
-import { useServiceStore } from "@/store/modules/service";
+import { useServiceStore } from "@/store/useServiceStore";
 
 const isServiceAvailable = useServiceStore().isServiceAvailable;
 

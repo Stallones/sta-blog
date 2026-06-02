@@ -1,4 +1,4 @@
-<!--
+﻿<!--
  * @Author: Zhang Yuming
  * @Date: 2023-06-26 15:48:34
  * @Description: 音乐播放器 控制音乐播放、暂停等
@@ -7,7 +7,7 @@
 import { defineComponent, onMounted } from "vue";
 
 import { storeToRefs } from "pinia";
-import { music } from "@/store/modules/music";
+import { useMusicStore } from "@/store/useMusicStore";
 
 import { ElNotification } from "element-plus";
 import { calcMusicTime } from "../../musicTool";
@@ -17,20 +17,20 @@ defineComponent({
 });
 
 // 音乐播放器的一些参数 使用storetoRefs是为了保持数据的响应式
-const { getIsPaused, getCurrentTime, getDuration } = storeToRefs(music());
+const { getIsPaused, getCurrentTime, getDuration } = storeToRefs(useMusicStore());
 
 const play = () => {
-  music().togglePlay();
+  useMusicStore().togglePlay();
 };
 
 // 上一首
 const prev = async () => {
-  music().setNext(false);
+  useMusicStore().setNext(false);
 };
 
 // 下一首
 const next = async () => {
-  music().setNext(true);
+  useMusicStore().setNext(true);
 };
 
 onMounted(() => {
@@ -38,7 +38,7 @@ onMounted(() => {
     offset: 60,
     title: "欢迎访问我的个人博客~",
   });
-  music().init();
+  useMusicStore().init();
   ElNotification({
     offset: 120,
     title: "左下角听听歌吧～",

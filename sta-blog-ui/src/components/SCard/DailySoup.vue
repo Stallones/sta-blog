@@ -16,7 +16,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Card title="每日鸡汤" prefix-icon="edit" suffix-icon="rotate" :isRotate="true" :isScale="true" @invoke="soupSub">
+  <Card variant="refresh" title="每日鸡汤" prefix-icon="edit" @invoke="soupSub">
     <div class="soup-container">
       <i class="soup-quote-left">"</i>
       <Transition name="fade" mode="out-in">

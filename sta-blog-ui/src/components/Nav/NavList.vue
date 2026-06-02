@@ -110,16 +110,21 @@ $accent-hover: #3b79ff;
 
 .menus_items {
   display: flex;
-  flex: 5;
   align-self: stretch;
+  flex-shrink: 0; // 锁死不压缩
 }
 
 .menus_item {
+  width: 100px;
+  height: auto;
   position: relative;
-  flex: 1;
+  flex: 0 0 auto; // 不伸缩，保持固有宽度
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 0.6rem; // 固定内边距
+  white-space: nowrap; // 文字不换行
+  min-width: unset;
 
   &::before {
     content: "";
@@ -148,7 +153,6 @@ $accent-hover: #3b79ff;
     }
   }
 
-  
   span .arrow {
     margin-left: 5px;
     transition: all 0.5s;

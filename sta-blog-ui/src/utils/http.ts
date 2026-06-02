@@ -1,11 +1,11 @@
-// 封装axios
+﻿// 封装axios
 import axios, { AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'axios'
 import {ElMessage, ElNotification} from "element-plus"
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import {JWT_PREFIX_CONS} from "@/const";
 import {GET_TOKEN} from "@/utils/auth.ts";
-import useLoadingStore from "@/store/modules/loading.ts";
+import { useLoading } from "@/composables/useLoading";
 import {REQUEST_LOADING_PATH, IGNORE_ERROR_PATH} from "@/utils/enum.ts";
 import { ApiResponse } from '@/types';
 
@@ -48,7 +48,7 @@ http.interceptors.request.use((config: InternalAxiosRequestConfig) => {
             pathRequestCount.set(matchingPath, (pathRequestCount.get(matchingPath) || 0) + 1);
             if (!loadingShown){
                 loadingShown = true;
-                const loadingStore = useLoadingStore();
+                const loadingStore = useLoading();
                 loadingStore.show();
                 NProgress.start();
             }
@@ -77,7 +77,7 @@ http.interceptors.response.use(
 
             if (pathRequestCount.get(matchingPath) === 0) { // 所有特定路径的请求都已完成
                 loadingShown = false;
-                const loadingStore = useLoadingStore();
+                const loadingStore = useLoading();
                 loadingStore.hide();
                 pathRequestCount.clear(); // 清空整个 Map
                 NProgress.done();

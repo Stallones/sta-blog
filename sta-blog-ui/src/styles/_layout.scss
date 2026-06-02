@@ -1,0 +1,106 @@
+/* ══════════════════════════════════════════════════════════════
+   统一布局引擎 — _layout.scss
+   
+   所有响应式断点、比例、间距收口于此。
+   改一处 → 全局生效。
+   
+   用法:
+     @use '../styles/_layout' as *;
+     .my-class { width: $layout-max-w; }
+     @include respond-to('tablet') { ... }
+   ══════════════════════════════════════════════════════════════ */
+
+// ─────────────────────────────────────────────────────────────
+// 一、断点体系（单位: px）
+// ─────────────────────────────────────────────────────────────
+$bp-mobile:  768;    // Tier-1: 手机
+$bp-tablet:  900;    // Tier-2: 窄屏平板（Nav 切换点）
+$bp-desktop: 1200;   // Tier-3/4 分界：宽屏平板 / 桌面
+$bp-wide:     2000;  // Tier-4/5 分界：桌面 / 超宽屏
+
+// ─────────────────────────────────────────────────────────────
+// 二、布局尺寸
+// ─────────────────────────────────────────────────────────────
+
+// 整体容器
+$layout-max-w:       1400px;   // 桌面端内容区最大宽度（参考 Butterfly 的 1200px，略宽）
+$content-ratio:      74%;       // 主内容区占比
+$sidebar-ratio:      26%;       // 侧边栏占比
+
+// Sidebar 固定宽度上限（参考 Butterfly 的 330px）
+$sidebar-max-w:      364px;     // 1400px × 26% ≈ 364px
+$content-max-w:      1036px;    // 1400px × 74% ≈ 1036px
+
+// ─────────────────────────────────────────────────────────────
+// 三、间距系统（单位: px，不用 rem）
+// ─────────────────────────────────────────────────────────────
+
+// 容器外边距（layout-main padding）
+$pad-mobile:   20px 5px;     // ≤768px
+$pad-tablet:   30px 12px;    // 769~900px
+$pad-desktop:  40px 15px;    // ≥901px
+
+// Content / Sidebar 内部间距
+$card-pad:         10px;     // 默认卡片内边距
+$card-pad-mobile:  6px;      // 移动端更紧凑
+$card-radius:      8px;
+$card-radius-mobile: 6px;
+
+// 主区域 gap
+$gap-desktop:  16px;
+$gap-tablet:   12px;
+$gap-mobile:   8px;
+
+// ─────────────────────────────────────────────────────────────
+// 四、响应式 Mixin
+// ─────────────────────────────────────────────────────────────
+
+/// 移动端: max-width: N
+@mixin mobile($breakpoint: $bp-mobile) {
+  @media screen and (max-width: #{$breakpoint}px) {
+    @content;
+  }
+}
+
+/// 平板窄屏: min-width > mobile AND max-width ≤ tablet
+@mixin tablet-only {
+  @media screen and (min-width: #{$bp-mobile + 1}px) and (max-width: #{$bp-tablet}px) {
+    @content;
+  }
+}
+
+/// 平板及以下: max-width ≤ tablet
+@mixin tablet-down($breakpoint: $bp-tablet) {
+  @media screen and (max-width: #{$breakpoint}px) {
+    @content;
+  }
+}
+
+/// 宽屏平板: tablet < width ≤ desktop
+@mixin wide-tablet {
+  @media screen and (min-width: #{$bp-tablet + 1}px) and (max-width: #{$bp-desktop}px) {
+    @content;
+  }
+}
+
+/// 桌面及以上: min-width > desktop
+@mixin desktop-up($breakpoint: $bp-desktop) {
+  @media screen and (min-width: #{$breakpoint + 1}px) {
+    @content;
+  }
+}
+
+/// 超宽屏: min-width > wide
+@mixin wide-screen {
+  @media screen and (min-width: #{$bp-wide + 1}px) {
+    @content;
+  }
+}
+
+/// 通用断点快捷方式（传字符串名）
+@mixin respond-to($name) {
+  @if $name == 'mobile'       { @include mobile        { @content; } }
+  @else if $name == 'tablet'  { @include tablet-down   { @content; } }
+  @else if $name == 'desktop' { @include desktop-up    { @content; } }
+  @else if $name == 'wide'    { @include wide-screen   { @content; } }
+}

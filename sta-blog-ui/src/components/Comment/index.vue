@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { MdPreview } from "md-editor-v3";
 import "md-editor-v3/lib/preview.css";
 import EmojiPicker from "./EmojiPicker.vue";
@@ -8,7 +8,7 @@ import { cancelLike, isLike, userLike } from "@/apis/like";
 import ChildComment from "./ChildComment.vue";
 import { ElMessage } from "element-plus";
 import { useColorMode } from "@vueuse/core";
-import usePaginationStore from "@/store/modules/pagination";
+import { usePaginationStore } from "@/store/usePaginationStore";
 import {CommentVO} from "@/types";
 
 const usePagination = usePaginationStore();

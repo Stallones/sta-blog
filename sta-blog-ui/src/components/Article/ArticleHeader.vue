@@ -41,7 +41,7 @@ defineProps<{
   // align-items: self-start;
   color: var(--mao-background-color);
   font-size: 15px;
-  padding: 0% 10vw;
+  padding: 0 10vh;
   width: 100%;
 
   .tag {

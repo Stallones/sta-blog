@@ -1,40 +1,73 @@
 <script setup lang="ts">
-// 接收父组件传递过来的参数
-defineProps({
-  // 前图标的名字
-  prefixIcon: String,
-  // 后图标的名字
-  suffixIcon: {
+import { computed } from "vue";
+
+// ── 默认值 ──
+const defaultProps = {
+  prefixIcon: "",
+  suffixIcon: "",
+  isDithering: false,
+  isScale: false,
+  isArrow: false,
+  isRotate: false,
+  title: "",
+  isCatalog: false,
+};
+
+// ── Variant 预设 ──
+const VARIANT_PRESETS: Record<string, Partial<typeof defaultProps>> = {
+  /** 默认样式：图标缩放呼吸 */
+  default: { isScale: true },
+  /** 可刷新样式：缩放 + 旋转按钮 + suffixIcon=rotate */
+  refresh: { isScale: true, isRotate: true, suffixIcon: "rotate" },
+  /** 公告样式：图标抖动 + 箭头 + suffixIcon=jt_y */
+  announcement: { isDithering: true, isArrow: true, suffixIcon: "jt_y" },
+};
+
+const props = defineProps({
+  // 预设变体：'default' | 'refresh' | 'announcement'
+  // 传入后会合并同名 prop，显式 prop 可覆盖 preset
+  variant: {
     type: String,
     default: "",
   },
-  // 是否抖动
+  prefixIcon: String,
+  suffixIcon: {
+    type: String,
+    default: undefined,
+  },
   isDithering: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
-  // 是否放大缩小
   isScale: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
-  // 是否箭头效果
   isArrow: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
-  // 是否旋转效果
   isRotate: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
-  // 标题
   title: String,
-  // 是否是目录
   isCatalog: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
+});
+
+// ── 合并 variant 预设与显式 prop ──
+const merged = computed(() => {
+  const preset = props.variant ? VARIANT_PRESETS[props.variant] ?? {} : {};
+  const keys = Object.keys(defaultProps) as (keyof typeof defaultProps)[];
+  const result: Record<string, unknown> = {};
+  for (const key of keys) {
+    const explicit = (props as Record<string, unknown>)[key];
+    result[key] = explicit !== undefined ? explicit : (preset[key] ?? defaultProps[key]);
+  }
+  return result;
 });
 
 const emit = defineEmits(["invoke"]);
@@ -49,40 +82,40 @@ function invoke() {
   <div
     v-slide-in
     class="card"
-    :style="isCatalog ? 'position: relative;z-index: 9' : ''"
+    :style="merged.isCatalog ? 'position: relative;z-index: 9' : ''"
   >
-    <div class="title" :style="isCatalog ? 'position: sticky;top: 0' : ''">
+    <div class="title" :style="merged.isCatalog ? 'position: sticky;top: 0' : ''">
       <div class="title_text">
         <SvgIcon
-          :class="{ dithering: isDithering, scale: isScale }"
-          :name="prefixIcon"
+          :class="{ dithering: merged.isDithering, scale: merged.isScale }"
+          :name="merged.prefixIcon"
           width="30"
           height="30"
         />
-        <span style="margin-left: 10px">{{ title }}</span>
+        <span style="margin-left: 10px">{{ merged.title }}</span>
       </div>
       <el-tooltip
         class="box-item"
         effect="light"
         content="刷新"
         placement="top"
-        v-if="suffixIcon == 'rotate'"
+        v-if="merged.suffixIcon == 'rotate'"
       >
         <div
-          :class="{ arrow: isArrow, rotate: isRotate }"
-          :style="suffixIcon == 'rotate' ? 'cursor: pointer' : ''"
+          :class="{ arrow: merged.isArrow, rotate: merged.isRotate }"
+          :style="merged.suffixIcon == 'rotate' ? 'cursor: pointer' : ''"
           @click="invoke"
         >
-          <SvgIcon :name="suffixIcon" width="30" height="30" />
+          <SvgIcon :name="merged.suffixIcon" width="30" height="30" />
         </div>
       </el-tooltip>
       <div
         v-else
-        :class="{ arrow: isArrow, rotate: isRotate }"
-        :style="suffixIcon == 'rotate' ? 'cursor: pointer' : ''"
+        :class="{ arrow: merged.isArrow, rotate: merged.isRotate }"
+        :style="merged.suffixIcon == 'rotate' ? 'cursor: pointer' : ''"
         @click="invoke"
       >
-        <SvgIcon :name="suffixIcon" width="30" height="30" />
+        <SvgIcon :name="merged.suffixIcon" width="30" height="30" />
       </div>
     </div>
     <div class="content">

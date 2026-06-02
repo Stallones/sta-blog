@@ -1,17 +1,16 @@
-<template>
+﻿<template>
   <nav
     class="hh-nav"
     :class="{ 'nav-hidden': isHidden, 'nav-transparent': isTransparent }"
   >
-    <div class="menu-left">
-      <span class="blog-info">
-        <a href="/">{{ useWebsite.webInfo?.websiteName }}</a>
-      </span>
+    <!-- 左侧：品牌名 -->
+    <span class="blog-info">
+      <a href="/">{{ useWebsite.webInfo?.websiteName }}</a>
+    </span>
 
+    <!-- 右侧：导航菜单 + 搜索 + 登录 -->
+    <div class="nav-menus">
       <NavList />
-    </div>
-    <div class="menu-right">
-      <!-- <ColorModeToggle /> -->
       <SearchByDB :is-service-available="isServiceAvailable" />
       <UserLogin :is-service-available="isServiceAvailable" />
     </div>
@@ -25,13 +24,12 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
-// import ColorModeToggle from "./ColorModeToggle/index.vue";
 import NavList from "./NavList.vue";
 import SearchByDB from "./SearchByDB.vue";
 import UserLogin from "./UserLogin.vue";
-import useWebsiteStore from "@/store/modules/website.ts";
-import { useServiceStore } from "@/store/modules/service";
-import NavForMob from "./NavForMob.vue";
+import { useWebsiteStore } from "@/store/useWebsiteStore";
+import { useServiceStore } from "@/store/useServiceStore";
+import NavForMob from "./NavForMob/index.vue";
 
 const useWebsite = useWebsiteStore();
 const isServiceAvailable = useServiceStore().isServiceAvailable;
@@ -50,21 +48,14 @@ const handleScroll = () => {
   // 首页且滚动位置为0时，透明菜单
   if (currentScrollTop === 0 && isHomePage) {
     isTransparent.value = true;
-  }
-  // else if(route.path.concat('article')) {
-  //   // 文章页和相册页始终显示菜单
-  //   isHidden.value = false;
-
-  // }
-  else {
-    //   // 保留原有逻辑：向下滚动隐藏，向上滚动显示
+  } else {
     isHidden.value = currentScrollTop > lastScrollTop;
   }
 
   // 立即更新背景透明状态
   isTransparent.value = currentScrollTop === 0;
 
-  lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile or negative scrolling
+  lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
 };
 
 const debounceBackground = () => {
@@ -90,12 +81,15 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
+@use "../../styles/_layout" as *;
+
 // ── 桌面导航 ──
 
 nav {
   position: fixed;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between; // 左右两端对齐
+  align-items: center;
   top: 0;
   height: 50px;
   width: 100%;
@@ -103,40 +97,57 @@ nav {
   background-color: var(--mao-nav-bg);
   backdrop-filter: blur(6px);
   transition: top 0.3s ease-in-out, background-color 0.3s ease-in-out;
-  border-bottom: 1px solid var(--mao-nav-border);
+  // border-bottom: 1px solid var(--mao-nav-border);
+  padding: 0 1.5rem;
+  box-sizing: border-box;
 
-  &.navHidden {
+  &.nav-hidden {
     top: -50px;
   }
 
-  &.navTransparent {
+  &.nav-transparent {
+    height: 60px;
+    border-bottom: 1px solid var(--mao-background-color);
     background-color: transparent;
     backdrop-filter: none;
     border-bottom-color: transparent;
     box-shadow: none;
-  }
+    color: #fff;
 
-  @media screen and (max-width: 910px) {
-    display: none;
-  }
-
-  .menu-left {
-    display: flex;
-    flex: 1;
-    align-items: center;
-    font-weight: bold;
-
-    .blog-info {
-      flex: 1;
-      text-align: center;
+    :deep(*) {
+      color: #fff !important;
     }
   }
 
-  .menu-right {
+  // ≤$bp-tablet 切换到移动端导航（与 NavForMob 断点对齐）
+  @include tablet-down($breakpoint: $bp-tablet) {
+    display: none;
+  }
+
+  .blog-info {
+    height: 100%;
     display: flex;
-    flex: 1;
-    justify-content: flex-end;
     align-items: center;
+    // 不再 flex:1，让右侧菜单自然靠右
+    flex-shrink: 0;
+
+    white-space: nowrap; // 品牌名不换行
+    font-weight: bold;
+    font-size: 1.1rem;
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+
+  .nav-menus {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0; // 右侧整体不被压缩
+    min-width: 0; // 允许内部元素收缩空间，但不影响字体大小
   }
 }
 </style>

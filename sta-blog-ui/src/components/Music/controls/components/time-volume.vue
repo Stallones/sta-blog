@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 * @Author: Zhang Yuming
 * @Date: 2023-07-03 11:48:49
 * @Description: 展示音量、进度等 后续可能加随机播放等
@@ -6,11 +6,11 @@
 <script setup>
 import { defineComponent, ref, watch } from "vue";
 
-import { music } from "@/store/modules/music";
+import { useMusicStore } from "@/store/useMusicStore";
 import { storeToRefs } from "pinia";
 import { MODELLIST } from "@/utils/enum";
 
-const { getPlayModel, getVolume } = storeToRefs(music());
+const { getPlayModel, getVolume } = storeToRefs(useMusicStore());
 
 defineComponent({
   name: "TimeVolume",
@@ -49,7 +49,7 @@ const changeModel = () => {
       index = index + 1;
     }
   }
-  music().setPlayModel(MODELLIST[index]);
+  useMusicStore().setPlayModel(MODELLIST[index]);
 };
 
 // 手动关闭popover
@@ -72,7 +72,7 @@ watch(
   () => currentVolume.value,
   () => {
     // 修改音乐大小 外面会根据音乐大小去调节音乐播放器的声音大小
-    music().setVolume(currentVolume.value);
+    useMusicStore().setVolume(currentVolume.value);
   }
 );
 </script>

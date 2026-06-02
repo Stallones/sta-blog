@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div>
     <!-- 尾部标签与点赞收藏分享 -->
     <div style="display: flex; justify-content: space-between">
@@ -76,7 +76,7 @@
 import { ref, computed, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { ElMessage } from "element-plus";
-import { useServiceStore } from "@/store/modules/service";
+import { useServiceStore } from "@/store/useServiceStore";
 import { cancelFavorite, userFavorite, isFavorite } from "@/apis/favorite";
 import { cancelLike, isLike, userLike } from "@/apis/like";
 import type { ArticleVO } from "@/types";

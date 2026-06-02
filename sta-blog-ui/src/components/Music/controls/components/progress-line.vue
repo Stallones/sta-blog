@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 * @Author: Zhang Yuming
 * @Date: 2023-07-03 11:48:31
 * @Description: 音乐进度组件
@@ -6,7 +6,7 @@
 <script setup>
 import { ref, watch, defineComponent } from "vue";
 
-import { music } from "@/store/modules/music";
+import { useMusicStore } from "@/store/useMusicStore";
 
 defineComponent({
   name: "ProgressLine",
@@ -24,9 +24,9 @@ const currentSchedule = ref(0);
 
 const handleChange = () => {
   // 先打断自动设置播放进度
-  music().setIsUseProgress(true);
+  useMusicStore().setIsUseProgress(true);
   // 修改pina里的当前播放进度
-  music().setCurrentTime(currentSchedule.value);
+  useMusicStore().setCurrentTime(currentSchedule.value);
 };
 
 watch(

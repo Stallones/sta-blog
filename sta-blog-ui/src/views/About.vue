@@ -1,6 +1,6 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import JSConfetti from 'js-confetti'
-import useWebsiteStore from "@/store/modules/website.ts";
+import { useWebsiteStore } from "@/store/useWebsiteStore";
 
 const jsConfetti = new JSConfetti()
 

@@ -1,5 +1,5 @@
-<script setup lang="ts">
-import useWebsiteStore from "@/store/modules/website.ts";
+﻿<script setup lang="ts">
+import { useWebsiteStore } from "@/store/useWebsiteStore";
 import { ElMessageBox } from "element-plus";
 
 const useWebsite = useWebsiteStore()
@@ -19,7 +19,7 @@ function announcement() {
     <div class="anime-girl">
       <img src="@/assets/images/动漫少女坐姿-公告_压缩.png" alt="动漫少女" />
     </div>
-    <Card title="公告" prefixIcon="announcement" suffix-icon="jt_y" :isDithering="true" :isArrow="true"
+    <Card variant="announcement" title="公告" prefix-icon="announcement"
           @invoke="announcement">
       <pre class="pre-text">{{ useWebsite.webInfo?.sidebarAnnouncement }}</pre>
     </Card>

@@ -92,6 +92,9 @@
   --mao-nav-bg: rgba(240, 248, 255, 0.5);
   --mao-nav-border: rgba(0, 0, 0, 0.05);
 
+  /* ── BottomRight 浮动按钮 ── */
+  --mao-br-bg: #4a9ff5;
+
   /* ── 毛玻璃 / 半透明覆盖层 ── */
   --mao-glass-bg: rgba(255, 255, 255, 0.8);
   --mao-glass-bg-hover: rgba(255, 255, 255, 0.95);
@@ -140,6 +143,9 @@ html.dark {
   /* ── 导航栏 ── */
   --mao-nav-bg: rgba(22, 27, 34, 0.5);
   --mao-nav-border: rgba(255, 255, 255, 0.1);
+
+  /* ── BottomRight 浮动按钮 ── */
+  --mao-br-bg: #2c2c2c;
 
   /* ── 毛玻璃 / 半透明覆盖层 ── */
   --mao-glass-bg: rgba(22, 27, 34, 0.9);

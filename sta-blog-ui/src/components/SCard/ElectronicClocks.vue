@@ -30,7 +30,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <Card title="电子时钟" prefix-icon="time" :isRotate="true" :isScale="true">
+  <Card variant="default" title="电子时钟" prefix-icon="time" :isRotate="true">
     <div id="clock">
       <p class="date">{{ date }}</p>
       <p class="time">{{ time }}</p>
@@ -44,6 +44,9 @@ onUnmounted(() => {
   font-family: 'Share Tech Mono', monospace;
   color: #ffffff;
   text-align: center;
+  // 夜间模式
+  //color: #daf6ff;
+  //text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0);
   color: grey;
   text-shadow: 0 0 20px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0);
 

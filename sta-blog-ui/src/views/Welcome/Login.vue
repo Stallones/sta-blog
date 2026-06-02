@@ -1,11 +1,11 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import {User, Lock} from '@element-plus/icons-vue'
 import {reactive, ref} from "vue";
 import {login} from "@/apis/user";
 import router from "@/router";
 import {SET_TOKEN} from "@/utils/auth";
 import {ElMessage} from "element-plus";
-import useUserStore from "@/store/modules/user.ts";
+import { useUserStore } from "@/store/useUserStore";
 
 
 const formRef = ref();

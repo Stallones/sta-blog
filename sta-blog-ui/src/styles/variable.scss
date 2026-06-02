@@ -4,6 +4,9 @@
 @use './cursor' as *;
 @use './woff' as *;
 
+// ── 统一布局引擎：断点/比例/间距/mixin 全局生效 ──
+@use './_layout' as *;
+
 // 全局样式设置文件
 // 侧边栏卡片的宽度
 $card-width: 85%;

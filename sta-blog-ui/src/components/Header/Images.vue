@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="imgs">
     <ul>
       <li
@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { backGetBanners } from "@/apis/website";
 import { Ref } from "vue";
-import { useServiceStore } from "@/store/modules/service";
+import { useServiceStore } from "@/store/useServiceStore";
 import { readBanners } from "@/utils/file-reader";
 
 const imageList = <Ref<String[]>>ref();

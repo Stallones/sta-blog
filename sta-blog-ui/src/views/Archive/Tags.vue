@@ -1,8 +1,8 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import ArticleList from "./ArticleList.vue";
 import { tagList } from "@/apis/tag";
 import { whereArticleList } from "@/apis/article";
-import { useServiceStore } from "@/store/modules/service";
+import { useServiceStore } from "@/store/useServiceStore";
 import { readTagList, readArchiveArticleList } from "@/utils/file-reader";
 import {ARCHIVE_TAG_CONS} from "@/const";
 
@@ -103,6 +103,9 @@ async function getArticle(id: Number) {
   display: flex;
   flex-direction: column;
   width: 100%;
+  background-color: var(--mao-background-color);
+  border-radius: 1rem;
+  padding: 1rem 1rem 2rem;
 
   .title {
     font-size: 2rem;
@@ -112,7 +115,6 @@ async function getArticle(id: Number) {
   .item_container {
     display: flex;
     flex-wrap: wrap;
-    padding: 1rem;
 
     .item {
       display: flex;

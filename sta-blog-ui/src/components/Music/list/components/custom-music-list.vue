@@ -1,12 +1,12 @@
-<script setup>
+﻿<script setup>
 import { defineComponent, h, watch } from "vue";
 
-import { music } from "@/store/modules/music";
+import { useMusicStore } from "@/store/useMusicStore";
 import { PLAYTYPE } from "../../musicTool";
 import { storeToRefs } from "pinia";
 import { ElNotification } from "element-plus";
 
-const { getCustomerMusicList } = storeToRefs(music());
+const { getCustomerMusicList } = storeToRefs(useMusicStore());
 
 defineComponent({
   name: "CustomMusicList",
@@ -14,14 +14,14 @@ defineComponent({
 
 const playMusic = (item) => {
   // 设置当前播放音乐
-  music().setMusicInfo(item.id);
+  useMusicStore().setMusicInfo(item.id);
   // 设置播放音乐的详细描述
-  music().setPlayType(PLAYTYPE.CUSTOM);
+  useMusicStore().setPlayType(PLAYTYPE.CUSTOM);
 };
 
 const customerDeleteMusic = (item) => {
-  music().setCustomerMusicList("delete", item);
-  music().setPlayType(PLAYTYPE.CUSTOM);
+  useMusicStore().setCustomerMusicList("delete", item);
+  useMusicStore().setPlayType(PLAYTYPE.CUSTOM);
 
   ElNotification({
     offset: 60,
@@ -34,7 +34,7 @@ watch(
   () => getCustomerMusicList.value.length,
   () => {
     if (!getCustomerMusicList.value.length) {
-      music().setPlayType("TOP");
+      useMusicStore().setPlayType("TOP");
     }
   }
 );

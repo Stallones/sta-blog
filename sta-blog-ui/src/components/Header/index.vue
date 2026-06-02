@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <header
     :class="header.cls"
     style="position: relative; width: 100%; overflow: hidden"
@@ -38,6 +38,8 @@
         <span>{{ subtitle }}</span>
       </h3>
     </div>
+
+    <div v-if="headerType === 'none'" class="h-none"></div>
   </header>
 </template>
 
@@ -49,7 +51,7 @@ import { canvasHeaderH } from "@/components/CanvasLayer/index.ts";
 import Images from "@/components/Header/Images.vue";
 import Brand from "@/components/Header/Brand.vue";
 import ArticleHeader from "@/components/Article/ArticleHeader.vue";
-import { useArticleStore } from "@/store/modules/article";
+import { useArticleStore } from "@/store/useArticleStore";
 
 const articleStore = useArticleStore();
 const {
@@ -79,10 +81,13 @@ const header = computed<HeaderConfig>(() => {
       return { cls: "article-header", height: windowH * 0.2 };
 
     case "page":
-      return { cls: "page-header", height: windowH * 0.5 };
+      return { cls: "page-header", height: windowH * 0.4 };
+
+    case "none":
+      return { cls: "none-header", height: windowH * 0 };
 
     default:
-      return { cls: "page-header", height: 0 };
+      return { cls: "null-header", height: 0 };
   }
 });
 
@@ -107,7 +112,7 @@ watch(
   justify-content: center;
   // padding: 3.5rem 1.5rem 0;
   transition: background-color 0.3s ease;
-  
+
   background-color: var(--mao-background-color);
   height: 30vh;
 }
@@ -119,12 +124,14 @@ watch(
   position: relative;
   height: 100%;
   width: 100%;
+  text-align: center;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   background-size: cover;
   background-position: center;
+  padding: 50px 2rem 0;
 }
 
 .h-banner {

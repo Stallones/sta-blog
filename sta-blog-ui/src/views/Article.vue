@@ -73,16 +73,15 @@ import { useRoute } from "vue-router";
 import { useColorMode } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 
-import { useServiceStore } from "@/store/modules/service";
-import { useArticleStore } from "@/store/modules/article";
-import { throttle } from "@/utils/optimize.ts";
+import { useServiceStore } from "@/store/useServiceStore";
+import { useArticleStore } from "@/store/useArticleStore";
+import { useReadingProgress } from "@/composables/useReadingProgress";
+import { useReadingMode } from "@/composables/useReadingMode";
 import { COMMENT_ARTICLE_CONS } from "@/const";
 
 import ArticleBody from "@/components/Article/ArticleBody.vue";
 import ArticleFooter from "@/components/Article/ArticleFooter.vue";
-import ArticleOthers from "@/components/Article/ArticleOthers.vue";
-import { isReadingMode } from "@/components/Article/readingMode";
-import { useBottomRightState } from "@/components/BottomRight/bottomRightState";
+import { useFloatingMenu } from "@/composables/useFloatingMenu";
 
 import MobileDirectoryCard from "@/views/Article/MobileDirectoryCard.vue";
 
@@ -92,13 +91,16 @@ const useService = useServiceStore();
 const articleStore = useArticleStore();
 const { articleVO } = storeToRefs(articleStore);
 
-// ── BottomRight：注册文章页独有功能项 ──
-const { registerItem, unregisterItem } = useBottomRightState();
+// ── Composables ──
+const { isReadingMode } = useReadingMode();
+
+// ── FloatingMenu：注册文章页独有功能项 ──
+const { registerItem, unregisterItem } = useFloatingMenu();
 
 onMounted(async () => {
-  // 注册文章页独有功能项
-  registerItem({ id: "readingMode", global: false, order: 10 });
-  registerItem({ id: "toComment", global: false, order: 20 });
+  // 注册文章页独有功能项（order 越小越靠上）
+  registerItem({ id: "readingMode", global: false, order: -20 });
+  registerItem({ id: "toComment", global: false, order: -10 });
 
   await getArticleDetailById();
 });
@@ -149,26 +151,7 @@ function mdHtml(htmlText: string) {
 }
 
 // ── 顶部进度条（阅读进度） ──
-const throttledScroll = throttle(() => {
-  window.requestAnimationFrame(scrollWork);
-}, 40);
-
-window.addEventListener("scroll", throttledScroll);
-
-function scrollWork() {
-  const pageHeight =
-    document.documentElement.scrollHeight || document.body.scrollHeight;
-  const screenHeight =
-    document.documentElement.clientHeight || document.body.clientHeight;
-  const scrollHeight = pageHeight - screenHeight;
-  const scrollTop =
-    document.documentElement.scrollTop || document.body.scrollTop;
-
-  const progress: HTMLElement | null = document.querySelector(".progress");
-  if (progress) {
-    progress.style.width = (scrollTop / scrollHeight) * 100 + "%";
-  }
-}
+useReadingProgress(".progress");
 
 // ── 移动端目录 ──
 const isShowMoveCatalog = ref(false);
@@ -194,7 +177,7 @@ const isShowMoveCatalog = ref(false);
   align-items: center;
   visibility: hidden;
 
-  @media screen and (max-width: 910px) {
+  @media screen and (max-width: 900px) {
     visibility: visible;
     right: 3em;
     bottom: 1em;

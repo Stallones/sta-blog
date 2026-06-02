@@ -1,7 +1,7 @@
-// 获取token
+﻿// 获取token
 import {TOKEN_KEY} from "@/const";
 import {ElMessage} from "element-plus";
-import useUserStore from "@/store/modules/user.ts";
+import { useUserStore } from "@/store/useUserStore";
 
 // 获取token
 export const GET_TOKEN = () => {

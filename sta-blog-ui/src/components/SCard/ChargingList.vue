@@ -50,7 +50,7 @@ const chargingList = ref([
 <template>
   <div>
     <!-- TODO 充电榜-->
-    <Card title="项目充电榜" prefix-icon="edit" :isScale="true">
+    <Card variant="default" title="项目充电榜" prefix-icon="edit">
       <div class="text-[12px] text-left">
         你们的每一次充电，不仅仅是电量的累积，更是对我们项目的信任和对未来的期待。每一份捐赠，无论大小，都承载着你们对我们的鼓励和对改变世界的信念。是你们，让项目持续更新得到了进一步保障，非常感谢大家！！！
         <br>（以下榜单时间排序）

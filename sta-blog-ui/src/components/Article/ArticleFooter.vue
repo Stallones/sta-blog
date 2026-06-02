@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div>
     <el-divider border-style="dashed" content-position="left">
       <div style="display: flex; align-items: center">
@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import { useRoute } from "vue-router";
-import useWebsiteStore from "@/store/modules/website.ts";
+import { useWebsiteStore } from "@/store/useWebsiteStore";
 
 const route = useRoute();
 const websiteStore = useWebsiteStore();
@@ -63,12 +63,12 @@ const env = import.meta.env;
     & > div:nth-child(1) {
       display: flex;
 
-      @media screen and (max-width: 910px) {
+      @media screen and (max-width: 900px) {
         width: 100%;
       }
     }
 
-    @media screen and (max-width: 910px) {
+    @media screen and (max-width: 900px) {
       flex-direction: column;
     }
   }
@@ -76,7 +76,7 @@ const env = import.meta.env;
   .license_text {
     display: flex;
 
-    @media screen and (max-width: 910px) {
+    @media screen and (max-width: 900px) {
       width: 100%;
       margin-top: 0.5rem;
     }

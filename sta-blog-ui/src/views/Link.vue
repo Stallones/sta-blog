@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { Watermelon } from "@element-plus/icons-vue";
 import {
   ElMessage,
@@ -8,7 +8,7 @@ import {
 } from "element-plus";
 import { applyLink, linkList } from "@/apis/link";
 import { MdPreview } from "md-editor-v3";
-import { useServiceStore } from "@/store/modules/service";
+import { useServiceStore } from "@/store/useServiceStore";
 
 const dialogVisible = ref(false);
 const useService = useServiceStore();

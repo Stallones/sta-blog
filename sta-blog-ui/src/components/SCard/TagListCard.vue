@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { tagList } from '@/apis/tag';
 import { useRouter } from 'vue-router';
-import { useServiceStore } from '@/store/modules/service';
+import { useServiceStore } from '@/store/useServiceStore';
 import { readTagList } from '@/utils/file-reader';
 
 // 标签类型接口
@@ -47,8 +47,8 @@ onMounted(() => {
 
 <template>
   <!-- 标签列表 -->
-  <Card title="热门标签" prefix-icon="tag" @isRotate="true"
-        :isScale="true" v-view-request="{ callback: loadContent }">
+  <Card variant="default" title="热门标签" prefix-icon="tag"
+        v-view-request="{ callback: loadContent }">
     <div class="tag-list-container">
       <!-- 小胶带装饰 -->
       <div class="tape tape-top-right"></div>

@@ -1,9 +1,9 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { categoryList } from "@/apis/category";
 import { whereArticleList } from "@/apis/article";
 import ArticleList from "./ArticleList.vue";
 import { dayjs } from "element-plus";
-import { useServiceStore } from "@/store/modules/service";
+import { useServiceStore } from "@/store/useServiceStore";
 import { readCategoryList, readArchiveArticleList } from "@/utils/file-reader";
 import { ARCHIVE_CATEGORY_CONS } from "@/const";
 
@@ -134,6 +134,7 @@ async function getArticle(id: Number) {
   width: 100%;
   background-color: var(--mao-background-color);
   border-radius: 1rem;
+  padding: 1rem 1rem 2rem;
 
   .scrollbar-flex-content {
     display: flex;

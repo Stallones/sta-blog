@@ -1,10 +1,10 @@
-<script setup>
+﻿<script setup>
 import { defineComponent } from "vue";
-import { music } from "@/store/modules/music";
+import { useMusicStore } from "@/store/useMusicStore";
 import { storeToRefs } from "pinia";
 
 const { getIsPaused, getCurrentSchedule, getMusicDescription, getIsToggleImg } = storeToRefs(
-  music()
+  useMusicStore()
 );
 
 defineComponent({

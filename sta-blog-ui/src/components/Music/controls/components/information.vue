@@ -1,4 +1,4 @@
-<!--
+﻿<!--
  * @Author: Zhang Yuming
  * @Date: 2023-07-03 11:48:12
  * @Description: 展示歌信息
@@ -6,14 +6,14 @@
 
 <script setup>
 import { defineComponent } from "vue";
-import { music } from "@/store/modules/music";
+import { useMusicStore } from "@/store/useMusicStore";
 import { storeToRefs } from "pinia";
 
 defineComponent({
   name: "Information",
 });
 
-const { getShowLyricBoard } = storeToRefs(music());
+const { getShowLyricBoard } = storeToRefs(useMusicStore());
 
 defineProps({
   // 当前播放的音乐
@@ -39,7 +39,7 @@ defineProps({
   <div class="music-info">
     <img
       :class="['music-img', isToggleImg ? '' : 'disc-rotate', isPaused ? 'paused' : 'running']"
-      @click="music().setShowLyricBoard(!getShowLyricBoard)"
+      @click="useMusicStore().setShowLyricBoard(!getShowLyricBoard)"
       :src="musicInfo.al.picUrl"
     />
     <div class="music-desc">

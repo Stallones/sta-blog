@@ -1,5 +1,5 @@
-<script setup lang="ts">
-import useWebsiteStore from "@/store/modules/website.ts";
+﻿<script setup lang="ts">
+import { useWebsiteStore } from "@/store/useWebsiteStore";
 import { ref } from 'vue'
 
 const useWebsite = useWebsiteStore()
@@ -22,7 +22,7 @@ function getDifferenceInDays() {
 </script>
 
 <template>
-  <Card title="网站资讯" prefix-icon="statistics" :isScale="true">
+  <Card variant="default" title="网站资讯" prefix-icon="statistics">
     <div class="statistics">
       <div>文章数目：<span>{{ useWebsite.webInfo?.articleCount }}</span></div>
       <div>运行时长：<span>{{ differenceInDays }} 天</span></div>
