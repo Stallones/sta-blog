@@ -47,12 +47,13 @@
 import { computed, watch } from "vue";
 import { storeToRefs } from "pinia";
 import Nav from "@/components/Nav/index.vue";
-import { canvasHeaderH } from "@/components/CanvasLayer/index.ts";
+import { useBackgroundParallax } from "@/composables/useBackgroundParallax";
 import Images from "@/components/Header/Images.vue";
 import Brand from "@/components/Header/Brand.vue";
 import ArticleHeader from "@/components/Article/ArticleHeader.vue";
 import { useArticleStore } from "@/store/useArticleStore";
 
+const { canvasHeaderH } = useBackgroundParallax();
 const articleStore = useArticleStore();
 const {
   articleVO,
@@ -110,10 +111,9 @@ watch(
 .article-header {
   display: flex;
   justify-content: center;
-  // padding: 3.5rem 1.5rem 0;
   transition: background-color 0.3s ease;
 
-  background-color: var(--mao-background-color);
+  background-color: var(--mao-bg-color);
   height: 30vh;
 }
 .page-header {
@@ -122,16 +122,26 @@ watch(
 
 .h-article {
   position: relative;
-  height: 100%;
+  // height: 100%;
   width: 100%;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
+  // text-align: center;
+  // display: flex;
+  // justify-content: center;
+  // flex-direction: column;
+  // align-items: center;
   background-size: cover;
   background-position: center;
-  padding: 50px 2rem 0;
+  // padding: 50px 2rem 0;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--mao-cover-shadow);
+  }
 }
 
 .h-banner {
@@ -155,19 +165,18 @@ watch(
       0 3px 0 hsl(174, 5%, 70%), 0 4px 0 hsl(174, 5%, 66%),
       0 5px 0 hsl(174, 5%, 64%), 0 6px 0 hsl(174, 5%, 62%),
       0 7px 0 hsl(174, 5%, 61%), 0 8px 0 hsl(174, 5%, 60%),
-      0 0 5px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.2),
-      0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.2),
-      0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.3);
+      0 0 5px hsla(0, 0%, 0%, 0.05), 0 1px 3px hsla(0, 0%, 0%, 0.2),
+      0 3px 5px hsla(0, 0%, 0%, 0.2), 0 5px 10px hsla(0, 0%, 0%, 0.2),
+      0 10px 10px hsla(0, 0%, 0%, 0.2), 0 20px 20px hsla(0, 0%, 0%, 0.3);
   }
 
-  $shadow: #533d4a;
-  $red: #e55643;
-  $green: #6ba988;
-  $yellow: #f1c83c;
-  $shadow: #533d4a;
+  $shadow: hsl(326, 14%, 30%);
+  $red: hsl(7, 76%, 58%);
+  $green: hsl(147, 27%, 53%);
+  $yellow: hsl(46, 86%, 59%);
 
   .subtitle {
-    color: rgba(255, 255, 255, 0.5);
+    color: hsla(0, 0%, 100%, 0.5);
     font-size: 1.6rem;
     letter-spacing: 5px;
     margin: 1rem 0 0 0;

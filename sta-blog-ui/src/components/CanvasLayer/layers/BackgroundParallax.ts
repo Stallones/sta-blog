@@ -1,9 +1,10 @@
 /**
  * BackgroundParallax — 背景视差滚动层
- * 从原 CanvasLayer/index.vue 抽离的背景绘制 + 滚动偏移逻辑
+ * 从 composables 读取共享状态
  */
-import type { Ref } from "vue";
-import { canvasHeaderH, canvasImageUrl } from "../index.ts";
+import { useBackgroundParallax } from '@/composables/useBackgroundParallax';
+
+const { canvasHeaderH, canvasImageUrl } = useBackgroundParallax();
 
 export interface ParallaxInstance {
   init(canvas: HTMLCanvasElement): void;
@@ -24,8 +25,8 @@ let themeObserver: MutationObserver | null = null;
 
 function getCanvasBg(): string {
   return getComputedStyle(document.documentElement)
-    .getPropertyValue("--mao-canvas-bg")
-    .trim() || "#f8f9fa";
+    .getPropertyValue("--mao-global-bg")
+    .trim() || "hsl(210, 17%, 98%)";
 }
 
 function drawOffscreen(w: number, h: number) {
@@ -100,7 +101,6 @@ export function createParallax(): ParallaxInstance {
       offscreen = document.createElement("canvas");
       offCtx = offscreen.getContext("2d");
 
-      // 加载图片
       if (canvasImageUrl.value) {
         loadImage(canvasImageUrl.value).then(() => {
           if (mainCanvas) {
@@ -110,7 +110,6 @@ export function createParallax(): ParallaxInstance {
         });
       }
 
-      // 监听主题切换
       themeObserver = new MutationObserver(() => {
         if (offscreen && offCtx) {
           drawOffscreen(offscreen.width, offscreen.height);

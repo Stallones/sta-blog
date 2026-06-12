@@ -12,7 +12,7 @@
  *   <TypewriterText url="https://v1.hitokoto.cn/?c=a&encode=json" :speed="100" :sleep="2000" />
  */
 import { watch, onMounted, onUnmounted } from "vue";
-import { useTypewriter, type TypewriterOptions } from "./useTypewriter";
+import { useTypewriter, type TypewriterOptions } from "../../composables/useTypewriter";
 
 const props = withDefaults(defineProps<TypewriterOptions & {
   /** 是否显示光标 */

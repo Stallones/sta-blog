@@ -1,16 +1,16 @@
 ﻿<template>
-  <div class="brand-container">
-    <div class="brand">
+  <div id="brand" class="h-f-brand">
+    <div class="brand-text">
       <!-- 标题 Glitch -->
       <GlitchText :text="useWebsite?.webInfo?.websiteName || ''" font-size="3rem" />
       <!-- 打字机（渐变色 + 自动获取鸡汤） -->
-      <div class="brand-text">
-        <GradientText :text="output" class="title" />
+      <div class="typewriter">
+        <GradientText :text="output" :mode="'static'" class="title" />
       </div>
     </div>
     <!-- <Wave></Wave> -->
     <!-- 向下按钮 -->
-    <div class="button-container" @click="scrollDown">
+    <div class="brand-button" @click="scrollDown">
       <SvgIcon class="arrow-down" name="jt_x" width="50px" height="50px" />
       <div class="button-ripple"></div>
     </div>
@@ -47,19 +47,19 @@ const scrollDown = () => {
 
 <style lang="scss" scoped>
 
-.brand-container {
+.h-f-brand {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   position: relative;
   // width: 100%; /* 冗余：block 元素自动撑满 */
-  // height: 100vh;
-  min-height: 10rem;
+  height: 100%;
+  // min-height: 10rem;
   color: var(--header-text-color);
 }
 
-.brand {
+.brand-text {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -68,8 +68,8 @@ const scrollDown = () => {
   z-index: -1;
   top: 15em;
 
-  .brand-text{
-    background: rgba(255, 255, 255, 0.5);
+  .typewriter{
+    background: hsla(0, 0%, 100%, 0.5);
     padding: 0.5em;
     border-radius: 0.5em;
   }
@@ -84,9 +84,9 @@ const scrollDown = () => {
   }
 }
 
-.button-container {
+.brand-button {
   position: absolute;
-  bottom: 15vh;
+  bottom: 5vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -106,7 +106,7 @@ const scrollDown = () => {
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  background: linear-gradient(90deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+  background: linear-gradient(90deg, hsl(30, 92%, 59%), hsl(12, 87%, 59%), hsl(336, 80%, 62%), hsl(280, 39%, 55%), hsl(218, 39%, 52%), hsl(186, 83%, 37%), hsl(167, 90%, 37%), hsl(137, 42%, 58%));
   background-size: 300% 300%;
   animation: gradientAnimation 4s ease infinite, ripple 2s ease-out infinite;
   opacity: 0.7;
@@ -114,7 +114,7 @@ const scrollDown = () => {
 }
 
 @media (max-width: 767px) {
-  .brand-container {
+  .brand-text {
     padding: 3rem 0.5rem 0;
   }
 }

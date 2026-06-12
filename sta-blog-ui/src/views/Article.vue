@@ -1,43 +1,42 @@
 <template>
   <!-- 正常模式 -->
-  <div v-if="!isReadingMode">
-    <div class="progress"></div>
-    <div class="p-1">
-      <ArticleBody
-        :content="articleVO.articleContent"
-        :editorId="id"
-        :theme="mode"
-        @htmlChanged="mdHtml"
-      />
-      <ArticleFooter :article="articleVO" />
-      <ArticleOthers :article="articleVO" />
-      <!-- 用户评论 -->
-      <Comment
-        v-if="showComment"
-        :serverOn="useService.isServiceAvailable"
-        :authorId="articleVO.userId"
-        :commentType="COMMENT_ARTICLE_CONS"
-        :commentPId="articleVO.id"
-        :liketype="2"
-      />
-    </div>
+  <div v-if="!isReadingMode" class="article-container">
+    <div class="article-scroll"></div>
+
+    <ArticleBody
+      :content="articleVO.articleContent"
+      :editorId="editorId"
+      :theme="mode"
+      @htmlChanged="mdHtml"
+    />
+    <ArticleFooter :article="articleVO" />
+    <!-- 用户评论 -->
+    <Comment
+      v-if="showComment"
+      :serverOn="useService.isServiceAvailable"
+      :authorId="articleVO.userId"
+      :commentType="COMMENT_ARTICLE_CONS"
+      :commentPId="articleVO.id"
+      :liketype="2"
+    />
+
   </div>
 
   <!-- 阅读模式 -->
-  <div v-if="isReadingMode" class="bg-white dark:bg-gray-800">
+  <div v-if="isReadingMode" class="reading-mode">
     <div
       @click="isReadingMode = false"
-      class="z-10 w-[50px] h-[50px] bg-gray-200 hover:bg-gray-300 fixed top-[2em] right-[1em] lg:right-[5em] rounded flex items-center justify-center duration-300 cursor-pointer"
+      class="reading-exit-btn"
     >
       <svg-icon name="exit_icon" style="width: 25px; height: 25px" />
     </div>
     <div
-      class="sm:px-1 md:px-[5rem] lg:px-[10rem] xl:px-[15rem] py-3"
+      class="reading-content"
       style="transition: all 0.5s ease"
     >
       <ArticleBody
         :content="articleVO.articleContent"
-        :editorId="id"
+        :editorId="editorId"
         :theme="mode"
         @htmlChanged="mdHtml"
       />
@@ -45,26 +44,7 @@
     </div>
   </div>
 
-  <MobileDirectoryCard
-    :id="id"
-    :scroll-element="scrollElement"
-    :is-show-move-catalog="isShowMoveCatalog"
-    @update:isShowMoveCatalog="(value) => (isShowMoveCatalog = value)"
-  />
-  <div v-show="!isReadingMode">
-    <el-affix position="bottom" :offset="200">
-      <el-tooltip effect="light" content="显示目录" placement="right">
-        <div class="move_catalog_btn" @click="isShowMoveCatalog = true">
-          <svg-icon
-            name="directory"
-            class="move_catalog_svg"
-            width="30"
-            height="30"
-          />
-        </div>
-      </el-tooltip>
-    </el-affix>
-  </div>
+  <DirectoryCardMob :id="editorId" :scroll-element="scrollElement" />
 </template>
 
 <script setup lang="ts">
@@ -79,11 +59,10 @@ import { useReadingProgress } from "@/composables/useReadingProgress";
 import { useReadingMode } from "@/composables/useReadingMode";
 import { COMMENT_ARTICLE_CONS } from "@/const";
 
-import ArticleBody from "@/components/Article/ArticleBody.vue";
-import ArticleFooter from "@/components/Article/ArticleFooter.vue";
-import { useFloatingMenu } from "@/composables/useFloatingMenu";
-
-import MobileDirectoryCard from "@/views/Article/MobileDirectoryCard.vue";
+import {
+  registerArticleItems,
+  unregisterArticleItems,
+} from "@/components/FloatingMenu/registerGlobal";
 
 // ── Store ──
 const route = useRoute();
@@ -94,20 +73,13 @@ const { articleVO } = storeToRefs(articleStore);
 // ── Composables ──
 const { isReadingMode } = useReadingMode();
 
-// ── FloatingMenu：注册文章页独有功能项 ──
-const { registerItem, unregisterItem } = useFloatingMenu();
-
 onMounted(async () => {
-  // 注册文章页独有功能项（order 越小越靠上）
-  registerItem({ id: "readingMode", global: false, order: -20 });
-  registerItem({ id: "toComment", global: false, order: -10 });
-
+  registerArticleItems();
   await getArticleDetailById();
 });
 
 onUnmounted(() => {
-  unregisterItem("readingMode");
-  unregisterItem("toComment");
+  unregisterArticleItems();
 });
 
 // ── 基础依赖 ──
@@ -117,7 +89,7 @@ const mode = computed(() =>
 );
 
 // ── 文章数据（从 store 读） ──
-const id = "preview-only";
+const editorId = "preview-only";
 const scrollElement = document.documentElement;
 
 // ── 功能显隐 ──
@@ -152,71 +124,87 @@ function mdHtml(htmlText: string) {
 
 // ── 顶部进度条（阅读进度） ──
 useReadingProgress(".progress");
-
-// ── 移动端目录 ──
-const isShowMoveCatalog = ref(false);
 </script>
 
 <style scoped lang="scss">
 @use "@/styles/mixin" as *;
 
-// 移动端目录按钮
-.move_catalog_btn {
-  border-radius: 1em;
-  box-shadow: var(--el-box-shadow-light);
-  border: 1px solid var(--el-border-color);
-  background: white;
-  position: fixed;
-  right: 5em;
-  bottom: 1em;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  visibility: hidden;
-
-  @media screen and (max-width: 900px) {
-    visibility: visible;
-    right: 3em;
-    bottom: 1em;
-  }
-
-  @media screen and (max-width: 768px) {
-    right: 5em;
-    bottom: 1em;
-  }
-
-  .move_catalog_svg {
-    @media screen and (max-width: 768px) {
-      width: 25px !important;
-      height: 25px !important;
-    }
-  }
+.article-container {
+  background-color: var(--mao-card-bg);
+  border-radius: $border-radius;
+  box-shadow: var(--mao-box-shadow);
+  display: flex ;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 $padding-lg;
 }
 
-::deep(.el-drawer__header) {
-  margin-bottom: 0;
-}
-
-.progress {
+.article-scroll {
   position: fixed;
   top: 0;
   left: 0;
-  height: 4px;
+  height: 5px;
   background: var(--mao-scroll-percentage-bar);
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
-  z-index: 11;
-}
-
-.p-1 {
-  /* 外层 main-content 已提供 padding，此处不再重复 */
+  z-index: 1032;
 }
 
 .pre-text {
   text-align: left;
   overflow: auto;
+}
+
+/* ── 阅读模式 ── */
+.reading-mode {
+  background-color: var(--card-bg);
+}
+
+.reading-exit-btn {
+  position: fixed;
+  top: 2em;
+  right: 1em;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: $border-radius;
+  background-color: var(--secondary-bg);
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+
+  &:hover {
+    background-color: var(--border-color-light);
+  }
+
+  @media (min-width: 1024px) {
+    right: 5em;
+  }
+}
+
+.reading-content {
+  padding: 0.75rem 0.25rem;
+
+  @media (min-width: 640px) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding-left: 10rem;
+    padding-right: 10rem;
+  }
+
+  @media (min-width: 1280px) {
+    padding-left: 15rem;
+    padding-right: 15rem;
+  }
 }
 </style>

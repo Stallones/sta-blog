@@ -6,41 +6,37 @@
 
   <!-- 数据就绪后渲染侧边栏内容 -->
   <div v-else>
-    <CardInfo />
+    <BloggerInfoCard />
+    <ClocksCard />
     <div class="sticky_layout">
-      <ElectronicClocks />
-      <div class="mt-[1.5em]">
-        <DirectoryCard />
-      </div>
-      <div v-if="showRandom">
-        <RandomArticle
-          :categoryId="articleVO.categoryId.toString()"
-          :articleId="(route.params.id as string) || undefined"
-          title="相关推荐"
-          prefix-icon="query_tasks"
-        />
-      </div>
+      <DirectoryCard />
+
+      <RandomCard
+        :categoryId="articleVO.categoryId.toString()"
+        :articleId="(route.params.id as string) || undefined"
+        title="相关推荐"
+        prefix-icon="query_tasks"
+        v-if="showRandom"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 
 import { useServiceStore } from "@/store/useServiceStore";
 import { useArticleStore } from "@/store/useArticleStore";
 
-import CardInfo from "@/components/CardInfo.vue";
-import ElectronicClocks from "@/components/SCard/ElectronicClocks.vue";
 import DirectoryCard from "@/components/SCard/DirectoryCard.vue";
-import RandomArticle from "@/components/SCard/RandomArticle.vue";
 
 const route = useRoute();
 const useService = useServiceStore();
 const articleStore = useArticleStore();
 const { articleVO } = storeToRefs(articleStore);
+
 
 // 服务可用时展示相关推荐
 const showRandom = ref(false);
@@ -54,7 +50,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .sticky_layout {
-  top: 60px;
+  top: 80px;
   position: sticky;
   transition: top 0.3s;
 }

@@ -322,7 +322,7 @@ function updatePreviewPosition(event) {
 .global-emoji-preview {
   position: fixed;
   transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.95);
+  background: hsla(0, 0%, 100%, 0.95);
   backdrop-filter: blur(4px);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(250, 170, 190, 0.3);

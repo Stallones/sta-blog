@@ -1,290 +1,344 @@
 /* ══════════════════════════════════════════════════════════════
-    风格主题 — 亮色 / 暗色
+   风格主题 — 亮色 / 暗色
+   
+   架构：3+3 HSL 色阶 + 语义映射
+   - 色阶层：W1/W2/W3（白3度）+ B1/B2/B3（黑3度），只改这里
+   - 语义层：组件通过 var(--card-bg) 等语义变量引用，不直接用色阶
+   - 强调色：亮色蓝/暗色橙
+   - 所有颜色统一使用 hsl()/hsla()，组件独有色也在组件内用 hsl()
    ══════════════════════════════════════════════════════════════ */
 
-/* ── 亮色模式 ── */
+/* ────────────────────────────────────────────
+   亮色模式
+   ──────────────────────────────────────────── */
 :root {
-  /* 主背景 — 极浅灰，接近白 */
-  --mao-background-color: #f8f9fa;
+  /* ═══ 色阶层 ═══ */
+  /* 白3度：W1 最白 → W3 最灰 */
+  --w1: hsl(0, 0%, 100%); /* #ffffff 纯白：卡片、浮层 */
+  --w2: hsl(210, 17%, 98%); /* #f8f9fa 次白：主背景 */
+  --w3: hsl(210, 14%, 96%); /* #f1f3f5 浅灰：次级面板 */
+  /* 黑3度（亮色模式几乎不用，但保留语义） */
+  --b1: hsl(215, 28%, 7%); /* #0d1117 最黑 */
+  --b2: hsl(215, 27%, 11%); /* #161b22 次黑 */
+  --b3: hsl(216, 19%, 16%); /* #1c2128 深灰 */
+  /* 强调色：蓝 */
+  --accent: hsl(217, 91%, 60%); /* #3b82f6 */
+  --accent-hover: hsl(220, 89%, 54%); /* #2563eb */
+  /* 强调渐变：蓝 → 紫 */
+  --accent-gradient: linear-gradient(
+    135deg,
+    hsl(217, 91%, 60%),
+    hsl(258, 64%, 61%)
+  );
+  /* 橙色（亮色模式备用，如标签高亮） */
+  --orange: hsl(25, 95%, 53%); /* #f0883e */
 
-  /* 首页波浪 */
-  --mao-bg-wave01: rgba(248, 249, 250, 0.3);
-  --mao-bg-wave02: rgba(233, 236, 239, 0.4);
-  --mao-bg-wave03: rgba(222, 226, 230, 0.5);
-  --mao-bg-wave04: rgba(248, 249, 250, 0.3);
+  /* ═══ 语义层：背景 ═══ */
+  --mao-global-bg: hsl(0, 0%, 100%);
+  --mao-card-bg: hsl(0, 0%, 98%);
+  --mao-input-bg: hsl(217, 57%, 95%);
 
-  /* 留言板 / 充电榜 */
-  --mao-bg-message: #f1f3f5;
-  --mao-charging-bg-color: #f1f3f5;
+  --mao-accent: hsl(204, 90%, 62%);
+  //   --mao-md-preview-quote-bg: hsl(0, 0%, 13%);
+  //    --mao-md-preview-code-bg: hsl(0, 0%, 7%);
 
-  /* 渐变 — 蓝色系 */
-  --mao-bg-category: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  --mao-bg-footer: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  /* ═══ 语义层：导航栏 ═══ */
+  --mao-nav-bg: hsla(0, 0%, 100%, 0.5);
+  --mao-nav-border-transparent: hsla(0, 0%, 100%, 0.33);
 
-  /* 评论框 */
-  --mao-bg-comment: #f1f3f5;
-  /* 回复标签 */
-  --mao-bg-reply: rgba(59, 130, 246, 0.12);
+  --mao-fm-btn-bg: hsl(204, 90%, 62%);
+  --mao-fm-layout-hover: hsla(0, 0%, 0%, 0.05);
 
-  /* 右侧栏 */
-  --mao-bg-right: #ffffff;
-  --mao-bg-left: #ffffff;
-  --mao-bg-left-card: #ffffff;
+  /* ═══ 语义层：文本 ═══ */
+  --mao-text-primary: hsl(210, 11%, 15%); /* #212529 */
+  --mao-text-secondary: hsl(210, 7%, 46%); /* #6c757d */
+  --mao-text-placeholder: hsl(210, 9%, 82%); /* #adb5bd */
 
-  /* 卡片 — 纯白 + 微阴影，与背景拉开层次 */
-  --card-bg: #ffffff;
-  --card-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --card-hover-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --mao-cover-shadow: hsla(0, 0%, 0%, 0.35);
 
-  /* 边框 */
-  --border-color-light: #e9ecef;
-  /* 次级背景 — 面板 / 浮层 */
-  --secondary-bg: #f1f3f5;
 
-  /* 强调色 — 蓝色系 */
-  --accent-color: #3b82f6;
-  --accent-color-hover: #2563eb;
 
-  /* 文本 */
-  --text-primary: #212529;
-  --text-secondary: #6c757d;
-  --text-placeholder: #adb5bd;
 
-  /* 阴影 */
-  --mao-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
-  --shadow-color: rgba(0, 0, 0, 0.06);
-  --shadow-mask-bg: rgba(0, 0, 0, 0.5);
-  --shadow-button-bg: rgba(255, 255, 255, 0.9);
 
-  /* 文章页滚动进度 */
-  --mao-scroll-percentage-bg: #ffffff;
-  --mao-scroll-percentage-bar: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  --mao-canvas-bg: var(--w2);
+  --card-bg: var(--w1);
+  --secondary-bg: var(--w3);
+  --mao-bg-message: var(--w3);
+  --mao-charging-bg-color: var(--w3);
+  --mao-bg-comment: var(--w3);
+  --mao-bg-left: var(--w1);
+  --mao-bg-right: var(--w1);
+  --mao-bg-left-card: var(--w1);
+  --mao-context-bg: var(--w1);
+  --mao-warning-bg: var(--w1);
+  --mao-welcome-bg: var(--w1);
+  --mao-timeline-year-bg: var(--w1);
+  --mao-scroll-percentage-bg: var(--w1);
+  --mao-search-hover-bg: hsl(210, 10%, 88%);
 
-  /* 滚动条 */
-  --scroll-bar-color: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  /* ═══ 语义层：毛玻璃 / 半透明 ═══ */
+  --mao-glass-bg: hsla(0, 0%, 100%, 0.8);
+  --mao-glass-bg-hover: hsla(0, 0%, 100%, 0.95);
+  --mao-glass-bg-light: hsla(0, 0%, 100%, 0.1);
+  --mao-glass-bg-medium: hsla(0, 0%, 100%, 0.15);
 
-  /* 音乐播放器 — 保留原变量名 */
-  --primary: #3b82f6;
-  --router-color: #dee2e6;
-  --font-color: #495057;
-  --dark-font-color: #6c757d;
-  --second-font-color: #adb5bd;
-  --hot-color: #dc3545;
-  --md-active: #3b82f6;
-  --global-white: #ffffff;
-  --global-black: #0d1117;
-  --global-shadow-white: #f8f9fa;
-  --header-bg-color: #f8f9fa;
-  --meta-color: #6c757d;
-  --comment-grey: #6c757d;
-  --border-color: #3b82f6;
-  --hr-border: #e9ecef;
-  --top: #f26c60;
-  --error: #dc3545;
-  --music-main-active: #10b981;
-  --music-main-bg: #0d1117;
+  /* ═══ 语义层：波浪（首页） ═══ */
+  --mao-bg-wave01: hsla(210, 17%, 98%, 0.3);
+  --mao-bg-wave02: hsla(210, 12%, 93%, 0.4);
+  --mao-bg-wave03: hsla(210, 9%, 89%, 0.5);
+  --mao-bg-wave04: hsla(210, 17%, 98%, 0.3);
+
+  /* ═══ 语义层：上下文菜单 ═══ */
+  --mao-context-header-bg: linear-gradient(
+    to right,
+    hsl(270, 100%, 97%),
+    hsl(260, 60%, 97%)
+  );
+  --mao-context-divider: hsl(270, 100%, 94%);
+
+  /* ═══ 语义层：边框 ═══ */
+  --border-color-light: hsl(210, 14%, 90%);
+  --mao-br-bg: hsl(210, 89%, 62%);
+
+  /* ═══ 语义层：文本 ═══ */
+  --text-primary: hsl(210, 11%, 15%); /* #212529 */
+  --text-secondary: hsl(210, 7%, 46%); /* #6c757d */
+  --text-placeholder: hsl(210, 9%, 82%); /* #adb5bd */
+
+  /* ═══ 语义层：强调 / 渐变 ═══ */
+  --accent-color: var(--accent);
+  --accent-color-hover: var(--accent-hover);
+  --mao-bg-category: var(--accent-gradient);
+  --mao-bg-footer: var(--accent-gradient);
+  --mao-scroll-percentage-bar: var(--accent-gradient);
+  --scroll-bar-color: var(--accent-gradient);
+  --mao-bg-reply: hsla(217, 91%, 60%, 0.12);
+
+  /* ═══ 语义层：阴影 ═══ */
+  --mao-box-shadow: 0px 0px 10px hsla(0, 0%, 0%, 0.2);
+  --card-hover-box-shadow: 0 4px 12px hsla(0, 0%, 0%, 0.08);
+  --shadow-color: hsla(0, 0%, 0%, 0.06);
+  --shadow-mask-bg: hsla(0, 0%, 0%, 0.5);
+  --shadow-button-bg: hsla(0, 0%, 100%, 0.9);
+
+  /* ═══ 语义层：相册 ═══ */
+  --mao-album-banner-bg: linear-gradient(
+    45deg,
+    hsl(215, 29%, 24%),
+    hsl(204, 64%, 44%)
+  );
+  --mao-album-cover-bg: linear-gradient(
+    120deg,
+    hsl(230, 100%, 93%) 0%,
+    hsl(240, 100%, 97%) 100%
+  );
+
+  /* ═══ 音乐播放器 — 保留旧变量名兼容 ═══ */
+  --primary: var(--accent);
+  --router-color: hsl(210, 12%, 90%); /* #dee2e6 */
+  --font-color: hsl(210, 10%, 36%); /* #495057 */
+  --dark-font-color: hsl(210, 7%, 46%); /* #6c757d */
+  --second-font-color: hsl(210, 9%, 82%); /* #adb5bd */
+  --hot-color: hsl(355, 70%, 54%); /* #dc3545 */
+  --md-active: var(--accent);
+  --global-white: var(--w1);
+  --global-black: var(--b1);
+  --global-shadow-white: var(--w2);
+  --header-bg-color: var(--w2);
+  --meta-color: hsl(210, 7%, 46%); /* #6c757d */
+  --comment-grey: hsl(210, 7%, 46%); /* #6c757d */
+  --border-color: var(--accent);
+  --hr-border: hsl(210, 14%, 90%); /* #e9ecef */
+  --top: hsl(4, 80%, 66%); /* #f26c60 */
+  --error: hsl(355, 70%, 54%); /* #dc3545 */
+  --music-main-active: hsl(160, 84%, 39%); /* #10b981 */
+  --music-main-bg: var(--b1);
   --global-font-size: 14px;
-
-  /* ── 画布 ── */
-  --mao-canvas-bg: #f8f9fa;
-
-  /* ── 导航栏 ── */
-  --mao-nav-bg: rgba(240, 248, 255, 0.5);
-  --mao-nav-border: rgba(0, 0, 0, 0.05);
-
-  /* ── BottomRight 浮动按钮 ── */
-  --mao-br-bg: #4a9ff5;
-
-  /* ── 毛玻璃 / 半透明覆盖层 ── */
-  --mao-glass-bg: rgba(255, 255, 255, 0.8);
-  --mao-glass-bg-hover: rgba(255, 255, 255, 0.95);
-  --mao-glass-bg-light: rgba(255, 255, 255, 0.1);
-  --mao-glass-bg-medium: rgba(255, 255, 255, 0.15);
-
-  /* ── 上下文菜单 / 浮层 ── */
-  --mao-context-bg: #ffffff;
-  --mao-context-header-bg: linear-gradient(to right, #f9f5ff, #f5f3ff);
-  --mao-context-divider: #f0e6ff;
-
-  /* ── 警告 / 调试阻止 ── */
-  --mao-warning-bg: #ffffff;
-
-  /* ── 相册 ── */
-  --mao-album-banner-bg: linear-gradient(45deg, #2c3e50, #3498db);
-  --mao-album-cover-bg: linear-gradient(120deg, #e0e7ff 0%, #f5f7ff 100%);
-
-  /* ── 搜索 ── */
-  --mao-search-hover-bg: #e0e2e5;
-
-  /* ── 欢迎页 ── */
-  --mao-welcome-bg: #ffffff;
-
-  /* ── 时间轴 ── */
-  --mao-timeline-year-bg: #ffffff;
-
-  /* Element Plus 亮色 — 保持默认即可 */
 }
 
-
-/* ── 暗色模式 ── */
+/* ────────────────────────────────────────────
+   暗色模式
+   ──────────────────────────────────────────── */
 html.dark {
-  /* 主背景 — 深邃黑 */
-  --mao-background-color: #0d1117;
+  /* ═══ 色阶层 ═══ */
+  /* 白3度：W1 最白 → W3 最灰 */
+  --w1: hsl(0, 0%, 100%); /* #ffffff 纯白：卡片、浮层 */
+  --w2: hsl(210, 17%, 98%); /* #f8f9fa 次白：主背景 */
+  --w3: hsl(210, 14%, 96%); /* #f1f3f5 浅灰：次级面板 */
+  /* 黑3度（亮色模式几乎不用，但保留语义） */
+  --b1: hsl(215, 28%, 7%); /* #0d1117 最黑 */
+  --b2: hsl(215, 27%, 11%); /* #161b22 次黑 */
+  --b3: hsl(216, 19%, 16%); /* #1c2128 深灰 */
+  /* 强调色：橙 */
+  --accent: hsl(25, 95%, 53%); /* #f0883e */
+  --accent-hover: hsl(25, 90%, 58%); /* 更亮橙 */
+  --accent-gradient: linear-gradient(
+    135deg,
+    hsl(215, 79%, 51%),
+    hsl(270, 51%, 44%)
+  );
+  --orange: hsl(25, 95%, 53%);
 
-  /* 首页波浪 */
-  --mao-bg-wave01: rgba(13, 17, 23, 0.4);
-  --mao-bg-wave02: rgba(22, 27, 34, 0.5);
-  --mao-bg-wave03: rgba(30, 37, 46, 0.6);
-  --mao-bg-wave04: rgba(13, 17, 23, 0.4);
+  /* ═══ 语义层：背景 ═══ */
+  --mao-global-bg: hsl(0, 0%, 0%);
+  --mao-card-bg: hsl(0, 0%, 8%);
+  --mao-input-bg: hsl(0, 0%, 20%);
+  --mao-accent: hsl(25, 95%, 53%);
 
-  /* ── 画布 ── */
-  --mao-canvas-bg: #0d1117;
+  --mao-md-preview-quote-bg: hsl(0, 0%, 11%);
+  --mao-md-preview-code-bg: hsl(0, 0%, 0%);
 
-  /* ── 导航栏 ── */
-  --mao-nav-bg: rgba(22, 27, 34, 0.5);
-  --mao-nav-border: rgba(255, 255, 255, 0.1);
+  /* ═══ 语义层：导航栏 ═══ */
+  --mao-nav-bg: hsla(0, 0%, 0%, 0.5);
+  --mao-nav-border-transparent: hsla(0, 0%, 100%, 0.33);
 
-  /* ── BottomRight 浮动按钮 ── */
-  --mao-br-bg: #2c2c2c;
+  --mao-fm-btn-bg: hsl(0, 0%, 15%);
+  --mao-fm-layout-hover: hsla(0, 0%, 100%, 0.05);
 
-  /* ── 毛玻璃 / 半透明覆盖层 ── */
-  --mao-glass-bg: rgba(22, 27, 34, 0.9);
-  --mao-glass-bg-hover: rgba(30, 37, 46, 0.95);
-  --mao-glass-bg-light: rgba(255, 255, 255, 0.05);
-  --mao-glass-bg-medium: rgba(255, 255, 255, 0.08);
+  /* ═══ 语义层：文本 ═══ */
+  --mao-text-primary: hsl(210, 18%, 87%); /* #e6edf3 */
+  --mao-text-secondary: hsl(210, 10%, 55%); /* #8b949e */
+  --mao-text-placeholder: hsl(215, 9%, 32%); /* #484f58 */
 
-  /* ── 上下文菜单 / 浮层 ── */
-  --mao-context-bg: #161b22;
-  --mao-context-header-bg: linear-gradient(to right, #312a48, #2d2644);
-  --mao-context-divider: #372f52;
 
-  /* ── 警告 / 调试阻止 ── */
-  --mao-warning-bg: #161b22;
 
-  /* ── 相册 ── */
-  --mao-album-banner-bg: linear-gradient(45deg, #1a2332, #2d4a6e);
-  --mao-album-cover-bg: linear-gradient(120deg, #1c2128 0%, #21262d 100%);
 
-  /* ── 搜索 ── */
-  --mao-search-hover-bg: #21262d;
 
-  /* ── 欢迎页 ── */
-  --mao-welcome-bg: #0d1117;
 
-  /* ── 时间轴 ── */
-  --mao-timeline-year-bg: #161b22;
 
-  /* 留言板 / 充电榜 */
-  --mao-bg-message: #161b22;
-  --mao-charging-bg-color: #161b22;
 
-  /* 渐变 — 蓝色+紫色，暗色更克制 */
-  --mao-bg-category: linear-gradient(135deg, #1f6feb, #6e40c9);
-  --mao-bg-footer: linear-gradient(135deg, #1f6feb, #6e40c9);
 
-  /* 评论框 */
-  --mao-bg-comment: #1c2128;
-  /* 回复标签 */
-  --mao-bg-reply: rgba(56, 139, 253, 0.15);
 
-  /* 右侧栏 / 侧边卡片 */
-  --mao-bg-right: #0d1117;
-  --mao-bg-left: #161b22;
-  --mao-bg-left-card: #1c2128;
 
-  /* 卡片 — 比背景亮一层，形成层级 */
-  --card-bg: #161b22;
-  --card-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --card-hover-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 
-  /* 边框 — 微弱可见 */
-  --border-color-light: #30363d;
-  /* 次级背景 — 面板 / 浮层，比卡片再亮一点 */
-  --secondary-bg: #1c2128;
+  --mao-background-color: var(--b1);
+  --mao-canvas-bg: var(--b1);
+  --card-bg: var(--b2);
+  --secondary-bg: var(--b3);
+  --mao-bg-message: var(--b2);
+  --mao-charging-bg-color: var(--b2);
+  --mao-bg-comment: var(--b3);
+  --mao-bg-left: var(--b2);
+  --mao-bg-right: var(--b1);
+  --mao-bg-left-card: var(--b3);
+  --mao-context-bg: var(--b2);
+  --mao-warning-bg: var(--b2);
+  --mao-welcome-bg: var(--b1);
+  --mao-timeline-year-bg: var(--b2);
+  --mao-scroll-percentage-bg: var(--b2);
+  --mao-search-hover-bg: hsl(215, 14%, 17%);
 
-  /* 强调色 — 蓝色系 */
-  --accent-color: #58a6ff;
-  --accent-color-hover: #79b8ff;
+  /* ═══ 语义层：毛玻璃 / 半透明 ═══ */
+  --mao-glass-bg: hsla(215, 27%, 11%, 0.9);
+  --mao-glass-bg-hover: hsla(216, 19%, 16%, 0.95);
+  --mao-glass-bg-light: hsla(0, 0%, 100%, 0.05);
+  --mao-glass-bg-medium: hsla(0, 0%, 100%, 0.08);
 
-  /* 文本 */
-  --text-primary: #e6edf3;
-  --text-secondary: #8b949e;
-  --text-placeholder: #484f58;
+  /* ═══ 语义层：波浪 ═══ */
+  --mao-bg-wave01: hsla(215, 28%, 7%, 0.4);
+  --mao-bg-wave02: hsla(215, 27%, 11%, 0.5);
+  --mao-bg-wave03: hsla(216, 19%, 16%, 0.6);
+  --mao-bg-wave04: hsla(215, 28%, 7%, 0.4);
 
-  /* 阴影 */
-  --mao-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.4);
-  --shadow-color: rgba(0, 0, 0, 0.3);
-  --shadow-mask-bg: rgba(0, 0, 0, 0.7);
-  --shadow-button-bg: rgba(22, 27, 34, 0.9);
+  /* ═══ 语义层：上下文菜单 ═══ */
+  --mao-context-header-bg: linear-gradient(
+    to right,
+    hsl(263, 30%, 21%),
+    hsl(258, 25%, 21%)
+  );
+  --mao-context-divider: hsl(258, 27%, 25%);
 
-  /* 文章页滚动进度 */
-  --mao-scroll-percentage-bg: #161b22;
-  --mao-scroll-percentage-bar: linear-gradient(135deg, #1f6feb, #6e40c9);
+  /* ═══ 语义层：边框 ═══ */
+  --border-color-light: hsl(215, 15%, 20%); /* #30363d */
+  --mao-br-bg: hsl(0, 0%, 17%); /* #2c2c2c */
 
-  /* 滚动条 */
-  --scroll-bar-color: linear-gradient(135deg, #1f6feb, #6e40c9);
+  /* ═══ 语义层：文本 ═══ */
+  --text-primary: hsl(210, 18%, 87%); /* #e6edf3 */
+  --text-secondary: hsl(210, 10%, 55%); /* #8b949e */
+  --text-placeholder: hsl(215, 9%, 32%); /* #484f58 */
 
-  /* 音乐播放器 */
-  --global-white: #161b22;
-  --global-shadow-white: #0d1117;
-  --primary: #58a6ff;
-  --font-color: #8b949e;
-  --dark-font-color: #6e7681;
-  --second-font-color: #6e7681;      /* 暗色下提亮 */
-  --router-color: #30363d;            /* 暗色路线指示 */
-  --header-bg-color: #161b22;         /* 暗色页头 */
-  --meta-color: #8b949e;              /* 暗色元数据文本 */
-  --md-active: #58a6ff;
-  --comment-grey: #8b949e;
-  --border-color: #58a6ff;
-  --hr-border: #30363d;
+  /* ═══ 语义层：强调 / 渐变 ═══ */
+  --accent-color: var(--accent);
+  --accent-color-hover: var(--accent-hover);
+  --mao-bg-category: var(--accent-gradient);
+  --mao-bg-footer: var(--accent-gradient);
+  --mao-scroll-percentage-bar: var(--accent-gradient);
+  --scroll-bar-color: var(--accent-gradient);
+  --mao-bg-reply: hsla(215, 79%, 51%, 0.15);
+
+  /* ═══ 语义层：阴影 ═══ */
+  --mao-shadow: 0 2px 12px 0 hsla(0, 0%, 0%, 0.4);
+  --card-box-shadow: 0 1px 3px hsla(0, 0%, 0%, 0.3);
+  --card-hover-box-shadow: 0 4px 12px hsla(0, 0%, 0%, 0.5);
+  --shadow-color: hsla(0, 0%, 0%, 0.3);
+  --shadow-mask-bg: hsla(0, 0%, 0%, 0.7);
+  --shadow-button-bg: hsla(215, 27%, 11%, 0.9);
+
+  /* ═══ 语义层：相册 ═══ */
+  --mao-album-banner-bg: linear-gradient(
+    45deg,
+    hsl(210, 32%, 15%),
+    hsl(210, 35%, 29%)
+  );
+  --mao-album-cover-bg: linear-gradient(
+    120deg,
+    hsl(216, 19%, 16%) 0%,
+    hsl(213, 13%, 18%) 100%
+  );
+
+  /* ═══ 音乐播放器 ═══ */
+  --primary: hsl(210, 100%, 67%); /* #58a6ff */
+  --router-color: hsl(215, 15%, 20%); /* #30363d */
+  --font-color: hsl(210, 10%, 55%); /* #8b949e */
+  --dark-font-color: hsl(215, 8%, 40%); /* #6e7681 */
+  --second-font-color: hsl(215, 8%, 40%); /* #6e7681 */
+  --md-active: hsl(210, 100%, 67%); /* #58a6ff */
+  --global-white: var(--b2);
+  --global-shadow-white: var(--b1);
+  --header-bg-color: var(--b2);
+  --meta-color: hsl(210, 10%, 55%); /* #8b949e */
+  --comment-grey: hsl(210, 10%, 55%); /* #8b949e */
+  --border-color: hsl(210, 100%, 67%); /* #58a6ff */
+  --hr-border: hsl(215, 15%, 20%); /* #30363d */
 
   /* ═══════════════════════════════════
      Element Plus 暗色覆盖
      ═══════════════════════════════════ */
+  --el-border-color: hsl(215, 15%, 20%); /* #30363d */
+  --el-border-color-light: hsl(215, 14%, 17%); /* #21262d */
+  --el-border-color-lighter: hsl(215, 15%, 20%); /* #30363d */
+  --el-border-color-extra-light: hsl(215, 14%, 17%); /* #21262d */
 
-  /* 边框 */
-  --el-border-color: #30363d;
-  --el-border-color-light: #21262d;
-  --el-border-color-lighter: #30363d;
-  --el-border-color-extra-light: #21262d;
+  --el-text-color-primary: hsl(210, 18%, 87%); /* #e6edf3 */
+  --el-text-color-regular: hsl(210, 14%, 79%); /* #c9d1d9 */
+  --el-text-color-secondary: hsl(210, 10%, 55%); /* #8b949e */
+  --el-text-color-placeholder: hsl(215, 9%, 32%); /* #484f58 */
 
-  /* 文本 */
-  --el-text-color-primary: #e6edf3;
-  --el-text-color-regular: #c9d1d9;
-  --el-text-color-secondary: #8b949e;
-  --el-text-color-placeholder: #484f58;
+  --el-fill-color-blank: var(--b1);
+  --el-fill-color-light: var(--b2);
+  --el-fill-color: var(--b3);
+  --el-fill-color-lighter: hsl(215, 14%, 17%); /* #21262d */
 
-  /* 填充 */
-  --el-fill-color-blank: #0d1117;
-  --el-fill-color-light: #161b22;
-  --el-fill-color: #1c2128;
-  --el-fill-color-lighter: #21262d;
+  --el-bg-color: var(--b1) !important;
+  --el-bg-color-overlay: var(--b2);
 
-  /* 背景 */
-  --el-bg-color: #0d1117 !important;
-  --el-bg-color-overlay: #161b22;
+  --el-color-primary: hsl(210, 100%, 67%); /* #58a6ff */
+  --el-color-primary-light-3: hsl(210, 100%, 74%); /* #79b8ff */
+  --el-color-primary-light-5: hsl(210, 100%, 81%); /* #a5d0ff */
+  --el-color-primary-light-7: hsl(210, 100%, 87%); /* #c2dfff */
+  --el-color-primary-light-8: hsl(210, 100%, 90%); /* #d6ebff */
+  --el-color-primary-light-9: hsl(210, 100%, 95%); /* #edf5ff */
+  --el-color-primary-dark-2: hsl(210, 100%, 60%); /* #388bfd */
 
-  /* 主色 — 蓝色 */
-  --el-color-primary: #58a6ff;
-  --el-color-primary-light-3: #79b8ff;
-  --el-color-primary-light-5: #a5d0ff;
-  --el-color-primary-light-7: #c2dfff;
-  --el-color-primary-light-8: #d6ebff;
-  --el-color-primary-light-9: #edf5ff;
-  --el-color-primary-dark-2: #388bfd;
-
-  /* 成功 / 警告 / 危险 */
-  --el-color-success: #3fb950;
-  --el-color-warning: #d29922;
-  --el-color-danger: #f85149;
+  --el-color-success: hsl(130, 47%, 52%); /* #3fb950 */
+  --el-color-warning: hsl(40, 74%, 48%); /* #d29922 */
+  --el-color-danger: hsl(0, 81%, 63%); /* #f85149 */
 }
 
-
-/* ── 全局字体 ── */
+/* ── 全局字体 & 基础 ── */
 body {
   font-family: "阿里妈妈方圆体 VF Regular", sans-serif;
   background-color: var(--mao-background-color);
-  color: var(--text-primary, #212529);
+  color: var(--text-primary);
   transition: background-color 0.3s ease, color 0.3s ease;
 }

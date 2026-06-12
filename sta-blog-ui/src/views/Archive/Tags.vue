@@ -72,7 +72,7 @@ async function getArticle(id: Number) {
 </script>
 
 <template>
-  <div class="tags_container">
+  <div class="tags-container">
           <div class="title">标签{{ isQueryArticle ? ' - ' + title : '' }}</div>
           <!-- <template v-if="!isQueryArticle"> -->
           <template v-if="true">
@@ -99,17 +99,18 @@ async function getArticle(id: Number) {
 </template>
 
 <style scoped lang="scss">
-.tags_container {
+.tags-container {
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: var(--mao-background-color);
+  background-color: var(--mao-card-bg);
+  box-shadow: var(--mao-box-shadow);
   border-radius: 1rem;
   padding: 1rem 1rem 2rem;
 
   .title {
-    font-size: 2rem;
-    padding: 1rem 0 0 1rem;
+    font-size: 30px;
+    padding: 15px;
   }
 
   .item_container {

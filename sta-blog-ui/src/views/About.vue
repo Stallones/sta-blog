@@ -10,45 +10,51 @@ const websiteStore = useWebsiteStore()
 </script>
 
 <template>
-  <div class="flex justify-center items-center h-[100%] w-[99%]" >
-    <div class="flex justify-center items-center max-lg:flex-col h-full w-full xl:w-[90%]">
-      <div class="w-[40%] max-lg:w-full h-full flex flex-col justify-center items-center">
-        <div class="h-[20rem] w-[20rem] rounded-full overflow-hidden mt-[5rem] drop-shadow-lg">
-          <div class="bg-cover bg-no-repeat bg-center w-full h-full" :style="{ 'background-image': 'url(' + websiteStore.webInfo?.webmasterAvatar + ')' }"></div>
+  <div class="about-page">
+    <div class="about-inner">
+      <!-- 左侧：头像 + 名字 + 签名 -->
+      <div class="profile-section">
+        <div class="avatar-ring">
+          <div
+            class="avatar"
+            :style="{ 'background-image': 'url(' + websiteStore.webInfo?.webmasterAvatar + ')' }"
+          ></div>
         </div>
-        <div>
+        <div class="name-wrap">
           <h1 :data-shadow='websiteStore.webInfo?.webmasterName'>{{ websiteStore.webInfo?.webmasterName }}</h1>
         </div>
-        <div class="text-gray-600 w-full font-bold dark:text-gray-300 text-center">
+        <div class="motto">
           人生如棋落子无悔道心稳固如箭离弦永不回头
         </div>
       </div>
-      <div class="flex flex-col justify-center items-center xl:w-[40%] lg:w-[60%] h-full">
-        <div class="w-full h-[60vh] flex flex-col justify-center items-center">
-          <div class="w-full text-[3rem] text-center text-gray-600 dark:text-gray-300 max-lg:text-[2rem] max-lg:pb-6">
+
+      <!-- 右侧：介绍 + 导航 -->
+      <div class="intro-section">
+        <div class="intro-top">
+          <div class="intro-title">
             一名中二Web全栈小白
           </div>
-          <div class="mt-4 text-center text-gray-500 dark:text-gray-300 max-lg:px-3">
+          <div class="intro-body">
             千年以前，看见元婴强者自己的小世界，非常羡慕，于是心中立誓，我也要变强，后抛弃世间情爱，终踏上修仙一途，虽一介散修，但亦往，经历千磨万难，
-            炼气百年，四百年筑基，一千年结丹，两千年突破元婴，又一千年后遭遇瓶颈，决心闭死关，四千年后的今日，终于突破<span class="text-red-500 font-bold"> 化神</span>，感叹回首沧桑，
+            炼气百年，四百年筑基，一千年结丹，两千年突破元婴，又一千年后遭遇瓶颈，决心闭死关，四千年后的今日，终于突破<span class="highlight"> 化神</span>，感叹回首沧桑，
             道不尽仙凡殊途，尽人间。
           </div>
         </div>
-        <div class="w-full h-[40vh] flex flex-col justify-center items-center">
-          <div class="text-gray-600 dark:text-gray-300 ">------------------------我的个人导航------------------------</div>
-          <div class="flex justify-center items-center h-full">
+        <div class="nav-section">
+          <div class="nav-divider">------------------------我的个人导航------------------------</div>
+          <div class="nav-links">
             <a href="https://github.com/kuailemao" target="_blank">
-              <div class="bg-white dark:bg-slate-800 w-[120px] h-[120px] flex justify-center items-center rounded-2xl drop-shadow-lg">
+              <div class="nav-card">
                 <SvgIcon name="github_icon" width="100px" height="100px"/>
               </div>
             </a>
-            <a href="https://gitee.com/kuailemao" target="_blank"  class="mx-10 max-lg:mx-4">
-              <div class="bg-white dark:bg-slate-800 w-[120px] h-[120px] flex justify-center items-center rounded-2xl drop-shadow-lg">
+            <a href="https://gitee.com/kuailemao" target="_blank" class="nav-link--gitee">
+              <div class="nav-card">
                 <SvgIcon name="gitee_icon" width="100px" height="100px"/>
               </div>
             </a>
             <a href="https://space.bilibili.com/299105957" target="_blank">
-              <div class="bg-white dark:bg-slate-800 w-[120px] h-[120px] flex justify-center items-center rounded-2xl drop-shadow-lg">
+              <div class="nav-card">
                 <SvgIcon name="bilibili_icon" width="100px" height="100px"/>
               </div>
             </a>
@@ -62,6 +68,179 @@ const websiteStore = useWebsiteStore()
 <style lang="scss" scoped>
 @import url(https://fonts.googleapis.com/css?family=Righteous);
 
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+
+/* ── 页面容器 ── */
+.about-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 99%;
+  height: 100%;
+}
+
+.about-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+
+  @media (min-width: $bp-xl) {
+    width: 90%;
+  }
+
+  @media (max-width: $bp-lg) {
+    flex-direction: column;
+  }
+}
+
+/* ── 左侧：头像区域 ── */
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
+  height: 100%;
+
+  @media (max-width: $bp-lg) {
+    width: 100%;
+  }
+}
+
+.avatar-ring {
+  width: 20rem;
+  height: 20rem;
+  margin-top: 5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  filter: drop-shadow(0 10px 15px hsla(0, 0%, 0%, 0.1));
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.motto {
+  width: 100%;
+  font-weight: bold;
+  text-align: center;
+  color: var(--text-secondary);
+
+  html.dark & {
+    color: var(--text-primary);
+  }
+}
+
+/* ── 右侧：介绍 + 导航 ── */
+.intro-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+  height: 100%;
+
+  @media (min-width: $bp-xl) {
+    width: 40%;
+  }
+}
+
+.intro-top {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 60vh;
+}
+
+.intro-title {
+  width: 100%;
+  font-size: 3rem;
+  text-align: center;
+  color: var(--text-secondary);
+
+  html.dark & {
+    color: var(--text-primary);
+  }
+
+  @media (max-width: $bp-lg) {
+    font-size: 2rem;
+    padding-bottom: 1.5rem;
+  }
+}
+
+.intro-body {
+  margin-top: 1rem;
+  text-align: center;
+  color: var(--text-secondary);
+
+  html.dark & {
+    color: var(--text-primary);
+  }
+
+  @media (max-width: $bp-lg) {
+    padding: 0 0.75rem;
+  }
+}
+
+.highlight {
+  color: hsl(0, 84%, 60%);
+  font-weight: bold;
+}
+
+/* ── 导航链接 ── */
+.nav-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 40vh;
+}
+
+.nav-divider {
+  color: var(--text-secondary);
+
+  html.dark & {
+    color: var(--text-primary);
+  }
+}
+
+.nav-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-link--gitee {
+  margin: 0 2.5rem;
+
+  @media (max-width: $bp-lg) {
+    margin: 0 1rem;
+  }
+}
+
+.nav-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 120px;
+  border-radius: 1rem;
+  background-color: var(--card-bg);
+  filter: drop-shadow(0 10px 15px hsla(0, 0%, 0%, 0.1));
+}
+
+/* ── Glitch 文字效果 ── */
 :deep(.author) {
   display: flex;
   align-items: center;

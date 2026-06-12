@@ -1,6 +1,6 @@
 ﻿<template>
   <nav
-    class="hh-nav"
+    class="h-nav"
     :class="{ 'nav-hidden': isHidden, 'nav-transparent': isTransparent }"
   >
     <!-- 左侧：品牌名 -->
@@ -10,26 +10,22 @@
 
     <!-- 右侧：导航菜单 + 搜索 + 登录 -->
     <div class="nav-menus">
-      <NavList />
+      <MenuList />
       <SearchByDB :is-service-available="isServiceAvailable" />
       <UserLogin :is-service-available="isServiceAvailable" />
     </div>
   </nav>
 
-  <div class="hh-mob-nav">
-    <NavForMob />
+  <div class="h-nav-mob">
+    <NavMob />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
-import NavList from "./NavList.vue";
-import SearchByDB from "./SearchByDB.vue";
-import UserLogin from "./UserLogin.vue";
 import { useWebsiteStore } from "@/store/useWebsiteStore";
 import { useServiceStore } from "@/store/useServiceStore";
-import NavForMob from "./NavForMob/index.vue";
 
 const useWebsite = useWebsiteStore();
 const isServiceAvailable = useServiceStore().isServiceAvailable;
@@ -91,7 +87,7 @@ nav {
   justify-content: space-between; // 左右两端对齐
   align-items: center;
   top: 0;
-  height: 50px;
+  height: 60px;
   width: 100%;
   z-index: 10;
   background-color: var(--mao-nav-bg);
@@ -106,20 +102,32 @@ nav {
   }
 
   &.nav-transparent {
-    height: 60px;
-    border-bottom: 1px solid var(--mao-background-color);
+    // height: 60px;
+    // border-bottom: 1px solid var(--mao-background-color);
     background-color: transparent;
     backdrop-filter: none;
-    border-bottom-color: transparent;
+    border-bottom: 1px solid var(--mao-nav-border-transparent);
     box-shadow: none;
-    color: #fff;
+    color: hsl(0, 0%, 100%);
 
     :deep(*) {
-      color: #fff !important;
+      color: hsl(0, 0%, 100%) !important;
+    }
+
+    /* 子菜单下拉恢复正常文字颜色（亮色背景上不能用白字） */
+    :deep(.menus_item_child),
+    :deep(.menus_item_child *) {
+      color: var(--el-text-color-primary) !important;
+    }
+
+    /* dark 模式下子菜单也正常 */
+    html.dark & :deep(.menus_item_child),
+    html.dark & :deep(.menus_item_child *) {
+      color: var(--el-text-color-primary) !important;
     }
   }
 
-  // ≤$bp-tablet 切换到移动端导航（与 NavForMob 断点对齐）
+  // ≤$bp-tablet 切换到移动端导航（与 NavMob 断点对齐）
   @include tablet-down($breakpoint: $bp-tablet) {
     display: none;
   }

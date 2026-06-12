@@ -13,11 +13,34 @@ export interface FloatingMenuItem {
 // ── 已注册的功能项列表 ──
 const registeredItems = ref<FloatingMenuItem[]>([]);
 
-// ── 展开状态 ──
+// ── 展开状态（设置按钮控制）──
 const isExpanded = ref(false);
 
 function toggleExpanded() {
   isExpanded.value = !isExpanded.value;
+}
+
+// ── 滚动隐藏状态（scrollTop≈0 时整组菜单右滑隐藏）──
+// 独立于 isExpanded，两者互不覆盖
+const hiddenByScroll = ref(false);
+
+function setHiddenByScroll(val: boolean) {
+  hiddenByScroll.value = val;
+}
+
+// ── 侧边栏显隐状态（FloatingMenu 按钮控制）──
+// 独立于 isExpanded，两者互不覆盖
+const sidebarVisible = ref(true);
+
+function toggleSidebar() {
+  sidebarVisible.value = !sidebarVisible.value;
+}
+
+// ── 目录抽屉显隐状态（文章页 FloatingMenu 按钮控制）──
+const catalogDrawerVisible = ref(false);
+
+function toggleCatalogDrawer() {
+  catalogDrawerVisible.value = !catalogDrawerVisible.value;
 }
 
 // ── 注册/注销功能项 ──
@@ -30,9 +53,6 @@ function unregisterItem(id: string) {
   registeredItems.value = registeredItems.value.filter((i) => i.id !== id);
 }
 
-/**
- * 判断某功能项是否已注册
- */
 function hasItem(id: string) {
   return registeredItems.value.some((i) => i.id === id);
 }
@@ -42,6 +62,12 @@ export function useFloatingMenu() {
     registeredItems,
     isExpanded,
     toggleExpanded,
+    hiddenByScroll,
+    setHiddenByScroll,
+    sidebarVisible,
+    toggleSidebar,
+    catalogDrawerVisible,
+    toggleCatalogDrawer,
     registerItem,
     unregisterItem,
     hasItem,

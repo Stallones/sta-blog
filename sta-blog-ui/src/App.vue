@@ -5,7 +5,8 @@
    <Music />
   <DevToolsBlocker :enableDevToolsBlocker="true" />
   <RightClickMenu />
-  <CanvasLayer :imageUrl="aaa" />
+  <!-- <CanvasLayer :imageUrl="aaa" /> -->
+  <CanvasLayer  />
 </template>
 
 <script setup lang="ts">

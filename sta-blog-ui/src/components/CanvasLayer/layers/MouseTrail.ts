@@ -1,8 +1,10 @@
 /**
  * MouseTrail — 鼠标拖尾效果层
- * 从 Header/MouseTrail.vue 迁移，改为纯 TS + 外部 canvas 绘制
+ * 从 composables 读取共享状态
  */
-import { mouseTrailConfig, mouseTrailEnabled } from "../index.ts";
+import { useMouseTrail } from '@/composables/useMouseTrail';
+
+const { mouseTrailConfig, mouseTrailEnabled } = useMouseTrail();
 
 interface Point {
   x: number; y: number; size: number; color: string; age: number;

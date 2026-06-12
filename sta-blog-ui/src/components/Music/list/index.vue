@@ -169,12 +169,12 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="music-list">
-    <div class="!max-w-[1024px] !w-[100%] flex md:justify-between justify-center items-start">
+    <div class="music-list-inner">
       <div class="music-list__left">
         <div class="header">分类歌单</div>
         <el-row v-loading="musicListLoading" class="body">
           <el-col
-            class="flex justify-center items-center overflow-auto"
+            class="top-col"
             :span="6"
             v-for="item in topList"
             :key="item.id"
@@ -187,7 +187,7 @@ onBeforeUnmount(() => {
         </el-row>
       </div>
       <div class="music-list__right">
-        <div class="!w-[100%] flex items-center">
+        <div class="top-bar">
           <span v-if="currentTop" class="top-name text-overflow" :title="currentTop.name">{{
             currentTop.name
           }}</span>
@@ -216,7 +216,7 @@ onBeforeUnmount(() => {
         </el-row>
         <el-row v-loading="params.loading" class="body">
           <el-col
-            class=" justify-start items-center overflow-auto"
+            class="song-col"
             :span="24"
             v-for="item in currentMusicList"
             :key="item.id"
@@ -432,4 +432,34 @@ onBeforeUnmount(() => {
 :deep(.el-col-24, .el-col-24.is-guttered){
   display: flex;
 }
+
+.music-list-inner {
+  max-width: 1024px !important;
+  width: 100% !important;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  @media (min-width: 768px) {
+    justify-content: space-between;
+  }
+}
+.top-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+}
+.top-bar {
+  width: 100% !important;
+  display: flex;
+  align-items: center;
+}
+.song-col {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: auto;
+}
+
 </style>

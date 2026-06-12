@@ -12,7 +12,7 @@ function toggle() {
 </script>
 
 <template>
-  <div class="my-4" @click="toggle">
+  <div class="color-toggle" @click="toggle">
     <el-tooltip
         effect="light"
         :content="isDark ? '切换到亮色模式' : '切换到暗色模式'"
@@ -26,6 +26,10 @@ function toggle() {
 </template>
 
 <style scoped lang="scss">
+
+.color-toggle {
+  margin: 1rem 0;
+}
 
 .back-to-top {
   height: 30px !important;

@@ -11,8 +11,8 @@
       !getIsShow && clickFlag ? 'hide-music' : '',
     ]"
   >
-    <div class="flex justify-center items-center !w-[100%] !h-[100%]">
-      <div class="music-box flex flex-col justify-center items-center">
+    <div class="music-full-center">
+      <div class="music-box">
         <i
           v-if="!getShowLyricBoard"
           class="iconfont icon-off-search dark-close change-color"
@@ -41,10 +41,10 @@
     />
     <div class="info-box">
       <div class="info">
-        <div class="text-sm whitespace-nowrap">
+        <div class="disc-info-text">
           {{ getMusicDescription?.name }}
         </div>
-        <div class="text-sm whitespace-nowrap">
+        <div class="disc-info-text">
           {{ getMusicDescription?.ar[0]?.name || "歌手走丢了" }}
         </div>
       </div>
@@ -316,4 +316,17 @@ watch(
     transform: rotate(360deg);
   }
 }
+
+.music-full-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100% !important;
+  height: 100% !important;
+}
+.disc-info-text {
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
 </style>

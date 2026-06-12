@@ -9,19 +9,30 @@ export function registerGlobalItems() {
 
   // ═══ 始终显示（全局）═══
 
-  // 百分比 + ToTop 合并按钮 — 最底部
-  registerItem({ id: "scrollPercentage", global: true, order: 300 });
+  // 设置按钮（触发展开）— 最顶部
+  registerItem({ id: "settings", global: true, order: 100 });
 
   // 亮暗色切换
   registerItem({ id: "colorMode", global: true, order: 200 });
 
-  // 设置按钮（触发展开）— 最顶部
-  registerItem({ id: "settings", global: true, order: 100 });
-
-  // ═══ 展开后显示（非全局，但所有页都有）═══
+  // 百分比 + ToTop 合并按钮 — 最底部
+  registerItem({ id: "scrollPercentage", global: true, order: 300 });
 
   // 侧边栏隐藏
   registerItem({ id: "sidebarHide", global: false, order: 50 });
+}
+
+/**
+ * 注册首页独有功能项（在首页挂载时调用）
+ */
+export function registerHomeItems() {
+  const { registerItem } = useFloatingMenu();
+  registerItem({ id: "galleryLayout", global: false, order: -10 });
+}
+
+export function unregisterHomeItems() {
+  const { unregisterItem } = useFloatingMenu();
+  unregisterItem("galleryLayout");
 }
 
 /**
@@ -29,9 +40,10 @@ export function registerGlobalItems() {
  */
 export function registerArticleItems() {
   const { registerItem } = useFloatingMenu();
-
   registerItem({ id: "readingMode", global: false, order: -20 });
   registerItem({ id: "toComment", global: false, order: -10 });
+  // 目录抽屉按钮（always 列表，仅文章页注册，≤900px 时显示）
+  registerItem({ id: "catalogDrawer", global: true, order: 110 });
 }
 
 /**
@@ -42,4 +54,5 @@ export function unregisterArticleItems() {
 
   unregisterItem("readingMode");
   unregisterItem("toComment");
+  unregisterItem("catalogDrawer");
 }

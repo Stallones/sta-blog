@@ -32,15 +32,15 @@ async function loadContent() {
   <div v-if="useService.isServiceAvailable" class="recommend-article-container">
     <div>
       <el-divider border-style="dashed" content-position="left">
-        <div class="flex items-center">
+        <div class="recommend-header">
           <SvgIcon name="recommend" color="#409EFF" class="icon" />
-          <span class="ml-[5px]">推荐</span>
+          <span class="recommend-label">推荐</span>
         </div>
       </el-divider>
     </div>
     <div v-view-request="{ callback: loadContent }">
       <swiper
-        class="h-[200px] recommend"
+        class="recommend recommend--h200"
         loop
         navigation
         :pagination="{ clickable: true }"
@@ -78,6 +78,22 @@ async function loadContent() {
 </template>
 
 <style scoped lang="scss">
+.recommend-article-container {
+}
+
+.recommend-header {
+  display: flex;
+  align-items: center;
+}
+
+.recommend-label {
+  margin-left: 5px;
+}
+
+.recommend--h200 {
+  height: 200px;
+}
+
 .recommend {
   border-radius: $border-radius;
 
@@ -93,7 +109,7 @@ async function loadContent() {
     color: #fff;
     font-size: 20px;
     font-weight: bold;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: hsla(0, 0%, 0%, 0.1);
     padding: 0 20px;
     z-index: 1;
     line-height: 40px;

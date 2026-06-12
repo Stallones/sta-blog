@@ -287,10 +287,10 @@ onBeforeUnmount(() => {
     ></div>
     <div
       v-show="getLyricType == 'COMMON'"
-      class="!w-[100%] !h-[100%] flex justify-between items-center"
+      class="lyric-layout"
     >
       <div class="left">
-        <div class="text-4xl font-semibold">
+        <div class="lyric-song-name">
           {{ getMusicDescription?.name }}
         </div>
         <div class="disc-box">
@@ -308,9 +308,9 @@ onBeforeUnmount(() => {
         </div>
       </div>
       <div id="lyricBox" class="right">
-        <div class="!p-[10px]">
+        <div class="lyric-padding">
           <div>
-            <div class="text-2xl leading-loose text-center">
+            <div class="lyric-title">
               {{ getMusicDescription?.name }}
             </div>
           </div>
@@ -328,18 +328,18 @@ onBeforeUnmount(() => {
     </div>
     <div
       v-show="getLyricType == 'SPECIAL'"
-      class="special !w-[100%] !h-[100%] flex flex-col justify-center items-center"
+      class="special special-full"
     >
       <div class="special-title">
         <SpecialTitle :title="`《 ${getMusicDescription?.name} 》`" @click="fullScreen" />
 
-        <div class="author text-2xl">
+        <div class="author lyric-author">
           <span class="brightness" @click="changeBrightness(false)"></span> --
           {{ getMusicDescription?.ar[0]?.name }}
           <span class="brightness" @click="changeBrightness(true)"></span>
         </div>
       </div>
-      <span class="special-lyric text-3xl">
+      <span class="special-lyric special-lyric-text">
         {{ getMusicInfo.lyricList[getCurrentLyticIndex] }}
       </span>
     </div>
@@ -359,7 +359,7 @@ onBeforeUnmount(() => {
           <i class="iconfont icon-xiayiqu change-color" @click="next"></i>
         </div>
         <div class="toggle-type">
-          <span class="type-btn mr-[10px]" v-show="getLyricType == 'SPECIAL'">
+          <span class="type-btn" v-show="getLyricType == 'SPECIAL'">
             <el-upload
               v-model:file-list="fileList"
               action="#"
@@ -372,13 +372,13 @@ onBeforeUnmount(() => {
             </el-upload>
           </span>
           <span
-            class="type-btn mr-[10px]"
+            class="type-btn"
             v-show="getLyricType == 'SPECIAL'"
             @click="toggleLyricType('COMMON')"
             ><i class="iconfont icon-icon-test1"
           /></span>
           <span
-            class="type-btn mr-[10px]"
+            class="type-btn"
             v-show="getLyricType == 'COMMON'"
             @click="toggleLyricType('SPECIAL')"
             ><i class="iconfont icon-icon-test"
@@ -682,4 +682,42 @@ onBeforeUnmount(() => {
     right: 30px !important;
   }
 }
+
+.lyric-layout {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.lyric-song-name {
+  font-size: 2.25rem;
+  font-weight: 600;
+}
+.lyric-padding {
+  padding: 10px !important;
+}
+.lyric-title {
+  font-size: 1.5rem;
+  line-height: 2;
+  text-align: center;
+}
+.special-full {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.lyric-author {
+  font-size: 1.5rem;
+}
+.special-lyric-text {
+  font-size: 1.875rem;
+}
+.type-btn {
+  margin-right: 10px;
+}
+
 </style>

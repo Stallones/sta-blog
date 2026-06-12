@@ -83,7 +83,7 @@ async function getArticle(id: Number) {
 
 <template>
   <template v-if="!isQueryArticle">
-    <div class="category_container">
+    <div class="category-container">
       <div class="title">文章分类</div>
       <div class="item_container">
         <template v-for="category in categorys" :key="category.id">
@@ -102,7 +102,7 @@ async function getArticle(id: Number) {
     </div>
   </template>
   <template v-if="isQueryArticle">
-    <div class="category_container">
+    <div class="category-container">
       <div class="title">
         {{ title }}
       </div>
@@ -128,11 +128,12 @@ async function getArticle(id: Number) {
 </template>
 
 <style scoped lang="scss">
-.category_container {
+.category-container {
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: var(--mao-background-color);
+  background-color: var(--mao-card-bg);
+  box-shadow: var(--mao-box-shadow);
   border-radius: 1rem;
   padding: 1rem 1rem 2rem;
 
@@ -168,8 +169,8 @@ async function getArticle(id: Number) {
   }
 
   .title {
-    font-size: 1.72rem;
-    padding: 1rem;
+    font-size: 30px;
+    padding: 15px;
   }
 
   .item_container {

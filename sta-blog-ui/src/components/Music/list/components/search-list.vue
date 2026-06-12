@@ -149,7 +149,7 @@ const searchSingerSongs = async (type) => {
         >搜索</el-button
       >
     </div>
-    <div class="flex justify-center items-start pt-[50px]">
+    <div class="search-body">
       <div class="search-music-list__detail">
         <el-row v-if="keyWordsSongs.length" class="body">
           <el-col :span="24" class="big-title">相似歌曲</el-col>
@@ -160,7 +160,7 @@ const searchSingerSongs = async (type) => {
             </el-col>
           </el-row>
           <el-col
-            class="flex justify-start items-center overflow-auto"
+            class="song-col"
             :span="24"
             v-for="item in keyWordsSongs"
             :key="item.id"
@@ -184,7 +184,7 @@ const searchSingerSongs = async (type) => {
             </el-col>
           </el-row>
           <el-col
-            class="flex justify-start items-center overflow-auto"
+            class="song-col"
             :span="24"
             v-for="item in searchList"
             :key="item.id"
@@ -325,4 +325,18 @@ const searchSingerSongs = async (type) => {
   color: var(--primary);
   cursor: pointer;
 }
+
+.search-body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 50px;
+}
+.song-col {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: auto;
+}
+
 </style>

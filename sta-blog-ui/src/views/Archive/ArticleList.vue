@@ -2,10 +2,9 @@
 defineProps({
   articleList: {
     type: Array,
-    required: true
-  }
-})
-
+    required: true,
+  },
+});
 </script>
 
 <template>
@@ -13,16 +12,21 @@ defineProps({
     <template v-for="article in articleList" :key="article.id">
       <div>
         <div class="article_left">
-          <img :src="article.articleCover" alt="预览图">
+          <img :src="article.articleCover" alt="预览图" />
         </div>
         <div class="article_right">
           <span class="article_time">{{ article.createTime }}</span>
-          <span @click="$router.push(`/article/${article.id}`)"
-                class="article_title"><span>{{ article.articleTitle }}</span> <span><SvgIcon
-              name="heat"/>{{ article.visitCount }}</span></span>
+          <span
+            @click="$router.push(`/article/${article.id}`)"
+            class="article_title"
+            ><span>{{ article.articleTitle }}</span>
+            <span><SvgIcon name="heat" />{{ article.visitCount }}</span></span
+          >
           <div class="article_tag">
             <template v-for="tag in article.tags" :key="tag.id">
-              <span @click="$router.push(`/tags/${tag.id}`)" >#{{ tag.tagName }}</span>
+              <span @click="$router.push(`/tags/${tag.id}`)"
+                >#{{ tag.tagName }}</span
+              >
             </template>
           </div>
         </div>
@@ -67,7 +71,6 @@ defineProps({
     }
 
     .article_right {
-
       display: flex;
       flex-direction: column;
       justify-content: center;

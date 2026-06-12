@@ -1,29 +1,22 @@
 ﻿<!-- 侧边栏 -->
 <template>
-  <div>
-    <div>
-      <UserInfo />
-    </div>
-    <div>
-      <Announcement />
-    </div>
-    <div>
-      <ElectronicClocks />
-    </div>
-    <div v-if="showRandom">
-      <RandomArticle />
-    </div>
-    <div>
-      <TagListCard />
-    </div>
-    <ChargingList />
-    <div>
-      <DailySoup />
-    </div>
-    <div>
-      <WebsiteInfo />
-    </div>
+  <BloggerInfoCard />
+
+  <PublicCard />
+
+  <ClocksCard />
+
+  <div v-if="showRandom">
+    <RandomCard />
   </div>
+
+  <TagListCard />
+
+  <ChargingCard />
+
+  <DailySoupCard />
+
+  <WebsiteCard />
 </template>
 
 <script setup lang="ts">

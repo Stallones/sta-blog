@@ -20,10 +20,11 @@
 
 // ── 防止双滚动条：html 统一管理滚动 ──
 html {
-  overflow-y: auto;   // 仅 html 层产生垂直滚动条，body 不再独立滚动
+  overflow-y: auto;     // 仅 html 层产生垂直滚动条
 }
 
 body {
   margin: 0;
+  overflow-y: hidden;   // 禁止 body 独立滚动，消除双滚动条
   // 水平溢出控制已移到 .layout-shell { overflow-x: hidden } 统一处理
 }

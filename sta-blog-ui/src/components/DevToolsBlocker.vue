@@ -475,7 +475,7 @@ html[class='dark'] .warning-container {
   background: var(--mao-warning-bg);
   color: var(--text-primary);
   border-color: var(--border-color-light);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px hsla(0, 0%, 0%, 0.3);
 }
 
 html[class='dark'] .warning-text h3 {

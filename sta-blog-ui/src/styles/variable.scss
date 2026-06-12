@@ -1,23 +1,15 @@
-// Replace deprecated @import with @use (as *) to preserve original global variable behavior
-@use './element_style' as *;
-@use './scrollBar' as *;
-@use './cursor' as *;
-@use './woff' as *;
+// ── 全局 SCSS 变量（通过 Vite additionalData 自动注入所有组件） ──
 
-// ── 统一布局引擎：断点/比例/间距/mixin 全局生效 ──
-@use './_layout' as *;
-
-// 全局样式设置文件
-// 侧边栏卡片的宽度
+// 侧边栏卡片尺寸
 $card-width: 85%;
-// 侧边栏卡片的外边距
 $card-margin: 0 5%;
-// 圆角
-$border-radius: 0.6em;
-// 自定义主题颜色(黑/白)
-$menuActiveText: var(--themeColor);
 
-body{
-  transition: all 0.5s ease !important;
-  background-color: var(--mao-background-color);
-}
+// 通用卡片圆角
+$border-radius: 8px;
+$margin-bottom: 20px;
+$padding-sm: 10px;
+$padding-md: 15px;
+$padding-lg: 20px;
+
+// 自定义主题颜色
+$menuActiveText: var(--accent-color);

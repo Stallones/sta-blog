@@ -12,7 +12,11 @@ import { ref, onMounted, onUnmounted, watch } from "vue";
 import { createParallax } from "./layers/BackgroundParallax";
 import { createMouseTrail } from "./layers/MouseTrail";
 import { createParticlesEffect } from "./layers/Particles";
-import { canvasHeaderH, particlesEnabled, mouseTrailEnabled, canvasImageUrl } from "./index";
+import { useBackgroundParallax, useMouseTrail, useParticles } from "./index";
+
+const { canvasHeaderH, setImageUrl } = useBackgroundParallax();
+const { mouseTrailEnabled } = useMouseTrail();
+const { particlesEnabled } = useParticles();
 
 const props = defineProps<{
   /** 背景图片 URL（可选） */
@@ -48,19 +52,11 @@ function handleResize() {
   particles?.resize(w, h);
 }
 
-// ---- 滚动触发视差重绘 ----
-function handleScroll() {
-  // 视差层在 tick() 内部读取 scrollY，无需额外传参
-  // 但需要确保动画帧在滚动时被调度
-}
-
 onMounted(() => {
-  // 同步 props.imageUrl 到共享状态
   if (props.imageUrl) {
-    canvasImageUrl.value = props.imageUrl;
+    setImageUrl(props.imageUrl);
   }
 
-  // 初始化各层
   if (bgRef.value) {
     parallax = createParallax();
     parallax.init(bgRef.value);
@@ -74,18 +70,12 @@ onMounted(() => {
     particles.init(particlesRef.value);
   }
 
-  // 初始尺寸
   handleResize();
-
-  // 启动统一动画循环
   animate();
 
-  // 全局事件
   window.addEventListener("resize", handleResize);
-  window.addEventListener("scroll", handleScroll, { passive: true });
 });
 
-// header 高度变化 → 触发视差重建
 watch(canvasHeaderH, () => {
   parallax?.resize(window.innerWidth, window.innerHeight);
 });
@@ -93,7 +83,6 @@ watch(canvasHeaderH, () => {
 onUnmounted(() => {
   cancelAnimationFrame(rafId);
   window.removeEventListener("resize", handleResize);
-  window.removeEventListener("scroll", handleScroll);
 
   parallax?.destroy();
   parallax = null;
@@ -105,7 +94,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
-/* 所有画布层共用：固定定位、铺满视口 */
 .canvas-layer {
   position: fixed;
   top: 0;
@@ -115,7 +103,6 @@ onUnmounted(() => {
   pointer-events: none;
 }
 
-/* z-index 从低到高：背景=粒子(同层装饰) < 鼠标拖尾 */
 .canvas-bg {
   z-index: -1;
 }

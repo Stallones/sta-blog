@@ -48,11 +48,11 @@ const { isLoading } = useLoading();
 .progress-bar {
   width: 100%;
   height: 15px;
-  background: rgba(255, 255, 255, 0.1);
+  background: hsla(0, 0%, 100%, 0.1);
   border-radius: 10px;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.2);
 }
 
 // 渐变进度条动画
@@ -82,7 +82,7 @@ const { isLoading } = useLoading();
   left: 0;
   height: calc(100% + 4px);
   width: 60px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  background: linear-gradient(90deg, transparent, hsla(0, 0%, 100%, 0.8), transparent);
   animation: glowMove 2s ease-in-out infinite;
   border-radius: 10px;
 }
@@ -142,7 +142,7 @@ const { isLoading } = useLoading();
 // 深色模式适配
 :deep(html.dark) {
   .progress-bar {
-    background: rgba(255, 255, 255, 0.05);
+    background: hsla(0, 0%, 100%, 0.05);
   }
 }
 </style>

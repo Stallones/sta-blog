@@ -103,7 +103,7 @@ $footer-max-width: 1200px;
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.55);
+    background: hsla(0, 0%, 0%, 0.55);
     z-index: 0;
   }
 
@@ -129,7 +129,7 @@ $footer-max-width: 1200px;
     .col-title {
       font-size: 1.5rem;
       font-weight: 700;
-      color: rgba(255, 255, 255, 0.9);
+      color: hsla(0, 0%, 100%, 0.9);
       margin-bottom: 0.8rem;
       letter-spacing: 0.05em;
     }
@@ -140,14 +140,14 @@ $footer-max-width: 1200px;
       margin: 0;
 
       li {
-        color: rgba(255, 255, 255, 0.6);
+        color: hsla(0, 0%, 100%, 0.6);
         font-size: 1rem;
         padding: 3px 0;
         cursor: pointer;
         transition: color 0.2s ease;
 
         &:hover {
-          color: #409eff;
+          color: var(--accent-color);
         }
       }
     }
@@ -158,17 +158,17 @@ $footer-max-width: 1200px;
 .footer-others {
   margin: 0 auto;
   text-align: center;
-  color: rgba(255, 255, 255, 0.7);
+  color: hsla(0, 0%, 100%, 0.7);
   font-size: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid hsla(0, 0%, 100%, 0.1);
 
   a {
-    color: rgba(255, 255, 255, 0.7);
+    color: hsla(0, 0%, 100%, 0.7);
     text-decoration: none;
     transition: color 0.2s ease;
 
     &:hover {
-      color: #409eff;
+      color: var(--accent-color);
     }
   }
 }

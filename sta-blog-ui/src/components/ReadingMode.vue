@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="my-4">
+  <div class="reading-toggle">
     <el-tooltip
         effect="light"
         content="阅读模式"
@@ -17,6 +17,10 @@
 </template>
 
 <style scoped lang="scss">
+
+.reading-toggle {
+  margin: 1rem 0;
+}
 
 .back-to-top {
   height: 30px !important;

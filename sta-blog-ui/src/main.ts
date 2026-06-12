@@ -3,16 +3,13 @@ import App from '@/App.vue'
 // svg插件需要配置代码
 import 'virtual:svg-icons-register'
 
-import gloablComponent from '@/components'
+import gloablComponent from '@/components/SvgIcon'
 import router from '@/router'
 
 // 引入模板的全局的样式
 import '@/styles/index.scss'
-// tailwind.css  https://www.tailwindcss.cn/docs
-import "@/styles/tailwind.css";
 /**
- *  element-plus 必须要在 tailwind 后导入，不然会出现样式冲突导致按钮背景色透明等问题
- *  具体请访问问题：https://github.com/tailwindlabs/tailwindcss/discussions/5969
+ *  element-plus 样式导入
  */
 import 'element-plus/dist/index.css'
 // 黑暗模式

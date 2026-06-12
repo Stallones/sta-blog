@@ -23,13 +23,13 @@ $bp-wide:     2000;  // Tier-4/5 分界：桌面 / 超宽屏
 // ─────────────────────────────────────────────────────────────
 
 // 整体容器
-$layout-max-w:       1400px;   // 桌面端内容区最大宽度（参考 Butterfly 的 1200px，略宽）
+$layout-max-w:       1200px;   // 桌面端内容区最大宽度（参考 Butterfly 的 1200px，略宽）
 $content-ratio:      74%;       // 主内容区占比
 $sidebar-ratio:      26%;       // 侧边栏占比
 
 // Sidebar 固定宽度上限（参考 Butterfly 的 330px）
-$sidebar-max-w:      364px;     // 1400px × 26% ≈ 364px
-$content-max-w:      1036px;    // 1400px × 74% ≈ 1036px
+$sidebar-max-w:      312px;     // 1400px × 26% ≈ 364px
+$content-max-w:      888px;    // 1400px × 74% ≈ 1036px
 
 // ─────────────────────────────────────────────────────────────
 // 三、间距系统（单位: px，不用 rem）
@@ -47,9 +47,9 @@ $card-radius:      8px;
 $card-radius-mobile: 6px;
 
 // 主区域 gap
-$gap-desktop:  16px;
-$gap-tablet:   12px;
-$gap-mobile:   8px;
+$gap-desktop:  20px;
+$gap-tablet:   15px;
+$gap-mobile:   10px;
 
 // ─────────────────────────────────────────────────────────────
 // 四、响应式 Mixin

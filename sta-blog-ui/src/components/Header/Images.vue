@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="imgs">
+  <div class="h-f-imgs">
     <ul>
       <li
         class="item"
@@ -29,7 +29,7 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-.imgs {
+.h-f-imgs {
   position: fixed;
   top: 0;
   left: 0;
@@ -37,7 +37,7 @@ onMounted(async () => {
   height: 100%;
   // z-index: -10; /* 低于 Canvas(-9) 和 Particles(-8) */
   z-index: -2;
-  background-color: #363636;
+  background-color: hsl(0, 0%, 21%);
   overflow: hidden;
 
   .item {
@@ -82,7 +82,7 @@ onMounted(async () => {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: hsla(0, 0%, 0%, 0.2);
     transition: all 0.2s ease-in-out 0s;
   }
 }

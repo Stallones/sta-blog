@@ -68,13 +68,11 @@ const logoutSub = async () => {
     font-size: 15px;
     font-weight: bold;
     color: var(--el-text-color-primary);
-    html.dark & { color: #e5e7eb; }
   }
   .profile-email {
     font-size: 14px;
     color: var(--el-text-color-secondary);
     margin-top: 3px;
-    html.dark & { color: #9ca3af; }
   }
 }
 </style>

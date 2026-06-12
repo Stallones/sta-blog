@@ -42,8 +42,8 @@ watch(
 
 <template>
   <div class="music-list">
-    <div class="flex justify-between items-start">
-      <div class="!py-[10px] music-list__detail">
+    <div class="custom-header">
+      <div class="music-list__detail custom-detail">
         <el-row>
           <el-col :span="24" class="header">
             <div class="title title1">歌曲</div>
@@ -54,7 +54,7 @@ watch(
         <el-row class="body">
           <div style="width: 100%" v-if="getCustomerMusicList.length">
             <el-col
-              class="flex justify-start items-center overflow-auto"
+              class="song-col"
               :span="24"
               v-for="item in getCustomerMusicList"
               :key="item.id"
@@ -160,4 +160,21 @@ watch(
     align-items: flex-end;
   }
 }
+
+.custom-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.custom-detail {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+.song-col {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: auto;
+}
+
 </style>

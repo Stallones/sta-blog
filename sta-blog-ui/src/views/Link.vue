@@ -159,63 +159,79 @@ function applyLinkFunc() {
         </el-form>
       </div>
     </el-dialog>
-    <div class="content">
-          <div class="header">
-            <div class="title">友链</div>
-            <el-button
-              type="primary"
-              :icon="Watermelon"
-              plain
-              @click="dialogVisible = true"
-              style="margin-right: 1rem"
-              >申请友链</el-button
-            >
-          </div>
-          <el-divider />
-          <div class="title_content">
-            <span style="font-size: 1rem; color: grey">欢迎访问友链板块！</span>
-            <span
-              >友链板块是一个旨在促进不同系统间相互协作和交流的平台。通过友链板块，您可以：</span
-            >
-            <span>1、分享自己系统的介绍和链接。</span>
-            <span>2、发现更多的优秀博客网站。</span>
-            <span style="font-size: 1rem; color: grey">注意：</span>
-            <span
-              >1、友链申请前必须先登录本网站，申请通过后会通过邮件的形式通知你。</span
-            >
-            <span>2、点击网站的名称进行友链跳转。</span>
-          </div>
-          <div class="link">
-            <template v-for="link in links" :key="link.id">
-              <div v-slide-in class="item">
-                <div
-                  class="bg"
-                  :style="{ background: `url(${link.background})` }"
-                ></div>
-                <div class="content_link">
-                  <div>
-                    <el-avatar :src="link.avatar" />
-                    <div class="name">
-                      <a :href="link.url">{{ link.name }}</a>
-                    </div>
+    <div class="link-container">
+      <div class="content">
+        <div class="header">
+          <div class="title">友链</div>
+          <el-button
+            type="primary"
+            :icon="Watermelon"
+            plain
+            @click="dialogVisible = true"
+            style="margin-right: 1rem"
+            >申请友链</el-button
+          >
+        </div>
+        <el-divider />
+        <div class="title_content">
+          <span style="font-size: 1rem; color: grey">欢迎访问友链板块！</span>
+          <span
+            >友链板块是一个旨在促进不同系统间相互协作和交流的平台。通过友链板块，您可以：</span
+          >
+          <span>1、分享自己系统的介绍和链接。</span>
+          <span>2、发现更多的优秀博客网站。</span>
+          <span style="font-size: 1rem; color: grey">注意：</span>
+          <span
+            >1、友链申请前必须先登录本网站，申请通过后会通过邮件的形式通知你。</span
+          >
+          <span>2、点击网站的名称进行友链跳转。</span>
+        </div>
+        <div class="link">
+          <template v-for="link in links" :key="link.id">
+            <div v-slide-in class="item">
+              <div
+                class="bg"
+                :style="{ background: `url(${link.background})` }"
+              ></div>
+              <div class="content_link">
+                <div>
+                  <el-avatar :src="link.avatar" />
+                  <div class="name">
+                    <a :href="link.url">{{ link.name }}</a>
                   </div>
-                  <div class="description">{{ link.description }}</div>
                 </div>
+                <div class="description">{{ link.description }}</div>
               </div>
-            </template>
-          </div>
+            </div>
+          </template>
         </div>
       </div>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
 @use "@/styles/mixin" as *;
 
-:deep(.el-dialog__body) {
+.link-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--mao-card-bg);
+  box-shadow: var(--mao-box-shadow);
+  border-radius: 1rem;
+  padding: 1rem 1rem 2rem;
+
+  .content {
+    margin-top: 0;
+  }
+}
+
+::deep(.el-dialog__body) {
   padding-top: 0;
 }
 
-:deep(.el-dialog) {
+::deep(.el-dialog) {
   // 过渡时间
   transition: all 0.3s ease-in-out;
   @media (max-width: 1000px) {
@@ -240,7 +256,7 @@ function applyLinkFunc() {
       height: 13rem;
       border: #0072ff 1px solid;
       border-radius: $border-radius;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.1);
       @include flex;
       flex-direction: column;
       overflow: hidden;
