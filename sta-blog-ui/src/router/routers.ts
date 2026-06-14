@@ -50,13 +50,14 @@ export const constantRouter = [
           subtitle: "Tags",
         },
       },
-      // ── 时间轴：横幅模式 ──
+      // ── 时间轴 ──
       {
         path: "/timeline",
         component: () => import("@/views/Archive/TimeLine.vue"),
         name: "timeline",
         meta: {
           headerType: "page",
+          sidebarType: "default",
           title: "时间轴",
           subtitle: "TimeLine",
         },

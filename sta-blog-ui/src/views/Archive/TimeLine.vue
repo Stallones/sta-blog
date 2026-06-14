@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import {ref, onMounted, nextTick} from 'vue';
 import {getTimeLine} from "@/apis/article";
 import {readTimeLine} from "@/utils/file-reader";
@@ -91,7 +91,7 @@ onMounted(async () => {
 @use './TimeLine' as *;
 
 .year {
-  background-color: var(--mao-timeline-year-bg);
+  background-color: var(--el-fill-color-blank);
   position: sticky;
   top: 5rem;
   text-align: center;

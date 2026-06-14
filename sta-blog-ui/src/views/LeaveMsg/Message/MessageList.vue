@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { MdEditor, ToolbarNames, Footers } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 
@@ -102,7 +102,7 @@ function mdContent(content: string) {
         >服务离线，留言功能不可用</span
       >
     </div>
-    <!-- <el-divider /> -->
+    <el-divider />
     <div class="item-content">
       <span>欢迎访问留言板板块！</span>
       <span
@@ -224,8 +224,8 @@ function mdContent(content: string) {
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: var(--mao-card-bg);
-  box-shadow: var(--mao-box-shadow);
+  background-color: var(--el-fill-color-blank);
+  box-shadow: var(--el-box-shadow-light);
   border-radius: 1rem;
   padding: 1rem 1rem 2rem;
 
@@ -242,7 +242,7 @@ function mdContent(content: string) {
     color: #999;
     display: flex;
     flex-direction: column;
-    background: var(--mao-bg-message);
+    background: var(--el-fill-color);
     padding: 0.5rem;
     border-radius: $border-radius;
     margin-bottom: 1rem;

@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div
     class="search-by-pagefind"
     :class="{
@@ -129,7 +129,7 @@ function clearQuery() {
   padding: 0 16px;
   border-radius: 50px;
   align-items: center;
-  background: var(--mao-input-bg);
+  background: var(--el-fill-color-light);
   // border: 1px solid hsla(0, 0%, 100%, 0.1);
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: text;
@@ -161,13 +161,13 @@ function clearQuery() {
     font-size: 18px;
     margin-right: 10px;
     flex-shrink: 0;
-    color: var(--mao-text-secondary);
+    color: var(--el-text-color-secondary);
     transition: color 0.25s ease;
   }
 
   &.focused .search-icon,
   &:hover .search-icon {
-    color: var(--mao-text-primary);
+    color: var(--el-text-color-primary);
   }
 
   input {
@@ -177,17 +177,17 @@ function clearQuery() {
     background: transparent;
     border: none;
     outline: none;
-    color: var(--mao-text-primary);
+    color: var(--el-text-color-primary);
     font-size: 14px;
     transition: opacity 0.25s ease;
 
     &::placeholder {
-      color: var(--mao-text-placeholder);
+      color: var(--el-text-color-placeholder);
     }
   }
 
   .clear-icon {
-    color: var(--mao-text-secondary);
+    color: var(--el-text-color-secondary);
     font-size: 16px;
     margin-left: 8px;
     cursor: pointer;
@@ -195,7 +195,7 @@ function clearQuery() {
     transition: color 0.2s;
 
     &:hover {
-      color: var(--mao-text-primary);
+      color: var(--el-text-color-primary);
     }
   }
 

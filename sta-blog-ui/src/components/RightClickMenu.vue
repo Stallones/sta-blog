@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div
     v-if="isVisible"
     class="context-menu"
@@ -367,7 +367,7 @@ html.dark .context-menu {
 }
 
 .menu-container {
-  background-color: var(--mao-context-bg);
+  background-color: var(--el-bg-color-overlay);
   border-radius: 12px;
   box-shadow: 0 4px 20px hsla(258, 64%, 61%, 0.15);
   border: 1px solid var(--border-color-light);
@@ -518,7 +518,7 @@ html.dark .menu-container {
   position: absolute;
   top: 0;
   left: 100%;
-  background-color: var(--mao-context-bg);
+  background-color: var(--el-bg-color-overlay);
   border-radius: 12px;
   box-shadow: 0 4px 16px hsla(258, 64%, 61%, 0.12);
   border: 1px solid var(--menu-submenu-border);

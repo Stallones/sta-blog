@@ -114,7 +114,7 @@ const chargingList = ref([
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--mao-charging-bg-color);
+    background-color: var(--el-fill-color);
     border-radius: $border-radius;
   }
 

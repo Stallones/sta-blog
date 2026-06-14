@@ -367,7 +367,7 @@ onUnmounted(() => {
 }
 
 .warning-container {
-  background: var(--mao-warning-bg);
+  background: var(--el-bg-color);
   color: var(--text-secondary);
   padding: 16px 24px;
   margin: 0 auto;
@@ -472,7 +472,7 @@ onUnmounted(() => {
 
 /* 暗色主题适配 */
 html[class='dark'] .warning-container {
-  background: var(--mao-warning-bg);
+  background: var(--el-bg-color);
   color: var(--text-primary);
   border-color: var(--border-color-light);
   box-shadow: 0 4px 20px hsla(0, 0%, 0%, 0.3);

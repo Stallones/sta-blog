@@ -83,7 +83,6 @@ function invoke() {
 </script>
 
 <template>
-  <!-- 封装侧边栏卡片 -->
   <div
     v-slide-in
     :class="['card', name ? `${name}-card` : '']"
@@ -131,7 +130,7 @@ function invoke() {
 
 <style scoped lang="scss">
 .card {
-  background-color: var( --mao-card-bg);
+  background-color: var(--el-fill-color-blank);
   // width: $card-width;
   // margin: $card-margin;
   // border: 1px solid var(--el-border-color);
@@ -139,7 +138,7 @@ function invoke() {
   margin-bottom: $margin-bottom;
   padding: $padding-sm;
   // 添加阴影
-  box-shadow: var(--mao-box-shadow);
+  box-shadow: var(--el-box-shadow-light);
   overflow: hidden;
   display: flex;
   flex-direction: column;

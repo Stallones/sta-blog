@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { useWebsiteStore } from "@/store/useWebsiteStore";
 
 const useWebsite = useWebsiteStore();
@@ -72,11 +72,11 @@ const useWebsite = useWebsiteStore();
   border-radius: $border-radius;
   text-align: center;
   // border: 1px solid var(--el-border-color-lighter);
-  background: var(--mao-card-bg);
+  background: var(--el-fill-color-blank);
   position: relative;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: var(--mao-box-shadow);
+  box-shadow: var(--el-box-shadow-light);
   display: flex;
   flex-direction: column;
 
@@ -100,7 +100,7 @@ const useWebsite = useWebsiteStore();
       background: linear-gradient(
         to bottom,
         hsla(0, 0%, 0%, 0.2) 0%,
-        var(--mao-card-bg) 100%
+        var(--el-fill-color-blank) 100%
       );
     }
   }

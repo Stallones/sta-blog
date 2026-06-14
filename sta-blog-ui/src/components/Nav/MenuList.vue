@@ -142,7 +142,7 @@ const env = import.meta.env;
     bottom: 5px;
     height: 2px;
     width: 0;
-    background-color: var(--mao-accent);
+    background-color: var(--el-color-primary);
     transition: width 0.3s;
   }
 
@@ -151,7 +151,7 @@ const env = import.meta.env;
 
     span .arrow {
       transform: rotate(180deg);
-      color: var(--mao-accent);
+      color: var(--el-color-primary);
     }
 
     .menus_item_child {
@@ -173,7 +173,7 @@ const env = import.meta.env;
     margin-left: 1px;
     transition: all 0.5s;
     transform: rotate(0deg);
-    color: var(--mao-accent);
+    color: var(--el-color-primary);
   }
 }
 
@@ -185,7 +185,7 @@ const env = import.meta.env;
   width: 100px;
   transform: translateX(-50%);
   white-space: nowrap;
-  background: var(--mao-card-bg);
+  background: var(--el-fill-color-blank);
   box-shadow: 0 2px 12px 0 var(--shadow-color);
   border-radius: 5px;
   border: 1px solid var(--el-border-color);
@@ -209,11 +209,11 @@ const env = import.meta.env;
 
     &:hover {
       cursor: pointer;
-      background: var(--mao-accent);
+      background: var(--el-color-primary);
       color: white;
     }
     html.dark &:hover {
-      background: var(--mao-accent);
+      background: var(--el-color-primary);
     }
   }
 

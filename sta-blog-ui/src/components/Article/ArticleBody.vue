@@ -40,14 +40,15 @@ function onHtmlChanged(htmlText: string) {
 -->
 <style lang="scss">
 .md-editor {
-  --md-bk-color: var(--mao-card-bg);
+  --md-bk-color: var(--el-fill-color-blank);
   // margin-bottom: $margin-bottom;
   border-radius: $border-radius;
-  // box-shadow: var(--mao-box-shadow);
+  // box-shadow: var(--el-box-shadow-light);
   // padding: 0 $padding-md ;
 }
 
 .md-editor-dark {
+   --md-bk-color: var(--el-fill-color-blank);
   .md-editor-preview {
     blockquote {
       background-color: var(--mao-md-preview-quote-bg);

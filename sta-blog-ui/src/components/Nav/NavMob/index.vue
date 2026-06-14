@@ -22,8 +22,8 @@
   <el-drawer
     v-model="drawer"
     :with-header="true"
-    size="40%"
-    direction="ltr"
+    size="33%"
+    direction="rtl"
     :show-close="false"
   >
     <template #header>

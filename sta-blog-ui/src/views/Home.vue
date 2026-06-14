@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="home-content">
     <!-- 搜索 + 公告 重叠区域 -->
     <div class="hc-header">
@@ -63,10 +63,10 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: var(--mao-card-bg);
+  background: var(--el-fill-color-blank);
   // border: 1px solid var(--border-color-light);
   transition: all 0.3s ease;
-  box-shadow: var(--mao-box-shadow);
+  box-shadow: var(--el-box-shadow-light);
   // 底层：被搜索展开后遮挡
   width: 100%;
 }
@@ -79,10 +79,10 @@ onUnmounted(() => {
   align-items: center;
   // justify-content: center;
   // gap: 8px;
-  // background: var(--mao-card-bg);
+  // background: var(--el-fill-color-blank);
   // border: 1px solid var(--border-color-light);
   transition: all 0.3s ease;
-  // box-shadow: var(--mao-box-shadow);
+  // box-shadow: var(--el-box-shadow-light);
   // 底层：被搜索展开后遮挡
   // width: 50px;
 

@@ -57,7 +57,10 @@ function resolveOverlay(mode: GalleryLayoutMode): boolean {
   <div v-view-request="{ callback: fetchArticles }">
     <!-- 卡片列表：带 fade 过渡 -->
     <TransitionGroup name="gallery-fade" tag="div"
-      :class="{ 'waterfall-grid': [6, 7].includes(effectiveMode) && !isMobile }"
+      :class="{
+        'two-col-grid': [4, 5].includes(effectiveMode) && !isMobile,
+        'waterfall-grid': [6, 7].includes(effectiveMode) && !isMobile,
+      }"
     >
       <template v-for="(article, index) in cardList" :key="article.id">
         <!-- 瀑布流容器：用 CSS column-count -->
@@ -91,7 +94,18 @@ function resolveOverlay(mode: GalleryLayoutMode): boolean {
 </template>
 
 <style scoped lang="scss">
-/* ── 瀑布流网格 ── */
+/* ── 两列等宽网格（模式 4/5）── */
+.two-col-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── 瀑布流网格（模式 6/7）── */
 .waterfall-grid {
   column-count: 2;
   column-gap: 14px;

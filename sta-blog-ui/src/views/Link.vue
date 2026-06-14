@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { Watermelon } from "@element-plus/icons-vue";
 import {
   ElMessage,
@@ -217,8 +217,8 @@ function applyLinkFunc() {
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: var(--mao-card-bg);
-  box-shadow: var(--mao-box-shadow);
+  background-color: var(--el-fill-color-blank);
+  box-shadow: var(--el-box-shadow-light);
   border-radius: 1rem;
   padding: 1rem 1rem 2rem;
 
@@ -349,7 +349,7 @@ function applyLinkFunc() {
     color: #999;
     display: flex;
     flex-direction: column;
-    background: var(--mao-bg-message);
+    background: var(--el-fill-color);
     padding: 0.5rem;
     border-radius: $border-radius;
     margin-bottom: 1rem;

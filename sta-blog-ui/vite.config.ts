@@ -63,9 +63,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
                 scss: {
                     javascriptEnabled: true,
                     additionalData: '@use "src/styles/variable" as *;',
-                    // Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
-                    // api: 'modern',
-                    silenceDeprecations: ['legacy-js-api']
+                    silenceDeprecations: ['legacy-js-api'],
                 },
             },
             postcss: {

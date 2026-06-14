@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ArticleVO } from "@/types";
+import { Calendar, Folder, View } from "@element-plus/icons-vue";
 
 defineProps<{
   article: ArticleVO;
@@ -13,7 +14,12 @@ defineProps<{
     <div class="g-cover">
       <div class="g-cover-inner">
         <div class="g-img-wrap">
-          <img class="g-img" v-lazy="true" :data-src="article.articleCover" alt="" />
+          <img
+            class="g-img"
+            v-lazy="true"
+            :data-src="article.articleCover"
+            alt=""
+          />
         </div>
       </div>
     </div>
@@ -23,14 +29,23 @@ defineProps<{
       <!-- 第1行：标题 -->
       <div class="g-title">{{ article.articleTitle }}</div>
 
-      <!-- 第2行：分类 | #tag #tag -->
+      <!-- 第2行：分类 | #tag #tag | time-->
       <div class="g-tags">
-        <span class="g-tag-cat">{{ article.categoryName }}</span>
-        <span v-for="tag in article.tags" :key="tag.id" class="g-tag-item">#{{ tag.tagName }}</span>
+        <el-icon><Calendar /></el-icon>
+        <span> 发布于 {{ article.createTime }} </span>
+        <el-divider direction="vertical" class="g-divider" />
+
+        <el-icon><Folder /></el-icon>
+        <span> {{ article.categoryName }} </span>
+        <el-divider direction="vertical" class="g-divider" />
+
+        <el-icon><View /></el-icon>
+        <span> {{ article.visitCount }}</span>
+        <!-- <span v-for="tag in article.tags" :key="tag.id" class="g-tag-item">#{{ tag.tagName }}</span> -->
       </div>
 
       <!-- 第3行：meta -->
-      <div class="g-meta">
+      <!-- <div class="g-meta">
         <SvgIcon name="reading" /> {{ article.visitCount }}
         <span class="g-sep">|</span>
         <SvgIcon name="comments" /> {{ article.commentCount }}
@@ -38,13 +53,13 @@ defineProps<{
         <SvgIcon name="like" /> {{ article.likeCount }}
         <span class="g-sep">|</span>
         <SvgIcon name="collection" /> {{ article.favoriteCount }}
-      </div>
+      </div> -->
 
       <!-- 第4行：描述（最多2行） -->
       <p class="g-desc">{{ article.articleContent }}</p>
 
       <!-- 第5行：时间 -->
-      <div class="g-time">{{ article.createTime }}</div>
+      <!-- <div class="g-time">{{ article.createTime }}</div> -->
     </div>
   </div>
 </template>
@@ -58,8 +73,8 @@ $bp: 768px;
   height: 200px;
   overflow: hidden;
   border-radius: $border-radius;
-  background-color: var(--mao-card-bg);
-  box-shadow: var(--mao-box-shadow);
+  background-color: var(--el-fill-color-blank);
+  box-shadow: var(--el-box-shadow-light);
   cursor: pointer;
   margin-bottom: $margin-bottom;
 
@@ -68,10 +83,20 @@ $bp: 768px;
     height: 12rem;
   }
 
-  &:hover .g-img { transform: scale(1.08); }
+  &:hover .g-img {
+    transform: scale(1.08);
+  }
 
-  &--left  { @media(min-width:$bp){flex-direction:row;} }
-  &--right { @media(min-width:$bp){flex-direction:row-reverse;} }
+  &--left {
+    @media (min-width: $bp) {
+      flex-direction: row;
+    }
+  }
+  &--right {
+    @media (min-width: $bp) {
+      flex-direction: row-reverse;
+    }
+  }
 }
 
 /* ── 统一封面 ── */
@@ -92,10 +117,13 @@ $bp: 768px;
   height: 100%;
 }
 
-.g-img-wrap { overflow: hidden; }
+.g-img-wrap {
+  overflow: hidden;
+}
 
 .g-img {
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   transition: transform 0.35s ease;
 }
@@ -107,7 +135,7 @@ $bp: 768px;
   justify-content: center;
   width: 100%;
   padding: 0.65rem 1rem;
-  gap: 0.25rem;
+  gap: 1rem;
 
   @media (min-width: $bp) {
     width: 58%;
@@ -124,7 +152,9 @@ $bp: 768px;
   overflow: hidden;
   text-overflow: ellipsis;
 
-  &:hover { color: var(--accent-color); }
+  &:hover {
+    color: var(--accent-color);
+  }
 }
 
 .g-tags {
@@ -135,20 +165,31 @@ $bp: 768px;
   color: var(--text-secondary);
   flex-wrap: wrap;
 
-  .g-tag-cat::after { content: "|"; margin-left: 0.35rem; opacity: 0.5; }
-  .g-tag-item { white-space: nowrap; }
+  .g-divider {
+    margin: 0 5px;
+    border-left: 1px var(--text-secondary) var(--el-border-style);
+  }
+  // .g-tag-cat::after { content: "|"; margin-left: 0.35rem; opacity: 0.5; }
+  .g-tag-item {
+    white-space: nowrap;
+  }
 }
 
-.g-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.72rem;
-  color: var(--text-secondary);
+// .g-meta {
+//   display: flex;
+//   align-items: center;
+//   gap: 0.25rem;
+//   font-size: 0.72rem;
+//   color: var(--text-secondary);
 
-  svg { width: 14px; height: 14px; }
-  .g-sep { opacity: 0.4; }
-}
+//   svg {
+//     width: 14px;
+//     height: 14px;
+//   }
+//   .g-sep {
+//     opacity: 0.4;
+//   }
+// }
 
 .g-desc {
   font-size: 0.82rem;

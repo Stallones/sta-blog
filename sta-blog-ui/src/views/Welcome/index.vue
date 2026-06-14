@@ -27,7 +27,7 @@ const login_bg = import.meta.env.VITE_MINIO_SERVE + '/blog/@SYB1[VP3FD01[03P`HBG
 <style scoped>
 .left-card{
   flex: 1;
-  background-color: var(--mao-welcome-bg)
+  background-color: var(--el-bg-color)
 }
 
 .right-card {

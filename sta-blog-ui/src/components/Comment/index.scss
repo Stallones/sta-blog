@@ -102,7 +102,7 @@
     margin: 0.5rem 0.2rem;
     padding: 0.5rem 0.7rem;
     border-radius: 0.5em;
-    background-color: var(--mao-bg-comment);
+    background-color: var(--el-fill-color);
     line-height: 0.8em;
   }
 
@@ -193,7 +193,7 @@
   :deep(.md-editor-preview-wrapper) {
     padding: 0;
     margin: 0;
-    background: var(--mao-bg-comment);
+    background: var(--el-fill-color);
   }
 
   // 普通文字

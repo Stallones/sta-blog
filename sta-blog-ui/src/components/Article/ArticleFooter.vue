@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="article-footer">
         <!-- ═══ 二、版权声明（原 ArticleFooter） ═══ -->
     <div class="af-copyright">
@@ -27,6 +27,7 @@
         </span>
       </div>
     </div>
+    <!-- <el-divider></el-divider> -->
     <!-- ═══ 一、文章交互区（原 ArticleOthers） ═══ -->
     <div class="af-interactions">
       <!-- 标签 + 点赞收藏分享 -->
@@ -226,7 +227,7 @@ async function copyToClipboard() {
   margin: 0.5rem;
   padding: 0.5rem 0.9rem;
   border-radius: 5px;
-  background-color: var(--mao-bg-color);
+  background-color: var(--el-bg-color);
   cursor: pointer;
   font-size: 0.8em;
 
@@ -333,6 +334,8 @@ async function copyToClipboard() {
 /* ═══════ 版权声明 ═══════ */
 .af-copyright {
   font-size: 0.8em;
+  border: 1px solid var(--el-border-color);
+  padding: 0 $padding-md;
  
 
   &__item {

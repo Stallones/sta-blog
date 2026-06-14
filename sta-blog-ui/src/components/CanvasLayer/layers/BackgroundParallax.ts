@@ -25,7 +25,7 @@ let themeObserver: MutationObserver | null = null;
 
 function getCanvasBg(): string {
   return getComputedStyle(document.documentElement)
-    .getPropertyValue("--mao-global-bg")
+    .getPropertyValue("--el-bg-color")
     .trim() || "hsl(210, 17%, 98%)";
 }
 

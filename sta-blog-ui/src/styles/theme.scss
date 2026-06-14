@@ -1,11 +1,10 @@
 /* ══════════════════════════════════════════════════════════════
    风格主题 — 亮色 / 暗色
    
-   架构：3+3 HSL 色阶 + 语义映射
-   - 色阶层：W1/W2/W3（白3度）+ B1/B2/B3（黑3度），只改这里
-   - 语义层：组件通过 var(--card-bg) 等语义变量引用，不直接用色阶
-   - 强调色：亮色蓝/暗色橙
-   - 所有颜色统一使用 hsl()/hsla()，组件独有色也在组件内用 hsl()
+   架构：
+   - 色阶层：W1-W3 / B1-B3 + accent 系列语义变量
+   - Element Plus 变量：直接使用 --el-*，html.dark 中统一覆盖
+   - [MAO-KEPT] 项目特有效果（渐变/毛玻璃/波浪等），el 无对应
    ══════════════════════════════════════════════════════════════ */
 
 /* ────────────────────────────────────────────
@@ -33,62 +32,36 @@
   /* 橙色（亮色模式备用，如标签高亮） */
   --orange: hsl(25, 95%, 53%); /* #f0883e */
 
-  /* ═══ 语义层：背景 ═══ */
-  --mao-global-bg: hsl(0, 0%, 100%);
-  --mao-card-bg: hsl(0, 0%, 98%);
-  --mao-input-bg: hsl(217, 57%, 95%);
+  /* ═══ [MAO-KEPT] 项目特有效果，el 无对应变量 ═══ */
 
-  --mao-accent: hsl(204, 90%, 62%);
-  //   --mao-md-preview-quote-bg: hsl(0, 0%, 13%);
-  //    --mao-md-preview-code-bg: hsl(0, 0%, 7%);
+  /* [MAO-KEPT] Markdown 预览 */
+  --mao-md-preview-quote-bg: hsl(210, 14%, 96%);
+  --mao-md-preview-code-bg: hsl(210, 17%, 98%);
 
-  /* ═══ 语义层：导航栏 ═══ */
+  /* [MAO-KEPT] 导航栏毛玻璃 */
   --mao-nav-bg: hsla(0, 0%, 100%, 0.5);
   --mao-nav-border-transparent: hsla(0, 0%, 100%, 0.33);
 
-  --mao-fm-btn-bg: hsl(204, 90%, 62%);
+  /* [MAO-KEPT] 浮动菜单 hover */
+  --mao-fm-btn-color: var(--el-color-primary); 
   --mao-fm-layout-hover: hsla(0, 0%, 0%, 0.05);
 
-  /* ═══ 语义层：文本 ═══ */
-  --mao-text-primary: hsl(210, 11%, 15%); /* #212529 */
-  --mao-text-secondary: hsl(210, 7%, 46%); /* #6c757d */
-  --mao-text-placeholder: hsl(210, 9%, 82%); /* #adb5bd */
-
+  /* [MAO-KEPT] 封面阴影 */
   --mao-cover-shadow: hsla(0, 0%, 0%, 0.35);
 
-
-
-
-
-  --mao-canvas-bg: var(--w2);
-  --card-bg: var(--w1);
-  --secondary-bg: var(--w3);
-  --mao-bg-message: var(--w3);
-  --mao-charging-bg-color: var(--w3);
-  --mao-bg-comment: var(--w3);
-  --mao-bg-left: var(--w1);
-  --mao-bg-right: var(--w1);
-  --mao-bg-left-card: var(--w1);
-  --mao-context-bg: var(--w1);
-  --mao-warning-bg: var(--w1);
-  --mao-welcome-bg: var(--w1);
-  --mao-timeline-year-bg: var(--w1);
-  --mao-scroll-percentage-bg: var(--w1);
-  --mao-search-hover-bg: hsl(210, 10%, 88%);
-
-  /* ═══ 语义层：毛玻璃 / 半透明 ═══ */
+  /* [MAO-KEPT] 毛玻璃效果 */
   --mao-glass-bg: hsla(0, 0%, 100%, 0.8);
   --mao-glass-bg-hover: hsla(0, 0%, 100%, 0.95);
   --mao-glass-bg-light: hsla(0, 0%, 100%, 0.1);
   --mao-glass-bg-medium: hsla(0, 0%, 100%, 0.15);
 
-  /* ═══ 语义层：波浪（首页） ═══ */
+  /* [MAO-KEPT] 波浪背景 */
   --mao-bg-wave01: hsla(210, 17%, 98%, 0.3);
   --mao-bg-wave02: hsla(210, 12%, 93%, 0.4);
   --mao-bg-wave03: hsla(210, 9%, 89%, 0.5);
   --mao-bg-wave04: hsla(210, 17%, 98%, 0.3);
 
-  /* ═══ 语义层：上下文菜单 ═══ */
+  /* [MAO-KEPT] 右键菜单 */
   --mao-context-header-bg: linear-gradient(
     to right,
     hsl(270, 100%, 97%),
@@ -96,32 +69,18 @@
   );
   --mao-context-divider: hsl(270, 100%, 94%);
 
-  /* ═══ 语义层：边框 ═══ */
-  --border-color-light: hsl(210, 14%, 90%);
-  --mao-br-bg: hsl(210, 89%, 62%);
+  /* [MAO-KEPT] Canvas 画布背景 */
+  // --mao-canvas-bg: var(--w2);
 
-  /* ═══ 语义层：文本 ═══ */
-  --text-primary: hsl(210, 11%, 15%); /* #212529 */
-  --text-secondary: hsl(210, 7%, 46%); /* #6c757d */
-  --text-placeholder: hsl(210, 9%, 82%); /* #adb5bd */
+  /* [MAO-KEPT] 搜索 hover */
+  --mao-search-hover-bg: hsl(210, 10%, 88%);
 
-  /* ═══ 语义层：强调 / 渐变 ═══ */
-  --accent-color: var(--accent);
-  --accent-color-hover: var(--accent-hover);
+  /* [MAO-KEPT] 渐变条 */
   --mao-bg-category: var(--accent-gradient);
   --mao-bg-footer: var(--accent-gradient);
   --mao-scroll-percentage-bar: var(--accent-gradient);
-  --scroll-bar-color: var(--accent-gradient);
-  --mao-bg-reply: hsla(217, 91%, 60%, 0.12);
 
-  /* ═══ 语义层：阴影 ═══ */
-  --mao-box-shadow: 0px 0px 10px hsla(0, 0%, 0%, 0.2);
-  --card-hover-box-shadow: 0 4px 12px hsla(0, 0%, 0%, 0.08);
-  --shadow-color: hsla(0, 0%, 0%, 0.06);
-  --shadow-mask-bg: hsla(0, 0%, 0%, 0.5);
-  --shadow-button-bg: hsla(0, 0%, 100%, 0.9);
-
-  /* ═══ 语义层：相册 ═══ */
+  /* [MAO-KEPT] 相册 */
   --mao-album-banner-bg: linear-gradient(
     45deg,
     hsl(215, 29%, 24%),
@@ -132,6 +91,21 @@
     hsl(230, 100%, 93%) 0%,
     hsl(240, 100%, 97%) 100%
   );
+
+  /* ═══ 旧版无前缀兼容变量 ═══ */
+  --card-bg: var(--w1);
+  --secondary-bg: var(--w3);
+  --border-color-light: hsl(210, 14%, 90%);
+  --text-primary: hsl(210, 11%, 15%); /* #212529 */
+  --text-secondary: hsl(210, 7%, 46%); /* #6c757d */
+  --text-placeholder: hsl(210, 9%, 82%); /* #adb5bd */
+  --accent-color: var(--accent);
+  --accent-color-hover: var(--accent-hover);
+  --scroll-bar-color: var(--accent-gradient);
+  --card-hover-box-shadow: 0 4px 12px hsla(0, 0%, 0%, 0.08);
+  --shadow-color: hsla(0, 0%, 0%, 0.06);
+  --shadow-mask-bg: hsla(0, 0%, 0%, 0.5);
+  --shadow-button-bg: hsla(0, 0%, 100%, 0.9);
 
   /* ═══ 音乐播放器 — 保留旧变量名兼容 ═══ */
   --primary: var(--accent);
@@ -161,17 +135,14 @@
    ──────────────────────────────────────────── */
 html.dark {
   /* ═══ 色阶层 ═══ */
-  /* 白3度：W1 最白 → W3 最灰 */
-  --w1: hsl(0, 0%, 100%); /* #ffffff 纯白：卡片、浮层 */
-  --w2: hsl(210, 17%, 98%); /* #f8f9fa 次白：主背景 */
-  --w3: hsl(210, 14%, 96%); /* #f1f3f5 浅灰：次级面板 */
-  /* 黑3度（亮色模式几乎不用，但保留语义） */
-  --b1: hsl(215, 28%, 7%); /* #0d1117 最黑 */
-  --b2: hsl(215, 27%, 11%); /* #161b22 次黑 */
-  --b3: hsl(216, 19%, 16%); /* #1c2128 深灰 */
-  /* 强调色：橙 */
+  --w1: hsl(0, 0%, 100%); /* #ffffff */
+  --w2: hsl(210, 17%, 98%); /* #f8f9fa */
+  --w3: hsl(210, 14%, 96%); /* #f1f3f5 */
+  --b1: hsl(215, 28%, 7%); /* #0d1117 */
+  --b2: hsl(215, 27%, 11%); /* #161b22 */
+  --b3: hsl(216, 19%, 16%); /* #1c2128 */
   --accent: hsl(25, 95%, 53%); /* #f0883e */
-  --accent-hover: hsl(25, 90%, 58%); /* 更亮橙 */
+  --accent-hover: hsl(25, 90%, 58%);
   --accent-gradient: linear-gradient(
     135deg,
     hsl(215, 79%, 51%),
@@ -179,68 +150,69 @@ html.dark {
   );
   --orange: hsl(25, 95%, 53%);
 
-  /* ═══ 语义层：背景 ═══ */
-  --mao-global-bg: hsl(0, 0%, 0%);
-  --mao-card-bg: hsl(0, 0%, 8%);
-  --mao-input-bg: hsl(0, 0%, 20%);
-  --mao-accent: hsl(25, 95%, 53%);
+  /* ═══════════════════════════════════
+     Element Plus 暗色覆盖（--el-* 在此统一设置）
+     ═══════════════════════════════════ */
+  --el-border-color: hsl(215, 15%, 20%); /* #30363d */
+  --el-border-color-light: hsl(215, 14%, 17%); /* #21262d */
+  --el-border-color-lighter: hsl(215, 15%, 20%); /* #30363d */
+  --el-border-color-extra-light: hsl(215, 14%, 17%); /* #21262d */
 
-  --mao-md-preview-quote-bg: hsl(0, 0%, 11%);
+  --el-text-color-primary: hsl(210, 18%, 87%); /* #e6edf3 */
+  --el-text-color-regular: hsl(210, 14%, 79%); /* #c9d1d9 */
+  --el-text-color-secondary: hsl(210, 10%, 55%); /* #8b949e */
+  --el-text-color-placeholder: hsl(215, 9%, 32%); /* #484f58 */
+
+  // --el-fill-color: var(--b3);
+  // --el-fill-color-blank: hsla(0, 0%, 9%);
+  // --el-fill-color-light: var(--b2);
+  // --el-fill-color-lighter: hsl(215, 14%, 17%); /* #21262d */
+
+  --el-bg-color:hsla(0, 0%, 0%) !important;
+  --el-bg-color-overlay: var(--b2);
+
+  --el-color-primary: hsl(210, 100%, 67%); /* #58a6ff */
+  --el-color-primary-light-3: hsl(210, 100%, 74%); /* #79b8ff */
+  --el-color-primary-light-5: hsl(210, 100%, 81%); /* #a5d0ff */
+  --el-color-primary-light-7: hsl(210, 100%, 87%); /* #c2dfff */
+  --el-color-primary-light-8: hsl(210, 100%, 90%); /* #d6ebff */
+  --el-color-primary-light-9: hsl(210, 100%, 95%); /* #edf5ff */
+  --el-color-primary-dark-2: hsl(210, 100%, 60%); /* #388bfd */
+
+  --el-color-success: hsl(130, 47%, 52%); /* #3fb950 */
+  --el-color-warning: hsl(40, 74%, 48%); /* #d29922 */
+  --el-color-danger: hsl(0, 81%, 63%); /* #f85149 */
+
+  /* ═══ [MAO-KEPT] 项目特有效果 ═══ */
+
+  /* [MAO-KEPT] Markdown 暗色 */
+  --mao-md-preview-quote-bg: hsl(0, 0%, 15%);
   --mao-md-preview-code-bg: hsl(0, 0%, 0%);
 
-  /* ═══ 语义层：导航栏 ═══ */
+  /* [MAO-KEPT] 导航栏毛玻璃 */
   --mao-nav-bg: hsla(0, 0%, 0%, 0.5);
   --mao-nav-border-transparent: hsla(0, 0%, 100%, 0.33);
 
-  --mao-fm-btn-bg: hsl(0, 0%, 15%);
+  /* [MAO-KEPT] 浮动菜单 hover */
+  --mao-fm-btn-color:  var(--el-fill-color-light); 
   --mao-fm-layout-hover: hsla(0, 0%, 100%, 0.05);
 
-  /* ═══ 语义层：文本 ═══ */
-  --mao-text-primary: hsl(210, 18%, 87%); /* #e6edf3 */
-  --mao-text-secondary: hsl(210, 10%, 55%); /* #8b949e */
-  --mao-text-placeholder: hsl(215, 9%, 32%); /* #484f58 */
+  /* [MAO-KEPT] 封面阴影 */
+  --mao-cover-shadow: hsla(0, 0%, 0%, 0.35);
 
-
-
-
-
-
-
-
-
-
-
-
-  --mao-background-color: var(--b1);
-  --mao-canvas-bg: var(--b1);
-  --card-bg: var(--b2);
-  --secondary-bg: var(--b3);
-  --mao-bg-message: var(--b2);
-  --mao-charging-bg-color: var(--b2);
-  --mao-bg-comment: var(--b3);
-  --mao-bg-left: var(--b2);
-  --mao-bg-right: var(--b1);
-  --mao-bg-left-card: var(--b3);
-  --mao-context-bg: var(--b2);
-  --mao-warning-bg: var(--b2);
-  --mao-welcome-bg: var(--b1);
-  --mao-timeline-year-bg: var(--b2);
-  --mao-scroll-percentage-bg: var(--b2);
-  --mao-search-hover-bg: hsl(215, 14%, 17%);
-
-  /* ═══ 语义层：毛玻璃 / 半透明 ═══ */
+  /* [MAO-KEPT] 毛玻璃效果 */
   --mao-glass-bg: hsla(215, 27%, 11%, 0.9);
   --mao-glass-bg-hover: hsla(216, 19%, 16%, 0.95);
   --mao-glass-bg-light: hsla(0, 0%, 100%, 0.05);
   --mao-glass-bg-medium: hsla(0, 0%, 100%, 0.08);
 
-  /* ═══ 语义层：波浪 ═══ */
+  /* [MAO-KEPT] 波浪背景 */
   --mao-bg-wave01: hsla(215, 28%, 7%, 0.4);
   --mao-bg-wave02: hsla(215, 27%, 11%, 0.5);
   --mao-bg-wave03: hsla(216, 19%, 16%, 0.6);
   --mao-bg-wave04: hsla(215, 28%, 7%, 0.4);
 
-  /* ═══ 语义层：上下文菜单 ═══ */
+  /* [MAO-KEPT] 右键菜单 */
   --mao-context-header-bg: linear-gradient(
     to right,
     hsl(263, 30%, 21%),
@@ -248,33 +220,18 @@ html.dark {
   );
   --mao-context-divider: hsl(258, 27%, 25%);
 
-  /* ═══ 语义层：边框 ═══ */
-  --border-color-light: hsl(215, 15%, 20%); /* #30363d */
-  --mao-br-bg: hsl(0, 0%, 17%); /* #2c2c2c */
+  /* [MAO-KEPT] Canvas 画布背景 */
+  // --mao-canvas-bg: var(--b1);
 
-  /* ═══ 语义层：文本 ═══ */
-  --text-primary: hsl(210, 18%, 87%); /* #e6edf3 */
-  --text-secondary: hsl(210, 10%, 55%); /* #8b949e */
-  --text-placeholder: hsl(215, 9%, 32%); /* #484f58 */
+  /* [MAO-KEPT] 搜索 hover */
+  --mao-search-hover-bg: hsl(215, 14%, 17%);
 
-  /* ═══ 语义层：强调 / 渐变 ═══ */
-  --accent-color: var(--accent);
-  --accent-color-hover: var(--accent-hover);
+  /* [MAO-KEPT] 渐变条 */
   --mao-bg-category: var(--accent-gradient);
   --mao-bg-footer: var(--accent-gradient);
   --mao-scroll-percentage-bar: var(--accent-gradient);
-  --scroll-bar-color: var(--accent-gradient);
-  --mao-bg-reply: hsla(215, 79%, 51%, 0.15);
 
-  /* ═══ 语义层：阴影 ═══ */
-  --mao-shadow: 0 2px 12px 0 hsla(0, 0%, 0%, 0.4);
-  --card-box-shadow: 0 1px 3px hsla(0, 0%, 0%, 0.3);
-  --card-hover-box-shadow: 0 4px 12px hsla(0, 0%, 0%, 0.5);
-  --shadow-color: hsla(0, 0%, 0%, 0.3);
-  --shadow-mask-bg: hsla(0, 0%, 0%, 0.7);
-  --shadow-button-bg: hsla(215, 27%, 11%, 0.9);
-
-  /* ═══ 语义层：相册 ═══ */
+  /* [MAO-KEPT] 相册 */
   --mao-album-banner-bg: linear-gradient(
     45deg,
     hsl(210, 32%, 15%),
@@ -285,6 +242,22 @@ html.dark {
     hsl(216, 19%, 16%) 0%,
     hsl(213, 13%, 18%) 100%
   );
+
+  /* ═══ 旧版无前缀兼容变量 ═══ */
+  --card-bg: var(--b2);
+  --secondary-bg: var(--b3);
+  --border-color-light: hsl(215, 15%, 20%); /* #30363d */
+  --text-primary: hsl(210, 18%, 87%); /* #e6edf3 */
+  --text-secondary: hsl(210, 10%, 55%); /* #8b949e */
+  --text-placeholder: hsl(215, 9%, 32%); /* #484f58 */
+  --accent-color: var(--accent);
+  --accent-color-hover: var(--accent-hover);
+  --scroll-bar-color: var(--accent-gradient);
+  --card-box-shadow: 0 1px 3px hsla(0, 0%, 0%, 0.3);
+  --card-hover-box-shadow: 0 4px 12px hsla(0, 0%, 0%, 0.5);
+  --shadow-color: hsla(0, 0%, 0%, 0.3);
+  --shadow-mask-bg: hsla(0, 0%, 0%, 0.7);
+  --shadow-button-bg: hsla(215, 27%, 11%, 0.9);
 
   /* ═══ 音乐播放器 ═══ */
   --primary: hsl(210, 100%, 67%); /* #58a6ff */
@@ -300,45 +273,12 @@ html.dark {
   --comment-grey: hsl(210, 10%, 55%); /* #8b949e */
   --border-color: hsl(210, 100%, 67%); /* #58a6ff */
   --hr-border: hsl(215, 15%, 20%); /* #30363d */
-
-  /* ═══════════════════════════════════
-     Element Plus 暗色覆盖
-     ═══════════════════════════════════ */
-  --el-border-color: hsl(215, 15%, 20%); /* #30363d */
-  --el-border-color-light: hsl(215, 14%, 17%); /* #21262d */
-  --el-border-color-lighter: hsl(215, 15%, 20%); /* #30363d */
-  --el-border-color-extra-light: hsl(215, 14%, 17%); /* #21262d */
-
-  --el-text-color-primary: hsl(210, 18%, 87%); /* #e6edf3 */
-  --el-text-color-regular: hsl(210, 14%, 79%); /* #c9d1d9 */
-  --el-text-color-secondary: hsl(210, 10%, 55%); /* #8b949e */
-  --el-text-color-placeholder: hsl(215, 9%, 32%); /* #484f58 */
-
-  --el-fill-color-blank: var(--b1);
-  --el-fill-color-light: var(--b2);
-  --el-fill-color: var(--b3);
-  --el-fill-color-lighter: hsl(215, 14%, 17%); /* #21262d */
-
-  --el-bg-color: var(--b1) !important;
-  --el-bg-color-overlay: var(--b2);
-
-  --el-color-primary: hsl(210, 100%, 67%); /* #58a6ff */
-  --el-color-primary-light-3: hsl(210, 100%, 74%); /* #79b8ff */
-  --el-color-primary-light-5: hsl(210, 100%, 81%); /* #a5d0ff */
-  --el-color-primary-light-7: hsl(210, 100%, 87%); /* #c2dfff */
-  --el-color-primary-light-8: hsl(210, 100%, 90%); /* #d6ebff */
-  --el-color-primary-light-9: hsl(210, 100%, 95%); /* #edf5ff */
-  --el-color-primary-dark-2: hsl(210, 100%, 60%); /* #388bfd */
-
-  --el-color-success: hsl(130, 47%, 52%); /* #3fb950 */
-  --el-color-warning: hsl(40, 74%, 48%); /* #d29922 */
-  --el-color-danger: hsl(0, 81%, 63%); /* #f85149 */
 }
 
 /* ── 全局字体 & 基础 ── */
 body {
   font-family: "阿里妈妈方圆体 VF Regular", sans-serif;
-  background-color: var(--mao-background-color);
+  background-color: var(--el-bg-color);
   color: var(--text-primary);
   transition: background-color 0.3s ease, color 0.3s ease;
 }

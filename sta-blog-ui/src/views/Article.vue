@@ -9,6 +9,7 @@
       :theme="mode"
       @htmlChanged="mdHtml"
     />
+    <!-- <el-divider></el-divider> -->
     <ArticleFooter :article="articleVO" />
     <!-- 用户评论 -->
     <Comment
@@ -44,7 +45,6 @@
     </div>
   </div>
 
-  <DirectoryCardMob :id="editorId" :scroll-element="scrollElement" />
 </template>
 
 <script setup lang="ts">
@@ -63,6 +63,7 @@ import {
   registerArticleItems,
   unregisterArticleItems,
 } from "@/components/FloatingMenu/registerGlobal";
+import { useFloatingMenu } from "@/composables/useFloatingMenu";
 
 // ── Store ──
 const route = useRoute();
@@ -72,9 +73,11 @@ const { articleVO } = storeToRefs(articleStore);
 
 // ── Composables ──
 const { isReadingMode } = useReadingMode();
+const { setCatalogContext } = useFloatingMenu();
 
 onMounted(async () => {
   registerArticleItems();
+  setCatalogContext(editorId, scrollElement);
   await getArticleDetailById();
 });
 
@@ -130,9 +133,9 @@ useReadingProgress(".progress");
 @use "@/styles/mixin" as *;
 
 .article-container {
-  background-color: var(--mao-card-bg);
+  background-color: var(--el-fill-color-blank);
   border-radius: $border-radius;
-  box-shadow: var(--mao-box-shadow);
+  box-shadow: var(--el-box-shadow-light);
   display: flex ;
   flex-direction: column;
   gap: 20px;

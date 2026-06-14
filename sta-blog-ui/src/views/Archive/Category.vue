@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { categoryList } from "@/apis/category";
 import { whereArticleList } from "@/apis/article";
 import ArticleList from "./ArticleList.vue";
@@ -132,8 +132,8 @@ async function getArticle(id: Number) {
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: var(--mao-card-bg);
-  box-shadow: var(--mao-box-shadow);
+  background-color: var(--el-fill-color-blank);
+  box-shadow: var(--el-box-shadow-light);
   border-radius: 1rem;
   padding: 1rem 1rem 2rem;
 

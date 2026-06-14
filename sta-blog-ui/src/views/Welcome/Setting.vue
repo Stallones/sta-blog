@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import {ElMessage, FormRules, UploadInstance} from 'element-plus'
 import {Plus, User, Select, Message, Refresh, Unlock} from '@element-plus/icons-vue'
 
@@ -402,7 +402,7 @@ $bp-2xl: 1536px;
   margin-bottom: 1.25rem;
   border-radius: $border-radius;
   background-color: var(--el-bg-color);
-  box-shadow: var(--mao-shadow);
+  box-shadow: var(--el-box-shadow-light);
 }
 
 .panel--email {

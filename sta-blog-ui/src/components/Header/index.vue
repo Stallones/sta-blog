@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <header
     :class="header.cls"
     style="position: relative; width: 100%; overflow: hidden"
@@ -113,7 +113,7 @@ watch(
   justify-content: center;
   transition: background-color 0.3s ease;
 
-  background-color: var(--mao-bg-color);
+  background-color: var(--el-bg-color);
   height: 30vh;
 }
 .page-header {

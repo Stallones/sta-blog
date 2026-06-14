@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <nav
     class="h-nav"
     :class="{ 'nav-hidden': isHidden, 'nav-transparent': isTransparent }"
@@ -103,7 +103,7 @@ nav {
 
   &.nav-transparent {
     // height: 60px;
-    // border-bottom: 1px solid var(--mao-background-color);
+    // border-bottom: 1px solid var(--el-bg-color);
     background-color: transparent;
     backdrop-filter: none;
     border-bottom: 1px solid var(--mao-nav-border-transparent);

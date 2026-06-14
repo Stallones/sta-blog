@@ -36,11 +36,20 @@ function toggleSidebar() {
   sidebarVisible.value = !sidebarVisible.value;
 }
 
-// ── 目录抽屉显隐状态（文章页 FloatingMenu 按钮控制）──
-const catalogDrawerVisible = ref(false);
+// ── 目录 Popover 状态（文章页 FloatingMenu 按钮控制）──
+const catalogPopoverVisible = ref(true);
 
-function toggleCatalogDrawer() {
-  catalogDrawerVisible.value = !catalogDrawerVisible.value;
+function toggleCatalogPopover() {
+  catalogPopoverVisible.value = !catalogPopoverVisible.value;
+}
+
+// ── 目录所需上下文（Article 页挂载时设置）──
+const catalogEditorId = ref("");
+const catalogScrollElement = ref<HTMLElement | null>(null);
+
+function setCatalogContext(editorId: string, scrollEl: HTMLElement) {
+  catalogEditorId.value = editorId;
+  catalogScrollElement.value = scrollEl;
 }
 
 // ── 注册/注销功能项 ──
@@ -66,8 +75,11 @@ export function useFloatingMenu() {
     setHiddenByScroll,
     sidebarVisible,
     toggleSidebar,
-    catalogDrawerVisible,
-    toggleCatalogDrawer,
+    catalogPopoverVisible,
+    toggleCatalogPopover,
+    catalogEditorId,
+    catalogScrollElement,
+    setCatalogContext,
     registerItem,
     unregisterItem,
     hasItem,

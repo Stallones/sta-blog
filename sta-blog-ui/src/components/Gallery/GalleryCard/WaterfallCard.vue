@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ArticleVO } from "@/types";
+import { Calendar, Folder, View } from "@element-plus/icons-vue";
 
 defineProps<{
   article: ArticleVO;
@@ -20,18 +21,16 @@ defineProps<{
         <div class="g-body w-overlay-body">
           <div class="g-title w-o-title">{{ article.articleTitle }}</div>
           <div class="g-tags w-o-tags">
-            <span class="g-tag-cat">{{ article.categoryName }}</span>
-            <span v-for="tag in article.tags" :key="tag.id" class="g-tag-item">#{{ tag.tagName }}</span>
-          </div>
-          <div class="g-meta w-o-meta">
-            <SvgIcon name="reading" /> {{ article.visitCount }}
-            <span class="g-sep">|</span>
-            <SvgIcon name="comments" /> {{ article.commentCount }}
-            <span class="g-sep">|</span>
-            <SvgIcon name="like" /> {{ article.likeCount }}
+            <el-icon><Calendar /></el-icon>
+            <span> 发布于 {{ article.createTime }} </span>
+            <el-divider direction="vertical" class="g-divider" />
+            <el-icon><Folder /></el-icon>
+            <span> {{ article.categoryName }} </span>
+            <el-divider direction="vertical" class="g-divider" />
+            <el-icon><View /></el-icon>
+            <span> {{ article.visitCount }}</span>
           </div>
           <p class="g-desc w-o-desc">{{ article.articleContent }}</p>
-          <div class="g-time w-o-time">{{ article.createTime }}</div>
         </div>
       </template>
     </div>
@@ -40,18 +39,16 @@ defineProps<{
     <div v-if="!overlay" class="g-body">
       <div class="g-title">{{ article.articleTitle }}</div>
       <div class="g-tags">
-        <span class="g-tag-cat">{{ article.categoryName }}</span>
-        <span v-for="tag in article.tags" :key="tag.id" class="g-tag-item">#{{ tag.tagName }}</span>
-      </div>
-      <div class="g-meta">
-        <SvgIcon name="reading" /> {{ article.visitCount }}
-        <span class="g-sep">|</span>
-        <SvgIcon name="comments" /> {{ article.commentCount }}
-        <span class="g-sep">|</span>
-        <SvgIcon name="like" /> {{ article.likeCount }}
+        <el-icon><Calendar /></el-icon>
+        <span> 发布于 {{ article.createTime }} </span>
+        <el-divider direction="vertical" class="g-divider" />
+        <el-icon><Folder /></el-icon>
+        <span> {{ article.categoryName }} </span>
+        <el-divider direction="vertical" class="g-divider" />
+        <el-icon><View /></el-icon>
+        <span> {{ article.visitCount }}</span>
       </div>
       <p class="g-desc">{{ article.articleContent }}</p>
-      <div class="g-time">{{ article.createTime }}</div>
     </div>
   </div>
 </template>
@@ -63,8 +60,8 @@ $bp: 768px;
   break-inside: avoid;
   overflow: hidden;
   border-radius: $border-radius;
-  background-color: var(--mao-card-bg);
-  box-shadow: var(--mao-box-shadow);
+  background-color: var(--el-fill-color-blank);
+  box-shadow: var(--el-box-shadow-light);
   cursor: pointer;
   margin-bottom: $margin-bottom;
   display: inline-block;
@@ -119,10 +116,10 @@ $bp: 768px;
 
 .w-o-title { text-shadow: 0 1px 3px rgba(0,0,0,.5); }
 
-.w-o-tags { color: rgba(255,255,255,.82); }
-.w-o-meta { color: rgba(255,255,255,.8); svg{width:14px;height:14px;} }
+.w-o-tags { color: rgba(255,255,255,.82);
+  .g-divider { margin: 0 5px; color: rgba(255,255,255,.5); }
+}
 .w-o-desc { color: rgba(255,255,255,.76); }
-.w-o-time { color: rgba(255,255,255,.68); }
 
 /* ── 非 overlay 内容区 ── */
 .g-body:not(.w-overlay-body) { padding: 0.7rem 1rem; display:flex; flex-direction:column; gap:0.2rem; }
@@ -150,19 +147,11 @@ $bp: 768px;
   color: var(--text-secondary);
   flex-wrap: wrap;
 
-  .g-tag-cat::after { content:"|"; margin-left:.32rem; opacity:.5; }
+  .g-divider {
+    margin: 0 5px;
+    border-left: 1px var(--text-secondary) var(--el-border-style);
+  }
   .g-tag-item { white-space:nowrap; }
-}
-
-.g-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.2rem;
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-
-  svg { width: 13px; height: 13px; }
-  .g-sep { opacity: .4; }
 }
 
 .g-desc {
@@ -175,6 +164,4 @@ $bp: 768px;
   overflow: hidden;
   margin: 0;
 }
-
-.g-time { font-size: 0.72rem; color: var(--text-placeholder); }
 </style>

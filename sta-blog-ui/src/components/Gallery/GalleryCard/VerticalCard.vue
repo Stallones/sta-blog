@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ArticleVO } from "@/types";
+import { Calendar, Folder, View } from "@element-plus/icons-vue";
 
 defineProps<{ article: ArticleVO }>();
 </script>
@@ -19,20 +20,16 @@ defineProps<{ article: ArticleVO }>();
     <div class="g-body">
       <div class="g-title">{{ article.articleTitle }}</div>
       <div class="g-tags">
-        <span class="g-tag-cat">{{ article.categoryName }}</span>
-        <span v-for="tag in article.tags" :key="tag.id" class="g-tag-item">#{{ tag.tagName }}</span>
-      </div>
-      <div class="g-meta">
-        <SvgIcon name="reading" /> {{ article.visitCount }}
-        <span class="g-sep">|</span>
-        <SvgIcon name="comments" /> {{ article.commentCount }}
-        <span class="g-sep">|</span>
-        <SvgIcon name="like" /> {{ article.likeCount }}
-        <span class="g-sep">|</span>
-        <SvgIcon name="collection" /> {{ article.favoriteCount }}
+        <el-icon><Calendar /></el-icon>
+        <span> 发布于 {{ article.createTime }} </span>
+        <el-divider direction="vertical" class="g-divider" />
+        <el-icon><Folder /></el-icon>
+        <span> {{ article.categoryName }} </span>
+        <el-divider direction="vertical" class="g-divider" />
+        <el-icon><View /></el-icon>
+        <span> {{ article.visitCount }}</span>
       </div>
       <p class="g-desc">{{ article.articleContent }}</p>
-      <div class="g-time">{{ article.createTime }}</div>
     </div>
   </div>
 </template>
@@ -45,8 +42,8 @@ $bp: 768px;
   flex-direction: column;
   overflow: hidden;
   border-radius: $border-radius;
-  background-color: var(--mao-card-bg);
-  box-shadow: var(--mao-box-shadow);
+  background-color: var(--el-fill-color-blank);
+  box-shadow: var(--el-box-shadow-light);
   cursor: pointer;
   margin-bottom: $margin-bottom;
 
@@ -84,8 +81,8 @@ $bp: 768px;
   flex-direction: column;
   justify-content: center;
   flex: 1;
-  padding: 0.85rem 1.25rem;
-  gap: 0.25rem;
+  padding: 1.5rem;
+  gap: 1rem;
 }
 
 .g-title {
@@ -108,19 +105,11 @@ $bp: 768px;
   color: var(--text-secondary);
   flex-wrap: wrap;
 
-  .g-tag-cat::after { content: "|"; margin-left: 0.35rem; opacity: 0.5; }
+  .g-divider {
+    margin: 0 5px;
+    border-left: 1px var(--text-secondary) var(--el-border-style);
+  }
   .g-tag-item { white-space: nowrap; }
-}
-
-.g-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-
-  svg { width: 14px; height: 14px; }
-  .g-sep { opacity: 0.4; }
 }
 
 .g-desc {
@@ -134,5 +123,5 @@ $bp: 768px;
   margin: 0;
 }
 
-.g-time { font-size: 0.72rem; color: var(--text-placeholder); }
+
 </style>
