@@ -11,21 +11,6 @@
       <Brand />
     </div>
 
-    <!-- 文章 cover -->
-    <div
-      v-if="headerType === 'article'"
-      class="h-article"
-      :style="
-        articleCover ? `background-image: url('${articleCover}')` : undefined
-      "
-    >
-      <ArticleHeader
-        v-if="!articleLoading && articleVO.id"
-        :article="articleVO"
-        :wordCount="countMd"
-      />
-    </div>
-
     <!-- 通用 banner -->
     <div
       v-if="headerType === 'page'"
@@ -39,28 +24,18 @@
       </h3>
     </div>
 
-    <div v-if="headerType === 'none'" class="h-none"></div>
   </header>
 </template>
 
 <script setup lang="ts">
 import { computed, watch } from "vue";
-import { storeToRefs } from "pinia";
 import Nav from "@/components/Nav/index.vue";
 import { useBackgroundParallax } from "@/composables/useBackgroundParallax";
 import Images from "@/components/Header/Images.vue";
 import Brand from "@/components/Header/Brand.vue";
-import ArticleHeader from "@/components/Article/ArticleHeader.vue";
-import { useArticleStore } from "@/store/useArticleStore";
 
 const { canvasHeaderH } = useBackgroundParallax();
-const articleStore = useArticleStore();
-const {
-  articleVO,
-  countMd,
-  loading: articleLoading,
-  articleCover,
-} = storeToRefs(articleStore);
+
 
 interface HeaderConfig {
   cls: string;
