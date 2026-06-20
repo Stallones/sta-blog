@@ -5,7 +5,7 @@
   </div>
 
   <!-- 数据就绪后渲染侧边栏内容 -->
-  <div v-else>
+  <div v-else class="article-sidebar__content">
     <BloggerInfoCard />
     <ClocksCard />
     <div class="sticky_layout">
@@ -27,13 +27,13 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 
-import { useServiceStore } from "@/store/useServiceStore";
+import { useDemotion } from "@/composables/useDemotion";
 import { useArticleStore } from "@/store/useArticleStore";
 
 import DirectoryCard from "@/components/SCard/DirectoryCard.vue";
 
 const route = useRoute();
-const useService = useServiceStore();
+const { isOnline } = useDemotion();
 const articleStore = useArticleStore();
 const { articleVO } = storeToRefs(articleStore);
 
@@ -42,15 +42,19 @@ const { articleVO } = storeToRefs(articleStore);
 const showRandom = ref(false);
 
 onMounted(() => {
-  if (useService.isServiceAvailable) {
+  if (isOnline) {
     showRandom.value = true;
   }
 });
 </script>
 
 <style scoped lang="scss">
+.article-sidebar__content {
+  flex: 1; // 撑满父级 .main-sidebar（flex column），让 sticky 有旅行空间
+}
+
 .sticky_layout {
-  top: 80px;
+  top: 50px;
   position: sticky;
   transition: top 0.3s;
 }

@@ -58,7 +58,7 @@ const id = "preview-only";
       
       // hover：强调色文字（只影响当前行 span）
       &:hover {
-        color: var(--accent);
+        color: var(--mao-accent);
       }
     }
     
@@ -74,7 +74,7 @@ const id = "preview-only";
 
     // 激活项：强调色满宽背景 + 白字 + 粗体（只影响当前行 span）
     &.md-editor-catalog-active > span {
-      background: var(--accent);
+      background: var(--mao-accent);
       color: #fff;
       // font-weight: bold;
     }

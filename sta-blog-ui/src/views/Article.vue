@@ -1,79 +1,103 @@
 <template>
-  <!-- 正常模式 -->
-  <div v-if="!isReadingMode" class="article-container">
-    <div class="article-scroll"></div>
-
-    <ArticleBody
-      :content="articleVO.articleContent"
-      :editorId="editorId"
-      :theme="mode"
-      @htmlChanged="mdHtml"
+  <!-- article header：文章封面（阅读模式下隐藏） -->
+  <div
+    v-if="!isReadingMode"
+    class="article-cover"
+    :style="
+      articleCover ? `background-image: url('${articleCover}')` : undefined
+    "
+  >
+    <ArticleHeader
+      v-if="!articleLoading && articleVO.id"
+      :article="articleVO"
+      :wordCount="countMd"
     />
-    <!-- <el-divider></el-divider> -->
-    <ArticleFooter :article="articleVO" />
-    <!-- 用户评论 -->
-    <Comment
-      v-if="showComment"
-      :serverOn="useService.isServiceAvailable"
-      :authorId="articleVO.userId"
-      :commentType="COMMENT_ARTICLE_CONS"
-      :commentPId="articleVO.id"
-      :liketype="2"
-    />
-
   </div>
 
-  <!-- 阅读模式 -->
-  <div v-if="isReadingMode" class="reading-mode">
-    <div
-      @click="isReadingMode = false"
-      class="reading-exit-btn"
-    >
-      <svg-icon name="exit_icon" style="width: 25px; height: 25px" />
-    </div>
-    <div
-      class="reading-content"
-      style="transition: all 0.5s ease"
-    >
-      <ArticleBody
+  <!-- 正常模式：content + sidebar 并排 -->
+  <div v-if="!isReadingMode" class="article-flex">
+    <div class="article-main">
+      <div class="article-scroll"></div>
+      <MdEditor
         :content="articleVO.articleContent"
         :editorId="editorId"
         :theme="mode"
         @htmlChanged="mdHtml"
       />
-      <ArticleFooter :article="articleVO" />
+      <ArticleFooter v-if="articleVO.id" :article="articleVO" />
+      <SComment
+        v-if="showComment"
+        :serverOn="isOnline"
+        :authorId="articleVO.userId"
+        :commentType="COMMENT_ARTICLE_CONS"
+        :commentPId="articleVO.id"
+        :liketype="2"
+      />
+    </div>
+    <div v-if="sidebarVisible" class="article-sidebar">
+      <ArticleSideBar />
     </div>
   </div>
 
+  <!-- 阅读模式 -->
+  <div v-if="isReadingMode" class="reading-mode">
+    <div class="reading-content">
+      <div @click="isReadingMode = false" class="reading-exit-btn">
+        <svg-icon name="exit_icon" style="width: 25px; height: 25px" />
+      </div>
+      <ArticleHeader
+        v-if="!articleLoading && articleVO.id"
+        :article="articleVO"
+        :wordCount="countMd"
+        variant="reading"
+      />
+      <el-divider></el-divider>
+      <MdEditor
+        :content="articleVO.articleContent"
+        :editorId="editorId"
+        :theme="mode"
+        @htmlChanged="mdHtml"
+      />
+      
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, watch, onMounted, onUnmounted, defineAsyncComponent } from "vue";
 import { useRoute } from "vue-router";
 import { useColorMode } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-
-import { useServiceStore } from "@/store/useServiceStore";
+import { useDemotion } from "@/composables/useDemotion";
 import { useArticleStore } from "@/store/useArticleStore";
 import { useReadingProgress } from "@/composables/useReadingProgress";
 import { useReadingMode } from "@/composables/useReadingMode";
 import { COMMENT_ARTICLE_CONS } from "@/const";
-
 import {
   registerArticleItems,
   unregisterArticleItems,
 } from "@/components/FloatingMenu/registerGlobal";
 import { useFloatingMenu } from "@/composables/useFloatingMenu";
+import ArticleFooter from "@/components/Article/ArticleFooter.vue";
+import ArticleHeader from "@/components/Article/ArticleHeader.vue";
+import ArticleSideBar from "@/components/SideBar/ArticleSideBar.vue";
+const SComment = defineAsyncComponent(() => import("@/components/SComment/index.vue"));
+const MdEditor = defineAsyncComponent(() => import("@/components/Article/MdEditor.vue"));
 
 // ── Store ──
 const route = useRoute();
-const useService = useServiceStore();
+const { isOnline, requestOrRead } = useDemotion();
 const articleStore = useArticleStore();
-const { articleVO } = storeToRefs(articleStore);
+const {
+  articleVO,
+  countMd,
+  loading: articleLoading,
+  articleCover,
+} = storeToRefs(articleStore);
 
 // ── Composables ──
 const { isReadingMode } = useReadingMode();
-const { setCatalogContext } = useFloatingMenu();
+const { sidebarVisible, setCatalogContext } = useFloatingMenu();
 
 onMounted(async () => {
   registerArticleItems();
@@ -91,14 +115,10 @@ const mode = computed(() =>
   colorMode.value === "auto" ? "light" : colorMode.value
 );
 
-// ── 文章数据（从 store 读） ──
 const editorId = "preview-only";
 const scrollElement = document.documentElement;
-
-// ── 功能显隐 ──
 const showComment = ref(false);
 
-// ── 路由切换重新获取 ──
 watch(
   () => route.params.id,
   () => {
@@ -107,15 +127,12 @@ watch(
 );
 
 async function getArticleDetailById() {
-  await articleStore.fetchArticle(route.params.id as string);
-
-  // 服务可用时展示交互功能区
-  if (useService.isServiceAvailable) {
+  await articleStore.fetchArticle(route.params.id as string, { requestOrRead, isOnline: isOnline.value });
+  if (isOnline) {
     showComment.value = true;
   }
 }
 
-// ── 字数统计回调（ArticleBody emit）→ 写回 store ──
 function mdHtml(htmlText: string) {
   const text = htmlText
     .replace(/<[^>]+>/g, "")
@@ -125,21 +142,57 @@ function mdHtml(htmlText: string) {
   articleStore.setWordCount(text.length);
 }
 
-// ── 顶部进度条（阅读进度） ──
 useReadingProgress(".progress");
 </script>
 
 <style scoped lang="scss">
-@use "@/styles/mixin" as *;
+@use "@/styles/_layout.scss" as *;
 
-.article-container {
-  background-color: var(--el-fill-color-blank);
-  border-radius: $border-radius;
-  box-shadow: var(--el-box-shadow-light);
-  display: flex ;
-  flex-direction: column;
-  gap: 20px;
-  padding: 0 $padding-lg;
+// ── article 封面（原 h-article）──
+.article-cover {
+  position: relative;
+  width: 100%;
+  height: 30vh;
+  display: flex;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--el-bg-color);
+  transition: background-color 0.3s ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--mao-cover-shadow);
+  }
+}
+
+// ── content + sidebar 74/26 分栏 ──
+.article-flex {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: $gap-desktop;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: $pad-desktop;
+  box-sizing: border-box;
+
+  @include tablet-down($breakpoint: $bp-tablet) {
+    flex-direction: column;
+    gap: $gap-tablet;
+    max-width: none;
+    padding: $pad-tablet;
+  }
+  @include mobile {
+    padding: $pad-mobile;
+    gap: $gap-mobile;
+  }
 }
 
 .article-scroll {
@@ -147,20 +200,58 @@ useReadingProgress(".progress");
   top: 0;
   left: 0;
   height: 5px;
-  background: var(--mao-scroll-percentage-bar);
+  background: var(--mao-accent-gradient);
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
   z-index: 1032;
 }
 
-.pre-text {
-  text-align: left;
-  overflow: auto;
+.article-main {
+  flex: 0 0 $content-ratio;
+  // max-width: $content-max-w;
+  min-width: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--el-fill-color-blank);
+  box-shadow: var(--el-box-shadow-light);
+  border-radius: $border-radius;
+  padding: 0 $padding-md $padding-md;
+
+  @include tablet-down($breakpoint: $bp-tablet) {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
-/* ── 阅读模式 ── */
+.article-sidebar {
+  flex: 0 0 $sidebar-ratio;
+  max-width: $sidebar-max-w;
+  min-width: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+
+  @include tablet-down($breakpoint: $bp-tablet) {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+// ── 阅读模式 ──
 .reading-mode {
-  background-color: var(--card-bg);
+  background-color: var(--el-fill-color-blank);
+  border-radius: $border-radius;
+  box-shadow: var(--el-box-shadow-light);
+  flex: 1;
+  margin: 0 auto;
+  max-width: $layout-max-w;
+  width: 100%;
+  padding: $pad-desktop;
+  box-sizing: border-box;
 }
 
 .reading-exit-btn {
@@ -171,43 +262,29 @@ useReadingProgress(".progress");
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: $border-radius;
-  background-color: var(--secondary-bg);
+  background-color: var(--el-fill-color-blank);
+  box-shadow: var(--el-box-shadow-light);
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
 
   &:hover {
-    background-color: var(--border-color-light);
+    background-color: var(--el-fill-color-light);
   }
 
   @media (min-width: 1024px) {
     right: 5em;
   }
-}
 
-.reading-content {
-  padding: 0.75rem 0.25rem;
-
-  @media (min-width: 640px) {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  @media (min-width: 768px) {
-    padding-left: 5rem;
-    padding-right: 5rem;
-  }
-
-  @media (min-width: 1024px) {
-    padding-left: 10rem;
-    padding-right: 10rem;
-  }
-
-  @media (min-width: 1280px) {
-    padding-left: 15rem;
-    padding-right: 15rem;
+  .reading-content {
+    // max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    // background-color: var(--el-fill-color-blank);
+    // border-radius: $border-radius;
+    // box-shadow: var(--el-box-shadow-light);
   }
 }
 </style>

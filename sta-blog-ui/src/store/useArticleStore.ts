@@ -6,9 +6,14 @@ import { ElMessage } from "element-plus";
 import router from "@/router";
 import { addArticleVisit, getArticleDetail } from "@/apis/article";
 import { readArticleDetail } from "@/utils/file-reader";
-import { useServiceStore } from "./useServiceStore";
 import { ARTICLE_VISIT_PREFIX } from "@/const";
-import type { ArticleVO } from "@/types";
+import type { ArticleVO, ApiResponse } from "@/types";
+
+type RequestOrReadFn = <T, Args extends any[]>(
+  requestFn: (...args: Args) => Promise<ApiResponse<T>>,
+  readFn: (...args: Args) => Promise<ApiResponse<T>>,
+  ...args: Args
+) => Promise<ApiResponse<T>>;
 
 export const useArticleStore = defineStore("article", () => {
   // ── State ──
@@ -23,15 +28,17 @@ export const useArticleStore = defineStore("article", () => {
   const articleCover = computed(() => articleVO.value.articleCover ?? "");
 
   // ── Actions ──
-  async function fetchArticle(id?: string) {
+  async function fetchArticle(
+    id: string | undefined,
+    demotion: { requestOrRead: RequestOrReadFn; isOnline: boolean }
+  ) {
     const articleId = (id || route.params.id) as string;
     if (!articleId) return;
 
     loading.value = true;
-    const useService = useServiceStore();
 
     try {
-      const res = await useService.requestOrRead(
+      const res = await demotion.requestOrRead(
         getArticleDetail,
         readArticleDetail,
         articleId
@@ -53,7 +60,7 @@ export const useArticleStore = defineStore("article", () => {
       // 访问统计
       if (
         !sessionStorage.getItem(ARTICLE_VISIT_PREFIX + articleId) &&
-        useService.isServiceAvailable
+        demotion.isOnline
       ) {
         sessionStorage.setItem(ARTICLE_VISIT_PREFIX + articleId, articleId);
         addArticleVisit(articleId);

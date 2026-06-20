@@ -2,12 +2,12 @@
 import ArticleList from "./ArticleList.vue";
 import { tagList } from "@/apis/tag";
 import { whereArticleList } from "@/apis/article";
-import { useServiceStore } from "@/store/useServiceStore";
+import { useDemotion } from "@/composables/useDemotion";
 import { readTagList, readArchiveArticleList } from "@/utils/file-reader";
 import {ARCHIVE_TAG_CONS} from "@/const";
 
 const route = useRoute();
-const useService = useServiceStore()
+const { requestOrRead } = useDemotion()
 
 const isQueryArticle = ref(false);
 const tags = ref<any[]>([]);
@@ -15,7 +15,7 @@ const articleList = ref<any[]>([]);
 const title = ref("");
 
 onMounted(async () => {
-  const res = await useService.requestOrRead(tagList,readTagList);
+  const res = await requestOrRead(tagList,readTagList);
 
   if (res.code === 200 && res.data !== undefined) {
     tags.value = res.data;
@@ -57,7 +57,7 @@ watch(
 // function getArticle(id: string | string[]) {
 async function getArticle(id: Number) {
   const realId = Array.isArray(id) ? id[0] : id;
-  const res = await useService.requestOrRead(
+  const res = await requestOrRead(
     whereArticleList,
     readArchiveArticleList,
     ARCHIVE_TAG_CONS,
@@ -79,7 +79,6 @@ async function getArticle(id: Number) {
             <div class="item_container">
               <template v-for="tag in tags" :key="tag.id">
                 <div
-                  v-slide-in
                   class="item"
                   @click="$router.push(`/tags/${tag.id}`)"
                 >

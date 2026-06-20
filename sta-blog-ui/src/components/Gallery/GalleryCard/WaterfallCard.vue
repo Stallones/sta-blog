@@ -128,13 +128,13 @@ $bp: 768px;
 .g-title {
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--el-text-color-primary);
   line-height: 1.35;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
-  &:hover { color: var(--accent-color); }
+  &:hover { color: var(--mao-accent); }
 }
 
 .w-card--overlay .g-title { color: #fff; }
@@ -144,12 +144,12 @@ $bp: 768px;
   align-items: center;
   gap: 0.32rem;
   font-size: 0.76rem;
-  color: var(--text-secondary);
+  color: var(--el-text-color-secondary);
   flex-wrap: wrap;
 
   .g-divider {
     margin: 0 5px;
-    border-left: 1px var(--text-secondary) var(--el-border-style);
+    border-left: 1px var(--el-text-color-secondary) var(--el-border-style);
   }
   .g-tag-item { white-space:nowrap; }
 }
@@ -157,7 +157,7 @@ $bp: 768px;
 .g-desc {
   font-size: 0.8rem;
   line-height: 1.4;
-  color: var(--text-secondary);
+  color: var(--el-text-color-secondary);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

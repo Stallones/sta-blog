@@ -5,7 +5,7 @@
       <GlitchText :text="useWebsite?.webInfo?.websiteName || ''" font-size="3rem" />
       <!-- 打字机（渐变色 + 自动获取鸡汤） -->
       <div class="typewriter">
-        <GradientText :text="output" :mode="'static'" class="title" />
+        <GradientText :text="output" :mode="'rainbow'" class="title" />
       </div>
     </div>
     <!-- <Wave></Wave> -->
@@ -69,8 +69,8 @@ const scrollDown = () => {
   top: 15em;
 
   .typewriter{
-    background: hsla(0, 0%, 100%, 0.5);
-    padding: 0.5em;
+    background: hsla(0, 0%, 100%, 0.6);
+    padding:  15px;
     border-radius: 0.5em;
   }
 

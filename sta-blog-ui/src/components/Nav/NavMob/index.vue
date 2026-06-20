@@ -2,20 +2,21 @@
   <!-- 移动端导航栏 -->
   <div class="nav-mob" :class="{ hidden: isMenuHidden }">
     <span class="blog-info">
-      <a href="/">{{ useWebsite.webInfo?.websiteName }}</a>
+      <a >{{ useWebsite.webInfo?.websiteName }}</a>
     </span>
 
-    <div class="drawer-trigger" @click="drawer = true">
-      <SvgIcon
-        name="directory_icon"
-        width="28"
-        height="28"
-        color="var(--accent-color)"
-        class="icon"
-      />
-    </div>
+    <!-- 右侧：搜索 + 抽屉 -->
+    <div class="nav-mob__actions">
+      <!-- 移动端搜索按钮 -->
+      <div class="search-trigger" @click="searchStore.openDialog()">
+        <!-- <svg-icon name="search"/> -->
+        <el-icon><Search /></el-icon>
+      </div>
 
-    <SearchByDB :is-service-available="isServiceAvailable" />
+      <div class="menu-trigger" @click="drawer = true">
+        <el-icon><Menu /></el-icon>
+      </div>
+    </div>
   </div>
 
   <!-- 移动端抽屉菜单 -->
@@ -42,12 +43,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { Close } from "@element-plus/icons-vue";
+import { Close, Search,Menu } from "@element-plus/icons-vue";
 import { useWebsiteStore } from "@/store/useWebsiteStore";
-import { useServiceStore } from "@/store/useServiceStore";
+import { useSearchStore } from "@/store/useSearchStore";
 
-const isServiceAvailable = useServiceStore().isServiceAvailable;
 const useWebsite = useWebsiteStore();
+const searchStore = useSearchStore();
 const drawer = ref(false);
 
 // 滚动显隐
@@ -113,14 +114,35 @@ onUnmounted(() => {
   font-weight: bold;
   font-size: 1rem;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
   max-width: 160px;
 }
 
-.drawer-trigger {
+.nav-mob__actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.menu-trigger {
   display: flex;
   align-items: center;
   cursor: pointer;
+  font-size: 25px;
+  color: var(--el-text-color-primary);
+}
+
+.search-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 25px;
+  color: var(--el-text-color-primary);
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 </style>

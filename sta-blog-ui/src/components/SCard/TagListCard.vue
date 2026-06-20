@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { tagList } from "@/apis/tag";
 import { useRouter } from "vue-router";
-import { useServiceStore } from "@/store/useServiceStore";
+import { useDemotion } from "@/composables/useDemotion";
 import { readTagList } from "@/utils/file-reader";
 
 // 标签类型接口
@@ -13,7 +13,7 @@ interface Tag {
 }
 
 const router = useRouter();
-const useService = useServiceStore();
+const { requestOrRead } = useDemotion();
 
 const tags = ref<Tag[]>([]);
 const loading = ref(true);
@@ -22,7 +22,7 @@ const loading = ref(true);
 async function loadContent() {
   loading.value = true;
   try {
-    const res = await useService.requestOrRead(tagList, readTagList);
+    const res = await requestOrRead(tagList, readTagList);
     if (res.code === 200 && res.data) {
       // 按文章数量排序并取前10个
       tags.value = res.data

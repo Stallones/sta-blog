@@ -11,7 +11,7 @@
       <Brand />
     </div>
 
-    <!-- 文章 cover：从 articleStore 读数据，动态封面 + 左对齐 -->
+    <!-- 文章 cover -->
     <div
       v-if="headerType === 'article'"
       class="h-article"
@@ -114,10 +114,10 @@ watch(
   transition: background-color 0.3s ease;
 
   background-color: var(--el-bg-color);
-  height: 30vh;
+  height: 20vh;
 }
 .page-header {
-  height: 50vh;
+  height: 40vh;
 }
 
 .h-article {

@@ -4,7 +4,7 @@
       <div class="warning-container">
         <div class="warning-content">
           <div class="warning-icon">
-            <svg viewBox="0 0 24 24" width="24" height="24" stroke="#8b5cf6" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="warning-svg">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="12" y1="8" x2="12" y2="12"></line>
               <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -368,14 +368,14 @@ onUnmounted(() => {
 
 .warning-container {
   background: var(--el-bg-color);
-  color: var(--text-secondary);
+  color: var(--el-text-color-secondary);
   padding: 16px 24px;
   margin: 0 auto;
   width: 100%;
   max-width: 500px;
   border-radius: 0 0 12px 12px;
-  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
-  border: 1px solid #f3f0ff;
+  box-shadow: var(--el-box-shadow-light);
+  border: 1px solid var(--el-border-color);
   border-top: none;
   display: flex;
   justify-content: space-between;
@@ -388,10 +388,10 @@ onUnmounted(() => {
 
 @keyframes glow {
   0% {
-    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
+    box-shadow: 0 4px 15px hsla(0, 0%, 0%, 0.06);
   }
   100% {
-    box-shadow: 0 4px 25px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 25px hsla(0, 0%, 0%, 0.12);
   }
 }
 
@@ -411,11 +411,12 @@ onUnmounted(() => {
   position: relative;
 }
 
-.warning-icon svg {
+.warning-icon svg,
+.warning-svg {
   width: 100%;
   height: 100%;
+  stroke: var(--mao-accent);
   animation: pulse 2s infinite ease-in-out;
-  filter: drop-shadow(0 0 4px rgba(139, 92, 246, 0.4));
 }
 
 @keyframes pulse {
@@ -432,7 +433,7 @@ onUnmounted(() => {
   font-size: 1.1rem;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: #8b5cf6;
+  color: var(--mao-accent);
 }
 
 .warning-text p {
@@ -460,39 +461,16 @@ onUnmounted(() => {
 }
 
 .close-button:hover {
-  background: rgba(139, 92, 246, 0.1);
+  background: var(--el-fill-color-light);
   transform: scale(1.1);
 }
 
 .close-button svg {
   width: 20px;
   height: 20px;
-  fill: #8b5cf6;
+  fill: var(--mao-accent);
 }
 
-/* 暗色主题适配 */
-html[class='dark'] .warning-container {
-  background: var(--el-bg-color);
-  color: var(--text-primary);
-  border-color: var(--border-color-light);
-  box-shadow: 0 4px 20px hsla(0, 0%, 0%, 0.3);
-}
-
-html[class='dark'] .warning-text h3 {
-  color: #a78bfa;
-}
-
-html[class='dark'] .warning-icon svg {
-  stroke: #a78bfa;
-}
-
-html[class='dark'] .close-button svg {
-  fill: #a78bfa;
-}
-
-html[class='dark'] .close-button:hover {
-  background: rgba(167, 139, 250, 0.2);
-}
 
 /* 响应式设计 */
 @media (max-width: 600px) {

@@ -11,55 +11,40 @@
    亮色模式
    ──────────────────────────────────────────── */
 :root {
-  /* ═══ 色阶层 ═══ */
-  /* 白3度：W1 最白 → W3 最灰 */
-  --w1: hsl(0, 0%, 100%); /* #ffffff 纯白：卡片、浮层 */
-  --w2: hsl(210, 17%, 98%); /* #f8f9fa 次白：主背景 */
-  --w3: hsl(210, 14%, 96%); /* #f1f3f5 浅灰：次级面板 */
-  /* 黑3度（亮色模式几乎不用，但保留语义） */
-  --b1: hsl(215, 28%, 7%); /* #0d1117 最黑 */
-  --b2: hsl(215, 27%, 11%); /* #161b22 次黑 */
-  --b3: hsl(216, 19%, 16%); /* #1c2128 深灰 */
+  /*通用 */
+  --mao-blue: hsl(217, 91%, 60%);
+  --mao-orange: hsl(25, 95%, 53%);
+
+
   /* 强调色：蓝 */
-  --accent: hsl(217, 91%, 60%); /* #3b82f6 */
-  --accent-hover: hsl(220, 89%, 54%); /* #2563eb */
+  --mao-accent: var(--mao-blue);
   /* 强调渐变：蓝 → 紫 */
-  --accent-gradient: linear-gradient(
+  --mao-accent-gradient: linear-gradient(
     135deg,
     hsl(217, 91%, 60%),
     hsl(258, 64%, 61%)
   );
   /* 橙色（亮色模式备用，如标签高亮） */
-  --orange: hsl(25, 95%, 53%); /* #f0883e */
-
+  
   /* ═══ [MAO-KEPT] 项目特有效果，el 无对应变量 ═══ */
-
+  --mao-overlay-text: hsl(0, 0%, 100%);
+  --mao-overlay-text-secondary: hsl(0, 0%, 85%);
+  --mao-overlay-text-placeholder: hsl(0, 0%, 80%);
+  
   /* [MAO-KEPT] Markdown 预览 */
   --mao-md-preview-quote-bg: hsl(210, 14%, 96%);
   --mao-md-preview-code-bg: hsl(210, 17%, 98%);
-
+  
   /* [MAO-KEPT] 导航栏毛玻璃 */
   --mao-nav-bg: hsla(0, 0%, 100%, 0.5);
   --mao-nav-border-transparent: hsla(0, 0%, 100%, 0.33);
-
+  
   /* [MAO-KEPT] 浮动菜单 hover */
-  --mao-fm-btn-color: var(--el-color-primary); 
+  --mao-fm-btn-color: var(--el-color-primary);
   --mao-fm-layout-hover: hsla(0, 0%, 0%, 0.05);
-
+  
   /* [MAO-KEPT] 封面阴影 */
   --mao-cover-shadow: hsla(0, 0%, 0%, 0.35);
-
-  /* [MAO-KEPT] 毛玻璃效果 */
-  --mao-glass-bg: hsla(0, 0%, 100%, 0.8);
-  --mao-glass-bg-hover: hsla(0, 0%, 100%, 0.95);
-  --mao-glass-bg-light: hsla(0, 0%, 100%, 0.1);
-  --mao-glass-bg-medium: hsla(0, 0%, 100%, 0.15);
-
-  /* [MAO-KEPT] 波浪背景 */
-  --mao-bg-wave01: hsla(210, 17%, 98%, 0.3);
-  --mao-bg-wave02: hsla(210, 12%, 93%, 0.4);
-  --mao-bg-wave03: hsla(210, 9%, 89%, 0.5);
-  --mao-bg-wave04: hsla(210, 17%, 98%, 0.3);
 
   /* [MAO-KEPT] 右键菜单 */
   --mao-context-header-bg: linear-gradient(
@@ -69,59 +54,21 @@
   );
   --mao-context-divider: hsl(270, 100%, 94%);
 
-  /* [MAO-KEPT] Canvas 画布背景 */
-  // --mao-canvas-bg: var(--w2);
-
-  /* [MAO-KEPT] 搜索 hover */
-  --mao-search-hover-bg: hsl(210, 10%, 88%);
-
-  /* [MAO-KEPT] 渐变条 */
-  --mao-bg-category: var(--accent-gradient);
-  --mao-bg-footer: var(--accent-gradient);
-  --mao-scroll-percentage-bar: var(--accent-gradient);
-
-  /* [MAO-KEPT] 相册 */
-  --mao-album-banner-bg: linear-gradient(
-    45deg,
-    hsl(215, 29%, 24%),
-    hsl(204, 64%, 44%)
-  );
-  --mao-album-cover-bg: linear-gradient(
-    120deg,
-    hsl(230, 100%, 93%) 0%,
-    hsl(240, 100%, 97%) 100%
-  );
-
-  /* ═══ 旧版无前缀兼容变量 ═══ */
-  --card-bg: var(--w1);
-  --secondary-bg: var(--w3);
-  --border-color-light: hsl(210, 14%, 90%);
-  --text-primary: hsl(210, 11%, 15%); /* #212529 */
-  --text-secondary: hsl(210, 7%, 46%); /* #6c757d */
-  --text-placeholder: hsl(210, 9%, 82%); /* #adb5bd */
-  --accent-color: var(--accent);
-  --accent-color-hover: var(--accent-hover);
-  --scroll-bar-color: var(--accent-gradient);
-  --card-hover-box-shadow: 0 4px 12px hsla(0, 0%, 0%, 0.08);
-  --shadow-color: hsla(0, 0%, 0%, 0.06);
-  --shadow-mask-bg: hsla(0, 0%, 0%, 0.5);
-  --shadow-button-bg: hsla(0, 0%, 100%, 0.9);
-
   /* ═══ 音乐播放器 — 保留旧变量名兼容 ═══ */
-  --primary: var(--accent);
+  --primary: var(--mao-accent);
   --router-color: hsl(210, 12%, 90%); /* #dee2e6 */
   --font-color: hsl(210, 10%, 36%); /* #495057 */
   --dark-font-color: hsl(210, 7%, 46%); /* #6c757d */
   --second-font-color: hsl(210, 9%, 82%); /* #adb5bd */
   --hot-color: hsl(355, 70%, 54%); /* #dc3545 */
-  --md-active: var(--accent);
+  --md-active: var(--mao-accent);
   --global-white: var(--w1);
   --global-black: var(--b1);
   --global-shadow-white: var(--w2);
   --header-bg-color: var(--w2);
   --meta-color: hsl(210, 7%, 46%); /* #6c757d */
   --comment-grey: hsl(210, 7%, 46%); /* #6c757d */
-  --border-color: var(--accent);
+  --border-color: var(--mao-accent);
   --hr-border: hsl(210, 14%, 90%); /* #e9ecef */
   --top: hsl(4, 80%, 66%); /* #f26c60 */
   --error: hsl(355, 70%, 54%); /* #dc3545 */
@@ -134,54 +81,12 @@
    暗色模式
    ──────────────────────────────────────────── */
 html.dark {
-  /* ═══ 色阶层 ═══ */
-  --w1: hsl(0, 0%, 100%); /* #ffffff */
-  --w2: hsl(210, 17%, 98%); /* #f8f9fa */
-  --w3: hsl(210, 14%, 96%); /* #f1f3f5 */
-  --b1: hsl(215, 28%, 7%); /* #0d1117 */
-  --b2: hsl(215, 27%, 11%); /* #161b22 */
-  --b3: hsl(216, 19%, 16%); /* #1c2128 */
-  --accent: hsl(25, 95%, 53%); /* #f0883e */
-  --accent-hover: hsl(25, 90%, 58%);
-  --accent-gradient: linear-gradient(
+  --mao-accent: var(--mao-orange);
+  --mao-accent-gradient: linear-gradient(
     135deg,
     hsl(215, 79%, 51%),
     hsl(270, 51%, 44%)
   );
-  --orange: hsl(25, 95%, 53%);
-
-  /* ═══════════════════════════════════
-     Element Plus 暗色覆盖（--el-* 在此统一设置）
-     ═══════════════════════════════════ */
-  --el-border-color: hsl(215, 15%, 20%); /* #30363d */
-  --el-border-color-light: hsl(215, 14%, 17%); /* #21262d */
-  --el-border-color-lighter: hsl(215, 15%, 20%); /* #30363d */
-  --el-border-color-extra-light: hsl(215, 14%, 17%); /* #21262d */
-
-  --el-text-color-primary: hsl(210, 18%, 87%); /* #e6edf3 */
-  --el-text-color-regular: hsl(210, 14%, 79%); /* #c9d1d9 */
-  --el-text-color-secondary: hsl(210, 10%, 55%); /* #8b949e */
-  --el-text-color-placeholder: hsl(215, 9%, 32%); /* #484f58 */
-
-  // --el-fill-color: var(--b3);
-  // --el-fill-color-blank: hsla(0, 0%, 9%);
-  // --el-fill-color-light: var(--b2);
-  // --el-fill-color-lighter: hsl(215, 14%, 17%); /* #21262d */
-
-  --el-bg-color:hsla(0, 0%, 0%) !important;
-  --el-bg-color-overlay: var(--b2);
-
-  --el-color-primary: hsl(210, 100%, 67%); /* #58a6ff */
-  --el-color-primary-light-3: hsl(210, 100%, 74%); /* #79b8ff */
-  --el-color-primary-light-5: hsl(210, 100%, 81%); /* #a5d0ff */
-  --el-color-primary-light-7: hsl(210, 100%, 87%); /* #c2dfff */
-  --el-color-primary-light-8: hsl(210, 100%, 90%); /* #d6ebff */
-  --el-color-primary-light-9: hsl(210, 100%, 95%); /* #edf5ff */
-  --el-color-primary-dark-2: hsl(210, 100%, 60%); /* #388bfd */
-
-  --el-color-success: hsl(130, 47%, 52%); /* #3fb950 */
-  --el-color-warning: hsl(40, 74%, 48%); /* #d29922 */
-  --el-color-danger: hsl(0, 81%, 63%); /* #f85149 */
 
   /* ═══ [MAO-KEPT] 项目特有效果 ═══ */
 
@@ -194,23 +99,11 @@ html.dark {
   --mao-nav-border-transparent: hsla(0, 0%, 100%, 0.33);
 
   /* [MAO-KEPT] 浮动菜单 hover */
-  --mao-fm-btn-color:  var(--el-fill-color-light); 
+  --mao-fm-btn-color: var(--el-fill-color-light);
   --mao-fm-layout-hover: hsla(0, 0%, 100%, 0.05);
 
   /* [MAO-KEPT] 封面阴影 */
   --mao-cover-shadow: hsla(0, 0%, 0%, 0.35);
-
-  /* [MAO-KEPT] 毛玻璃效果 */
-  --mao-glass-bg: hsla(215, 27%, 11%, 0.9);
-  --mao-glass-bg-hover: hsla(216, 19%, 16%, 0.95);
-  --mao-glass-bg-light: hsla(0, 0%, 100%, 0.05);
-  --mao-glass-bg-medium: hsla(0, 0%, 100%, 0.08);
-
-  /* [MAO-KEPT] 波浪背景 */
-  --mao-bg-wave01: hsla(215, 28%, 7%, 0.4);
-  --mao-bg-wave02: hsla(215, 27%, 11%, 0.5);
-  --mao-bg-wave03: hsla(216, 19%, 16%, 0.6);
-  --mao-bg-wave04: hsla(215, 28%, 7%, 0.4);
 
   /* [MAO-KEPT] 右键菜单 */
   --mao-context-header-bg: linear-gradient(
@@ -219,45 +112,6 @@ html.dark {
     hsl(258, 25%, 21%)
   );
   --mao-context-divider: hsl(258, 27%, 25%);
-
-  /* [MAO-KEPT] Canvas 画布背景 */
-  // --mao-canvas-bg: var(--b1);
-
-  /* [MAO-KEPT] 搜索 hover */
-  --mao-search-hover-bg: hsl(215, 14%, 17%);
-
-  /* [MAO-KEPT] 渐变条 */
-  --mao-bg-category: var(--accent-gradient);
-  --mao-bg-footer: var(--accent-gradient);
-  --mao-scroll-percentage-bar: var(--accent-gradient);
-
-  /* [MAO-KEPT] 相册 */
-  --mao-album-banner-bg: linear-gradient(
-    45deg,
-    hsl(210, 32%, 15%),
-    hsl(210, 35%, 29%)
-  );
-  --mao-album-cover-bg: linear-gradient(
-    120deg,
-    hsl(216, 19%, 16%) 0%,
-    hsl(213, 13%, 18%) 100%
-  );
-
-  /* ═══ 旧版无前缀兼容变量 ═══ */
-  --card-bg: var(--b2);
-  --secondary-bg: var(--b3);
-  --border-color-light: hsl(215, 15%, 20%); /* #30363d */
-  --text-primary: hsl(210, 18%, 87%); /* #e6edf3 */
-  --text-secondary: hsl(210, 10%, 55%); /* #8b949e */
-  --text-placeholder: hsl(215, 9%, 32%); /* #484f58 */
-  --accent-color: var(--accent);
-  --accent-color-hover: var(--accent-hover);
-  --scroll-bar-color: var(--accent-gradient);
-  --card-box-shadow: 0 1px 3px hsla(0, 0%, 0%, 0.3);
-  --card-hover-box-shadow: 0 4px 12px hsla(0, 0%, 0%, 0.5);
-  --shadow-color: hsla(0, 0%, 0%, 0.3);
-  --shadow-mask-bg: hsla(0, 0%, 0%, 0.7);
-  --shadow-button-bg: hsla(215, 27%, 11%, 0.9);
 
   /* ═══ 音乐播放器 ═══ */
   --primary: hsl(210, 100%, 67%); /* #58a6ff */

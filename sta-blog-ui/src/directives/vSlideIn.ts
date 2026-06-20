@@ -2,15 +2,21 @@ const DISTANCE = 100;
 const DURATION = 500;
 
 const map = new WeakMap()
+
+// 记录哪些路由已播过动画，同一路由再次挂载时跳过
+const animatedRoutes = new Set<string>();
+function routeKey(): string {
+    return window.location.pathname;
+}
+
 const ob = new IntersectionObserver((entries) => {
     for (const entry of entries){
-        // 该元素和视口相交
         if(entry.isIntersecting){
-            // 播放该元素动画
             const animation = map.get(entry.target);
             if (animation){
                 animation.play()
                 ob.unobserve(entry.target)
+                animatedRoutes.add(routeKey())
             }
         }
     }
@@ -24,8 +30,10 @@ function isBelowViewport(el: HTMLElement){
 
 export default {
     mounted(el: HTMLElement){
-        if(!isBelowViewport){
-            return
+        // 同一路由重新挂载（后退导航），跳过动画
+        if (animatedRoutes.has(routeKey())) return;
+        if(!isBelowViewport(el)){
+            return;
         }
         const animation = el.animate([
             {

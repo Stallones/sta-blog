@@ -73,7 +73,6 @@ defineProps<{ article: ArticleVO }>();
   flex-direction: column;
   justify-content: center;
   padding: 3rem;
-  color: var(--text-primary); /* 与其他mode一致，不硬编码白色 */
   gap: 1rem;
 }
 
@@ -83,7 +82,7 @@ defineProps<{ article: ArticleVO }>();
   line-height: 1.35;
   /* 文字阴影保证可读性 */
   text-shadow: 0 1px 4px rgba(0,0,0,.45);
-  color: hsl(0, 0%, 100%); /* 覆盖模式必须白色才能在深色背景上可见 */
+  color: var(--mao-overlay-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -94,7 +93,7 @@ defineProps<{ article: ArticleVO }>();
   align-items: center;
   gap: 0.35rem;
   font-size: 0.8rem;
-  color: hsl(0, 0%, 85%);
+  color: var(--mao-overlay-text-placeholder);
   flex-wrap: wrap;
 
   .g-divider {
@@ -107,7 +106,7 @@ defineProps<{ article: ArticleVO }>();
 .g-desc {
   font-size: 0.84rem;
   line-height: 1.4;
-  color: hsl(0, 0%, 85%);
+  color: var(--mao-overlay-text-secondary);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

@@ -16,14 +16,14 @@
 <script setup lang="ts">
 import { backGetBanners } from "@/apis/website";
 import { Ref } from "vue";
-import { useServiceStore } from "@/store/useServiceStore";
+import { useDemotion } from "@/composables/useDemotion";
 import { readBanners } from "@/utils/file-reader";
 
 const imageList = <Ref<String[]>>ref();
-const useService = useServiceStore();
+const { requestOrRead } = useDemotion();
 
 onMounted(async () => {
-  const res = await useService.requestOrRead(backGetBanners, readBanners);
+  const res = await requestOrRead(backGetBanners, readBanners);
   imageList.value = res.data;
 });
 </script>

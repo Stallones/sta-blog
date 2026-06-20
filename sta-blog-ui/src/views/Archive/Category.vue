@@ -3,12 +3,12 @@ import { categoryList } from "@/apis/category";
 import { whereArticleList } from "@/apis/article";
 import ArticleList from "./ArticleList.vue";
 import { dayjs } from "element-plus";
-import { useServiceStore } from "@/store/useServiceStore";
+import { useDemotion } from "@/composables/useDemotion";
 import { readCategoryList, readArchiveArticleList } from "@/utils/file-reader";
 import { ARCHIVE_CATEGORY_CONS } from "@/const";
 
 const route = useRoute();
-const useService = useServiceStore();
+const { requestOrRead } = useDemotion();
 
 const categorys = ref<any[]>([]);
 const articleList = ref<any[]>([]);
@@ -17,7 +17,7 @@ const isQueryArticle = ref(false);
 const title = ref("");
 
 onMounted(async () => {
-  const res = await useService.requestOrRead(categoryList, readCategoryList);
+  const res = await requestOrRead(categoryList, readCategoryList);
   if (res.code === 200) {
     categorys.value = res.data;
   }
@@ -64,7 +64,7 @@ watch(
 // 文章
 async function getArticle(id: Number) {
   const realId = Array.isArray(id) ? id[0] : id;
-  const res: any = await useService.requestOrRead(
+  const res: any = await requestOrRead(
     whereArticleList,
     readArchiveArticleList,
     ARCHIVE_CATEGORY_CONS,
@@ -88,7 +88,6 @@ async function getArticle(id: Number) {
       <div class="item_container">
         <template v-for="category in categorys" :key="category.id">
           <div
-            v-slide-in
             class="item"
             @click="$router.push(`/category/${category.id}`)"
           >
@@ -182,7 +181,7 @@ async function getArticle(id: Number) {
       flex-direction: column;
       width: calc(100% / 3 - 2em);
       height: 7em;
-      background: var(--mao-bg-category);
+      background: var(--mao-accent-gradient);
       opacity: 0.8;
       margin: 1em;
       border-radius: $border-radius;
@@ -225,7 +224,7 @@ async function getArticle(id: Number) {
           height: 0.2em;
           border-radius: 0.1em;
           // 蓝紫色渐变色背景
-          background: var(--card-bg);
+          background: var(--el-fill-color-blank);
           transition: width 0.8s ease; /* 过渡动画效果 */
         }
       }

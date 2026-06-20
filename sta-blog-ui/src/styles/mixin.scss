@@ -9,3 +9,40 @@
     top: 0;
     left: 0;
 }
+
+/* ════════ Transition 动画混入 ════════ */
+@mixin layout-slide-transition($duration: 0.4s) {
+  &-enter-active,
+  &-leave-active {
+    transition: all $duration cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+  }
+}
+
+/* ════════ 页面入场动画：四个方向 ════════ */
+.layout-slide-top {
+  @include layout-slide-transition(0.5s);
+  &-enter-from { transform: translateY(-33vh); }
+  &-leave-to   { transform: translateY(-33vh); }
+}
+
+// .layout-slide-left {
+//   @include layout-slide-transition;
+//   &-enter-from { transform: translateX(-60px); }
+//   &-leave-to   { transform: translateX(-60px); }
+// }
+
+.layout-slide-right {
+  @include layout-slide-transition(0.5s);
+  &-enter-from { transform: translateX(60px); }
+  &-leave-to   { transform: translateX(60px); }
+}
+
+// .layout-slide-bottom {
+//   @include layout-slide-transition;
+//   &-enter-from { transform: translateY(30px); }
+//   &-leave-to   { transform: translateY(30px); }
+// }

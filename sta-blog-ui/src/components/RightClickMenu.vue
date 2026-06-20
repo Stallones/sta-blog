@@ -107,6 +107,18 @@
               </div>
               <span>友链</span>
             </li>
+            <li class="submenu-item" @click.stop="navigateTo('/tree-hole')">
+              <div class="submenu-item-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                  <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                  <line x1="6" y1="1" x2="6" y2="4"></line>
+                  <line x1="10" y1="1" x2="10" y2="4"></line>
+                  <line x1="14" y1="1" x2="14" y2="4"></line>
+                </svg>
+              </div>
+              <span>树洞</span>
+            </li>
             <li class="submenu-item" @click.stop="navigateTo('/music')">
               <div class="submenu-item-icon">
                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -130,44 +142,15 @@
           </ul>
         </li>
 
-        <!-- 留言 ▾ -->
-        <li class="menu-item has-submenu">
-          <div class="menu-item-content">
-            <div class="menu-item-icon">
-              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </div>
-            <span>留言</span>
-            <div class="menu-item-arrow">
-              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
-            </div>
+        <!-- 留言 -->
+        <li class="menu-item" @click="navigateTo('/message')">
+          <div class="menu-item-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
           </div>
-          <ul class="submenu">
-            <li class="submenu-item" @click.stop="navigateTo('/tree-hole')">
-              <div class="submenu-item-icon">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
-                  <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
-                  <line x1="6" y1="1" x2="6" y2="4"></line>
-                  <line x1="10" y1="1" x2="10" y2="4"></line>
-                  <line x1="14" y1="1" x2="14" y2="4"></line>
-                </svg>
-              </div>
-              <span>树洞</span>
-            </li>
-            <li class="submenu-item" @click.stop="navigateTo('/message')">
-              <div class="submenu-item-icon">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg>
-              </div>
-              <span>留言板</span>
-            </li>
-          </ul>
+          <span>留言</span>
         </li>
 
         <!-- 关于 -->
@@ -354,7 +337,7 @@ html.dark .context-menu {
   --menu-icon-color: hsl(258, 44%, 72%);          /* 暗色：浅紫 #a78bfa */
   --menu-icon-hover: hsl(296, 80%, 72%);          /* 暗色悬停 */
   --menu-hover-bg: hsl(260, 25%, 25%);            /* 暗色悬停背景 */
-  --menu-submenu-border: var(--border-color-light);
+  // --menu-submenu-border: var(--el-border-color-light);
   --menu-refresh-from: hsl(258, 44%, 72%);
   --menu-refresh-to: hsl(330, 81%, 60%);
   --menu-refresh-hover-from: hsl(258, 55%, 80%);
@@ -370,10 +353,10 @@ html.dark .context-menu {
   background-color: var(--el-bg-color-overlay);
   border-radius: 12px;
   box-shadow: 0 4px 20px hsla(258, 64%, 61%, 0.15);
-  border: 1px solid var(--border-color-light);
+  // border: 1px solid var(--el-border-color-light);
   min-width: 240px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-  color: var(--text-secondary);
+  color: var(--el-text-color-secondary);
   position: relative;
   transition: all 0.2s ease;
   animation: slideIn 0.2s ease;
@@ -381,7 +364,7 @@ html.dark .context-menu {
 }
 
 html.dark .menu-container {
-  color: var(--text-primary);
+  color: var(--el-text-color-primary);
   box-shadow: 0 4px 20px hsla(0, 0%, 0%, 0.3);
 }
 

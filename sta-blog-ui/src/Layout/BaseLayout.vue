@@ -7,31 +7,23 @@
     />
     <!-- 主内容区 -->
     <main class="main-shell">
-      <div  class="main-wrapper">
+      <div class="main-wrapper">
         <div class="main-content">
-          <!-- <router-view v-slot="{ Component, route: r }">
-            <transition name="el-fade-in-linear" mode="out-in">
-              <div :key="r.fullPath">
-                <component :is="Component" />
-              </div>
-            </transition>
-          </router-view> -->
-
           <router-view v-slot="{ Component, route: r }">
-            <transition name="el-fade-in-linear">
-              <component :is="Component" :key="r.fullPath" />
-            </transition>
+            <component :is="Component" :key="r.fullPath" />
           </router-view>
         </div>
 
-        <!-- 侧边栏：根据 sidebarType + sidebarVisible 控制显隐 -->
-        <div class="main-sidebar" v-if="meta.sidebarType && sidebarVisible">
-          <SideBar v-if="meta.sidebarType === 'default'" />
-          <ArticleSideBar v-if="meta.sidebarType === 'article'" />
+        <!-- 侧边栏：FloatingMenu 按钮控制显隐，带左右滑入/滑出动画 -->
+
+        <div
+          v-if="meta.sidebarType && sidebarVisible"
+          :key="sidebarKey"
+          class="main-sidebar"
+        >
+          <SideBar />
         </div>
       </div>
-
-
     </main>
 
     <!-- Footer -->
@@ -47,7 +39,6 @@ import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import Header from "@/components/Header/index.vue";
 import SideBar from "@/components/SideBar/index.vue";
-// import ArticleSideBar from "@/components/SideBar/ArticleSideBar.vue";
 import FloatingMenu from "@/components/FloatingMenu/index.vue";
 import { registerGlobalItems } from "@/components/FloatingMenu/registerGlobal";
 import { useFloatingMenu } from "@/composables/useFloatingMenu";
@@ -58,12 +49,16 @@ const { sidebarVisible } = useFloatingMenu();
 
 const meta = computed(() => ({
   headerType: (route.meta.headerType as string) || "none",
-  sidebarType: (route.meta.sidebarType as string) || "none",
+  sidebarType: (route.meta.sidebarType as string) ?? "default",
   showWrapper: route.meta.showWrapper ?? true,
   showFooter: (route.meta.showFooter as boolean) ?? true,
   title: (route.meta.title as string) || "",
   subtitle: (route.meta.subtitle as string) || "",
 }));
+
+const sidebarKey = computed(
+  () => `${meta.value.sidebarType}-${sidebarVisible.value}`
+);
 
 // 注册全局功能项
 onMounted(() => {
@@ -103,7 +98,7 @@ onMounted(() => {
 
 .layout-shell {
   // min-height: 100vh;
-  overflow-x: clip; // clip 不创建滚动容器，不破坏 position: sticky
+  // overflow-x: clip 已移至 html 全局控制（scrollBar.scss）
 
   .main-shell {
     width: 100%;
@@ -129,7 +124,7 @@ onMounted(() => {
   .main-wrapper {
     display: flex;
     justify-content: center;
-    align-items: flex-start; // 不 stretch sidebar，让 sticky 有空间生效
+    align-items: stretch; // stretch sidebar 以匹配 content 高度，让 sticky sidebar 有足够旅行空间
     width: 100%;
     gap: $gap-desktop;
     box-sizing: border-box;
@@ -165,12 +160,8 @@ onMounted(() => {
   .main-content {
     flex: 0 0 $content-ratio;
     max-width: $content-max-w;
-    // padding-right: $card-pad;
-    // border-radius: $card-radius;
-    // box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.2);
     box-sizing: border-box;
     min-width: 0;
-    // overflow-x: clip; /* clip 不影响 overflow-y，避免 CSS 规范强制 overflow-y 计算为 auto */
 
     // ── sidebar 隐藏时：content 独占全宽 ──
     &:only-child {
@@ -187,8 +178,8 @@ onMounted(() => {
     // ── 单列时全宽 + 紧凑内边距 ──
     @include tablet-down($breakpoint: $bp-tablet) {
       max-width: 100%;
-      padding: $card-pad-mobile;
-      border-radius: $card-radius-mobile;
+      padding: $padding-sm;
+      border-radius: $border-radius;
     }
   }
 
@@ -198,8 +189,10 @@ onMounted(() => {
     max-width: $sidebar-max-w;
     min-width: 0; // 允许收缩，与 content 同步压缩
     // padding-left: $gap-desktop;
-    border-radius: $card-radius;
+    border-radius: $border-radius;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column; // 让子元素可以撑满高度，sticky 有足够旅行空间
 
     // ── 宽屏平板及以下：跟随容器等比缩放 ──
     @include tablet-down($breakpoint: $bp-desktop) {
@@ -211,12 +204,12 @@ onMounted(() => {
     @include tablet-down($breakpoint: $bp-tablet) {
       flex: none;
       max-width: 100%;
-      padding: $card-pad-mobile;
+      padding: $padding-sm;
     }
 
     // ── 手机更紧凑 ──
     @include mobile {
-      padding: $card-pad-mobile;
+      padding: $padding-sm;
     }
   }
 }

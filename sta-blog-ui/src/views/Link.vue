@@ -8,13 +8,13 @@ import {
 } from "element-plus";
 import { applyLink, linkList } from "@/apis/link";
 import { MdPreview } from "md-editor-v3";
-import { useServiceStore } from "@/store/useServiceStore";
+import { useDemotion } from "@/composables/useDemotion";
 
 const dialogVisible = ref(false);
-const useService = useServiceStore();
+const { isOnline } = useDemotion();
 
 onMounted(() => {
-  if (useService.isServiceAvailable) linkListFunc();
+  if (isOnline) linkListFunc();
 });
 
 const links = ref();
@@ -188,7 +188,7 @@ function applyLinkFunc() {
         </div>
         <div class="link">
           <template v-for="link in links" :key="link.id">
-            <div v-slide-in class="item">
+            <div class="item">
               <div
                 class="bg"
                 :style="{ background: `url(${link.background})` }"

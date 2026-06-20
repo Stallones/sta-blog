@@ -11,19 +11,7 @@ export const constantRouter = [
         name: "home",
         meta: {
           headerType: "home",
-          sidebarType: "default",
           title: "marcus-blog | 不断追求完美的开源博客",
-        },
-      },
-      // ── 文章详情 ──
-      {
-        path: "/article/:id",
-        component: () => import("@/views/Article.vue"),
-        name: "article",
-        meta: {
-          headerType: "article",
-          sidebarType: "article",
-          title: "文章详情",
         },
       },
       // ── 分类 ──
@@ -33,7 +21,6 @@ export const constantRouter = [
         name: "category",
         meta: {
           headerType: "page",
-          sidebarType: "default",
           title: "文章分类",
           subtitle: "Category",
         },
@@ -45,7 +32,6 @@ export const constantRouter = [
         name: "tags",
         meta: {
           headerType: "page",
-          sidebarType: "default",
           title: "文章标签",
           subtitle: "Tags",
         },
@@ -57,7 +43,6 @@ export const constantRouter = [
         name: "timeline",
         meta: {
           headerType: "page",
-          sidebarType: "default",
           title: "时间轴",
           subtitle: "TimeLine",
         },
@@ -65,22 +50,19 @@ export const constantRouter = [
       // ── 留言版 ──
       {
         path: "/message",
-        component: () => import("@/views/LeaveMsg/Message/MessageList.vue"),
+        component: () => import("@/views/Message/MessageList.vue"),
         name: "message",
         meta: {
           headerType: "page",
-          sidebarType: "default",
           title: "留言板",
         },
       },
       {
         path: "/message/detail/:id?",
-        component: () =>
-          import("@/views/LeaveMsg/Message/MessageDetail.vue"),
+        component: () => import("@/views/Message/MessageDetail.vue"),
         name: "messageDetail",
         meta: {
           headerType: "page",
-          sidebarType: "default",
           title: "留言详情",
         },
       },
@@ -92,7 +74,6 @@ export const constantRouter = [
         name: "link",
         meta: {
           headerType: "page",
-          sidebarType: "default",
           title: "博客友链",
         },
       },
@@ -104,73 +85,77 @@ export const constantRouter = [
     name: "custom-layout",
     component: () => import("@/Layout/CustomLayout.vue"),
     children: [
+      // ── 文章详情（自含 header + sidebar，完整自主布局）──
+      {
+        path: "article/:id",
+        component: () => import("@/views/Article.vue"),
+        name: "article",
+        meta: { title: "文章详情", showFooter: true },
+      },
+      // ── 关于 ──
+      {
+        path: "about",
+        component: () => import("@/views/About.vue"),
+        name: "about",
+        meta: { title: "关于" },
+      },
+      // ── 用户认证（左右分栏包裹）──
+      {
+        path: "/user",
+        component: () => import("@/views/User/index.vue"),
+        name: "user",
+        redirect: "/login",
+        meta: { showFooter: false },
+        children: [
+          {
+            path: "/login",
+            component: () => import("@/views/User/Login.vue"),
+            name: "login",
+            meta: { title: "用户登录", showFooter: false },
+          },
+          {
+            path: "/register",
+            component: () => import("@/views/User/Register.vue"),
+            name: "register",
+            meta: { title: "用户注册", showFooter: false },
+          },
+          {
+            path: "/reset",
+            component: () => import("@/views/User/Reset.vue"),
+            name: "reset",
+            meta: { title: "重置密码", showFooter: false },
+          },
+        ],
+      },
+      // ── 用户设置 ──
+      {
+        path: "/setting",
+        component: () => import("@/views/User/Setting.vue"),
+        name: "setting",
+        meta: { title: "用户设置", showFooter: true },
+      },
       // ── 树洞 ──
       {
-        path: "/tree-hole",
-        component: () => import("@/views/LeaveMsg/TreeHole.vue"),
+        path: "tree-hole",
+        component: () => import("@/views/TreeHole.vue"),
         name: "treeHole",
-        meta: { title: "心灵树洞" },
+        meta: { title: "树洞" },
       },
       // ── 音乐 ──
       {
-        path: "/music",
+        path: "music",
         component: () => import("@/views/Music/index.vue"),
         name: "music",
         meta: { title: "音乐" },
       },
-      // ── 关于 ──
-      {
-        path: "/about",
-        component: () => import("@/views/About.vue"),
-        name: "about",
-        meta: { title: "关于网站" },
-      },
       // ── 相册 ──
       {
-        path: "/photo",
+        path: "photo",
         component: () => import("@/views/Photo/index.vue"),
         name: "photo",
         meta: { title: "相册" },
       },
     ],
-  },
-  // ── 登录/注册/重置 ──
-  {
-    path: "/welcome",
-    component: () => import("@/views/Welcome/index.vue"),
-    name: "welcome",
-    redirect: "/login",
-    meta: {
-      headerType: "none",
-      showFooter: false,
-    },
-    children: [
-      {
-        path: "/login",
-        component: () => import("@/views/Welcome/Login.vue"),
-        name: "welcome-login",
-        meta: { title: "用户登录", headerType: "none", showFooter: false },
-      },
-      {
-        path: "/register",
-        component: () => import("@/views/Welcome/Register.vue"),
-        name: "welcome-register",
-        meta: { title: "用户注册", headerType: "none", showFooter: false },
-      },
-      {
-        path: "/reset",
-        component: () => import("@/views/Welcome/Reset.vue"),
-        name: "welcome-reset",
-        meta: { title: "重置密码", headerType: "none", showFooter: false },
-      },
-    ],
-  },
-  // ── 设置 ──
-  {
-    path: "/setting",
-    component: () => import("@/views/Welcome/Setting.vue"),
-    name: "setting",
-    meta: { title: "用户设置", headerType: "page", showFooter: true },
   },
   // ── 通配符重定向 ──
   {

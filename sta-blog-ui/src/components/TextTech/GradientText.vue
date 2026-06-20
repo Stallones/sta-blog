@@ -20,7 +20,7 @@
  *   <GradientText text="Hello" mode="rainbow" :colors="['#f00','#0f0','#00f']" />
  */
 import { computed } from "vue";
-import { getCircleColors } from "@/utils/colorCircle";
+import { getHslCircleColors } from "@/utils/colorHsl";
 
 const props = withDefaults(
   defineProps<{
@@ -39,9 +39,8 @@ const props = withDefaults(
 
 const modeClass = computed(() => `mode-${props.mode}`);
 
-/** 默认色板：OKLab 大圆等距采样，感知均匀，视觉差异明显 */
 const palette = computed(() =>
-  props.colors.length ? props.colors : getCircleColors(9)
+  props.colors.length ? props.colors : getHslCircleColors(18)
 );
 
 const gradientStyle = computed(() => {
@@ -56,12 +55,11 @@ const gradientStyle = computed(() => {
   }
 
   if (mode === "rainbow") {
-    // 双倍色板 + 200% 宽度 → 文本上始终看到完整一轮色 → 平移即循环
-    const doubled = [...c, ...c];
+    // 单色板 + alternate 来回滑动，正反向色相连续无跳变
     return {
-      "background-image": `linear-gradient(90deg, ${doubled.join(", ")})`,
-      "background-size": "500% 100%",
-      "--duration": `${duration ?? 4}s`,
+      "background-image": `linear-gradient(90deg, ${c.join(", ")})`,
+      "background-size": "200% 100%",
+      "--duration": `${duration ?? 6}s`,
     };
   }
 
@@ -88,7 +86,8 @@ const gradientStyle = computed(() => {
 
   /* 光谱流动 */
   &.mode-rainbow {
-    animation: rainbow-flow var(--duration, 4s) ease infinite alternate;
+    animation: rainbow-flow var(--duration, 6s) ease-in-out infinite alternate;
+    will-change: background-position;
   }
 
   /* 呼吸灯：纯色跟随主题 */
@@ -102,10 +101,6 @@ const gradientStyle = computed(() => {
 @keyframes rainbow-flow {
   0% {
     background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 50% 50%;
   }
 
   100% {

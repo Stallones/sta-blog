@@ -8,12 +8,10 @@
       <a href="/">{{ useWebsite.webInfo?.websiteName }}</a>
     </span>
 
-    <!-- 右侧：导航菜单 + 搜索 + 登录 -->
-    <div class="nav-menus">
-      <MenuList />
-      <SearchByDB :is-service-available="isServiceAvailable" />
-      <UserLogin :is-service-available="isServiceAvailable" />
-    </div>
+    <!-- 右侧：导航菜单 + 登录 -->
+    <MenuList />
+
+    <UserLogin v-if="isOnline && !isGuestPage" />
   </nav>
 
   <div class="h-nav-mob">
@@ -22,14 +20,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import { useWebsiteStore } from "@/store/useWebsiteStore";
-import { useServiceStore } from "@/store/useServiceStore";
+import UserLogin from "./UserLogin.vue";
+import { useDemotion } from "@/composables/useDemotion";
 
+const { isOnline } = useDemotion();
 const useWebsite = useWebsiteStore();
-const isServiceAvailable = useServiceStore().isServiceAvailable;
 const route = useRoute();
+
+const guestNames = ["login", "register", "reset"];
+const isGuestPage = computed(() => guestNames.includes(String(route.name)));
 
 const isHidden = ref(false);
 const isTransparent = ref(false);
@@ -87,7 +89,7 @@ nav {
   justify-content: space-between; // 左右两端对齐
   align-items: center;
   top: 0;
-  height: 60px;
+  height: 50px;
   width: 100%;
   z-index: 10;
   background-color: var(--mao-nav-bg);
@@ -149,13 +151,5 @@ nav {
     }
   }
 
-  .nav-menus {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    flex-shrink: 0; // 右侧整体不被压缩
-    min-width: 0; // 允许内部元素收缩空间，但不影响字体大小
-  }
 }
 </style>

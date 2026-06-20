@@ -2,7 +2,7 @@
 import {ref, onMounted, nextTick} from 'vue';
 import {getTimeLine} from "@/apis/article";
 import {readTimeLine} from "@/utils/file-reader";
-import {useServiceStore} from "@/store/useServiceStore";
+import {useDemotion} from "@/composables/useDemotion";
 
 
 function handleData(data: any[]) : Record<string, any[]> {
@@ -26,12 +26,12 @@ function handleData(data: any[]) : Record<string, any[]> {
   return groupedArticles;
 }
 
-const useService = useServiceStore();
+const { requestOrRead } = useDemotion();
 const shellRef = ref<HTMLElement | null>(null);
 const items = ref<any>({});
 
 onMounted(async () => {
-  const res: any = await useService.requestOrRead(getTimeLine, readTimeLine);
+  const res: any = await requestOrRead(getTimeLine, readTimeLine);
   items.value = handleData(res.data);
   await nextTick(() => {
     const shell = shellRef.value;

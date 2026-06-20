@@ -13,21 +13,28 @@ interface FooterColumn {
 
 const columns: FooterColumn[] = [
   {
-    title: "文章",
+    title: "归档",
     items: [
-      { label: "归档", to: "/timeline" },
       { label: "分类", to: "/category" },
       { label: "标签", to: "/tags" },
+      { label: "时间轴", to: "/timeline" },
+    ],
+  },
+  {
+    title: "页面",
+    items: [
+      { label: "首页", to: "/" },
+      { label: "树洞", to: "/tree-hole" },
+      { label: "音乐", to: "/music" },
+      { label: "相册", to: "/photo" },
     ],
   },
   {
     title: "其他",
     items: [
-      { label: "树洞", to: "/tree-hole" },
       { label: "留言板", to: "/message" },
-      { label: "关于", to: "/about" },
       { label: "友链", to: "/link" },
-      { label: "相册", to: "/photo" },
+      { label: "关于", to: "/about" },
     ],
   },
   {
@@ -40,13 +47,6 @@ const columns: FooterColumn[] = [
       { label: "TypeScript", href: "https://www.typescriptlang.org/zh/" },
     ],
   },
-  //   {
-  //     title: "语言",
-  //     items: [
-  //       { label: "English", href: "/" },
-  //       { label: "中文", href: "/" },
-  //     ],
-  //   },
 ];
 
 function navigate(item: FooterColumn["items"][0]) {
@@ -91,7 +91,7 @@ $footer-max-width: 1200px;
 .footer {
   position: relative;
   width: 100%;
-  height: 300px;
+  // height: 300px;
   overflow: hidden;
   // 同 header 背景图
   background-image: url("@/assets/images/forest.jpg");
@@ -147,7 +147,7 @@ $footer-max-width: 1200px;
         transition: color 0.2s ease;
 
         &:hover {
-          color: var(--accent-color);
+          color: var(--mao-accent);
         }
       }
     }
@@ -159,8 +159,9 @@ $footer-max-width: 1200px;
   margin: 0 auto;
   text-align: center;
   color: hsla(0, 0%, 100%, 0.7);
-  font-size: 20px;
+  font-size: 1em;
   border-top: 1px solid hsla(0, 0%, 100%, 0.1);
+  padding: 15px 0px;
 
   a {
     color: hsla(0, 0%, 100%, 0.7);
@@ -168,7 +169,7 @@ $footer-max-width: 1200px;
     transition: color 0.2s ease;
 
     &:hover {
-      color: var(--accent-color);
+      color: var(--mao-accent);
     }
   }
 }

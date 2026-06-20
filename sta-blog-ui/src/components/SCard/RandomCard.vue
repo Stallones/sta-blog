@@ -142,19 +142,19 @@ function loadContent() {
     flex-direction: column;
     justify-content: center;
     line-height: 30px;
+    text-align: left;
+    margin-left:20px;
 
     :first-child {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
 
-      margin-left: 1rem;
       font-size: 1em;
-      color: $menuActiveText;
+      color: var(text-primary);
     }
 
     :last-child {
-      margin-left: 1rem;
       font-size: 0.8em;
     }
   }

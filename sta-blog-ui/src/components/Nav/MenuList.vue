@@ -1,13 +1,20 @@
 <template>
-  <div class="menus_items">
-    <div class="menus_item" @click="router.push('/')">
+  <div class="menu-items">
+    <div class="item" @click="searchStore.openDialog()">
+      <span>
+         <el-icon><Search /></el-icon>
+        <span>搜索</span>
+      </span>
+    </div>
+
+    <div class="item" @click="router.push('/')">
       <span>
         <el-icon><HomeFilled /></el-icon>
         <span>首页</span>
       </span>
     </div>
 
-    <div class="menus_item">
+    <div class="item">
       <span>
         <el-icon><Briefcase /></el-icon>
         <span>归档</span>
@@ -35,7 +42,7 @@
       </ul>
     </div>
 
-    <div class="menus_item">
+    <div class="item">
       <span>
         <el-icon><ChromeFilled /></el-icon>
         <span>页面</span>
@@ -48,13 +55,18 @@
             <span>友链</span>
           </span>
         </li>
+        <li @click="router.push('/tree-hole')">
+          <span>
+            <el-icon><Fries /></el-icon>
+            <span>树洞</span>
+          </span>
+        </li>
         <li v-if="env.VITE_MUSIC_FRONTEND_URL" @click="router.push('/music')">
           <span>
             <el-icon><Headset /></el-icon>
             <span>音乐</span>
           </span>
         </li>
-
         <li @click="router.push('/photo')">
           <span>
             <el-icon><Picture /></el-icon>
@@ -64,29 +76,14 @@
       </ul>
     </div>
 
-    <div class="menus_item">
+    <div class="item" @click="router.push('/message')">
       <span>
         <el-icon><Promotion /></el-icon>
         <span>留言</span>
-        <el-icon class="arrow"><ArrowDownBold /></el-icon>
       </span>
-      <ul class="menus_item_child">
-        <li @click="router.push('/tree-hole')">
-          <span>
-            <el-icon><Fries /></el-icon>
-            <span>树洞</span>
-          </span>
-        </li>
-        <li @click="router.push('/message')">
-          <span>
-            <el-icon><Postcard /></el-icon>
-            <span>留言板</span>
-          </span>
-        </li>
-      </ul>
     </div>
 
-    <div class="menus_item" @click="router.push('/about')">
+    <div class="item" @click="router.push('/about')">
       <span>
         <el-icon><InfoFilled /></el-icon>
         <span>关于</span>
@@ -104,44 +101,39 @@ import {
   Clock,
   ChromeFilled,
   Link,
+  Fries,
   Headset,
   Picture,
   Promotion,
-  Fries,
-  Postcard,
   InfoFilled,
   ArrowDownBold,
+  Search
 } from "@element-plus/icons-vue";
 import router from "@/router";
+import { useSearchStore } from "@/store/useSearchStore";
 
+const searchStore = useSearchStore();
 const env = import.meta.env;
 </script>
 
 <style scoped lang="scss">
-.menus_items {
+.menu-items {
   display: flex;
-  align-self: stretch;
-  flex-shrink: 0; // 锁死不压缩
+  height: 60%;
 }
 
-.menus_item {
-  width: 85px;
-  height: auto;
-  position: relative;
-  flex: 0 0 auto; // 不伸缩，保持固有宽度
+.item {
   display: flex;
-  align-items: center;
+  width: 80px;
   justify-content: center;
-  // padding: 0 0.6rem; // 固定内边距
-  white-space: nowrap; // 文字不换行
-  min-width: unset;
+  position: relative;
+  color: var(--el-text-color-primary);
 
   &::before {
     content: "";
     position: absolute;
-    bottom: 5px;
+    bottom: 0;
     height: 2px;
-    width: 0;
     background-color: var(--el-color-primary);
     transition: width 0.3s;
   }
@@ -166,7 +158,7 @@ const env = import.meta.env;
   span {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 1px;
   }
 
   span .arrow {
@@ -180,13 +172,13 @@ const env = import.meta.env;
 .menus_item_child {
   display: none;
   position: absolute;
-  top: 100%;
+  top: 110%;
   left: 50%;
   width: 100px;
   transform: translateX(-50%);
   white-space: nowrap;
   background: var(--el-fill-color-blank);
-  box-shadow: 0 2px 12px 0 var(--shadow-color);
+
   border-radius: 5px;
   border: 1px solid var(--el-border-color);
   animation: slide-down 0.3s ease-out;

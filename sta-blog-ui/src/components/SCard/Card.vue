@@ -131,12 +131,9 @@ function invoke() {
 <style scoped lang="scss">
 .card {
   background-color: var(--el-fill-color-blank);
-  // width: $card-width;
-  // margin: $card-margin;
-  // border: 1px solid var(--el-border-color);
   border-radius: $border-radius;
   margin-bottom: $margin-bottom;
-  padding: $padding-sm;
+  padding: $padding-md;
   // 添加阴影
   box-shadow: var(--el-box-shadow-light);
   overflow: hidden;

@@ -40,11 +40,7 @@ $pad-mobile:   20px 5px;     // ≤768px
 $pad-tablet:   30px 12px;    // 769~900px
 $pad-desktop:  40px 15px;    // ≥901px
 
-// Content / Sidebar 内部间距
-$card-pad:         10px;     // 默认卡片内边距
-$card-pad-mobile:  6px;      // 移动端更紧凑
-$card-radius:      8px;
-$card-radius-mobile: 6px;
+// ── Content / Sidebar 间距已迁移至 variable.scss（自动注入）──
 
 // 主区域 gap
 $gap-desktop:  20px;

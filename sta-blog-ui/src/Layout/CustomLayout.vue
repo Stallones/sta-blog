@@ -1,40 +1,38 @@
 <template>
   <div class="custom-layout">
-    <!-- needNav: true(默认) → 只显示 Nav，无 banner -->
-    <Header v-if="needNav" headerType="none" />
+    <!-- Nav（阅读模式下隐藏） -->
+    <Nav v-if="!isReadingMode" />
 
-    <!-- 裸露内容区：无 wrapper、无 padding、无 max-width，完全交给路由页面 -->
-    <router-view v-slot="{ Component, route: r }">
-      <transition name="el-fade-in-linear">
+    <!-- 裸露内容区：路由页面完全自主管理 -->
+    <div class="custom-content">
+      <router-view v-slot="{ Component, route: r }">
         <component :is="Component" :key="r.fullPath" />
-      </transition>
-    </router-view>
+      </router-view>
+    </div>
 
-    <!-- Footer: 默认不显示，meta.showFooter=true 时显示 -->
-    <Footer v-if="showFooter" />
+    <!-- Footer（阅读模式下隐藏） -->
+    <Footer v-if="showFooter && !isReadingMode" />
 
-    <!-- 全局 FloatingMenu -->
-    <FloatingMenu />
+    <!-- 全局 FloatingMenu（阅读模式下隐藏） -->
+    <FloatingMenu v-if="!isReadingMode" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import Header from "@/components/Header/index.vue";
+import Nav from "@/components/Nav/index.vue";
 import Footer from "@/components/Footer/index.vue";
 import FloatingMenu from "@/components/FloatingMenu/index.vue";
 import { registerGlobalItems } from "@/components/FloatingMenu/registerGlobal";
+import { useReadingMode } from "@/composables/useReadingMode";
 
 const route = useRoute();
-
-/** 默认显示 Nav，meta.needNav=false 时隐藏整个 Header */
-const needNav = computed(() => route.meta.needNav !== false);
+const { isReadingMode } = useReadingMode();
 
 /** 默认不显示 Footer，meta.showFooter=true 时显示 */
 const showFooter = computed(() => (route.meta.showFooter as boolean) ?? false);
 
-// 注册全局功能项
 onMounted(() => {
   registerGlobalItems();
 });
@@ -43,7 +41,12 @@ onMounted(() => {
 <style scoped lang="scss">
 .custom-layout {
   min-height: 100vh;
-  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-content {
+  flex: 1;
   display: flex;
   flex-direction: column;
 }

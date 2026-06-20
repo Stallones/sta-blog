@@ -1,15 +1,14 @@
 // ── 全局 SCSS 变量（通过 Vite additionalData 自动注入所有组件） ──
 
-// 侧边栏卡片尺寸
-$card-width: 85%;
-$card-margin: 0 5%;
-
 // 通用卡片圆角
 $border-radius: 8px;
 $margin-bottom: 20px;
-$padding-sm: 10px;
-$padding-md: 15px;
-$padding-lg: 20px;
+
+//通用padding
+$padding-sm: 15px;
+$padding-md: 20px;
+$padding-lg: 30px;
 
 // 自定义主题颜色
-$menuActiveText: var(--accent-color);
+
+

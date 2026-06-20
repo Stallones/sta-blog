@@ -20,11 +20,11 @@
 </template>
 
 <script setup lang="ts">
-import { useServiceStore } from "@/store/useServiceStore";
+import { useDemotion } from "@/composables/useDemotion";
 
-const isServiceAvailable = useServiceStore().isServiceAvailable;
+const isOnline = useDemotion().isOnline;
 const showRandom = ref(false);
-showRandom.value = isServiceAvailable;
+showRandom.value = isOnline.value;
 </script>
 
 <style lang="scss" scoped>

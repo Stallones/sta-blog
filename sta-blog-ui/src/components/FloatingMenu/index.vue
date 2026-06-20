@@ -350,7 +350,7 @@ function handleButtonClick(id: string) {
   background-color: var(--mao-fm-btn-color);
 
   &:hover {
-    background-color: var(--orange);
+    background-color: var(--mao-orange);
     transform: scale(1.05);
   }
 
@@ -367,7 +367,7 @@ function handleButtonClick(id: string) {
 
 /* 展开时设置按钮高亮橙色 */
 .fm-btn--active {
-  background-color: var(--orange) !important;
+  background-color: var(--mao-orange) !important;
 }
 
 /* 未展开时设置按钮持续旋转 */
@@ -432,10 +432,10 @@ function handleButtonClick(id: string) {
   &__title {
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--el-text-color-primary);
     margin-bottom: 6px;
     padding-bottom: 6px;
-    border-bottom: 1px solid var(--border-color-light);
+    // border-bottom: 1px solid var(--el-border-color-light);
   }
 
   &__item {
@@ -446,17 +446,17 @@ function handleButtonClick(id: string) {
     border-radius: 6px;
     cursor: pointer;
     font-size: 0.82rem;
-    color: var(--text-secondary);
+    color: var(--el-text-color-secondary);
     transition: background 0.15s, color 0.15s;
 
     &:hover {
       background: var(--mao-fm-layout-hover);
-      color: var(--accent);
+      color: var(--mao-accent);
     }
 
     &--active {
-      background: var(--accent-color-alpha, rgba(64, 158, 255, 0.12));
-      color: var(--accent);
+      background: var(--el-color-primary-light-9, rgba(64, 158, 255, 0.12));
+      color: var(--mao-accent);
     }
   }
 
@@ -479,7 +479,7 @@ function handleButtonClick(id: string) {
   &__check {
     width: 16px;
     height: 16px;
-    color: var(--accent-color, #409eff);
+    color: var(--mao-accent, #409eff);
     flex-shrink: 0;
     font-weight: 700;
     font-size: 14px;
@@ -494,10 +494,10 @@ function handleButtonClick(id: string) {
   &__title {
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--el-text-color-primary);
     margin-bottom: 6px;
     padding-bottom: 6px;
-    border-bottom: 1px solid var(--border-color-light);
+    border-bottom: 1px solid var(--el-border-color-light);
   }
 
   &__list {

@@ -1,30 +1,26 @@
 // 重写浏览器滚动条
-
-:-webkit-scrollbar-track
-{
+::-webkit-scrollbar-track {
   background-color: transparent;
 }
 
-:-webkit-scrollbar
-{
+::-webkit-scrollbar {
   width: 6px;
   height: 6px;
   background-color: transparent;
 }
 
-:-webkit-scrollbar-thumb
-{
+::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background: var(--scroll-bar-color);
+  background: var(--el-color-primary);
 }
 
-// ── 防止双滚动条：html 统一管理滚动 ──
+// ── html 统一管理滚动，防止双滚动条 ──
 html {
-  overflow-y: auto;     // 仅 html 层产生垂直滚动条
+  overflow-y: auto;
+  overflow-x: clip; // 防止横向滚动条
 }
 
 body {
   margin: 0;
-  overflow-y: hidden;   // 禁止 body 独立滚动，消除双滚动条
-  // 水平溢出控制已移到 .layout-shell { overflow-x: hidden } 统一处理
+  // overflow-y 已移除：hidden 会创建不可滚动的 scroll container，导致 position: sticky 失效
 }

@@ -1,12 +1,12 @@
 ﻿<script setup lang="ts">
-import JSConfetti from 'js-confetti'
 import { useWebsiteStore } from "@/store/useWebsiteStore";
 
-const jsConfetti = new JSConfetti()
-
-jsConfetti.addConfetti()
-
 const websiteStore = useWebsiteStore()
+
+// JSConfetti 懒加载，避免首屏打入 ~30KB
+import('js-confetti').then(({ default: JSConfetti }) => {
+  new JSConfetti().addConfetti()
+})
 </script>
 
 <template>
@@ -131,10 +131,10 @@ $bp-xl: 1280px;
   width: 100%;
   font-weight: bold;
   text-align: center;
-  color: var(--text-secondary);
+  color: var(--el-text-color-secondary);
 
   html.dark & {
-    color: var(--text-primary);
+    color: var(--el-text-color-primary);
   }
 }
 
@@ -165,10 +165,10 @@ $bp-xl: 1280px;
   width: 100%;
   font-size: 3rem;
   text-align: center;
-  color: var(--text-secondary);
+  color: var(--el-text-color-secondary);
 
   html.dark & {
-    color: var(--text-primary);
+    color: var(--el-text-color-primary);
   }
 
   @media (max-width: $bp-lg) {
@@ -180,10 +180,10 @@ $bp-xl: 1280px;
 .intro-body {
   margin-top: 1rem;
   text-align: center;
-  color: var(--text-secondary);
+  color: var(--el-text-color-secondary);
 
   html.dark & {
-    color: var(--text-primary);
+    color: var(--el-text-color-primary);
   }
 
   @media (max-width: $bp-lg) {
@@ -207,10 +207,10 @@ $bp-xl: 1280px;
 }
 
 .nav-divider {
-  color: var(--text-secondary);
+  color: var(--el-text-color-secondary);
 
   html.dark & {
-    color: var(--text-primary);
+    color: var(--el-text-color-primary);
   }
 }
 
@@ -236,7 +236,7 @@ $bp-xl: 1280px;
   width: 120px;
   height: 120px;
   border-radius: 1rem;
-  background-color: var(--card-bg);
+  background-color: var(--el-fill-color-blank);
   filter: drop-shadow(0 10px 15px hsla(0, 0%, 0%, 0.1));
 }
 

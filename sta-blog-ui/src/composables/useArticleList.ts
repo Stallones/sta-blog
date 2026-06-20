@@ -2,16 +2,17 @@ import { ref, watch, computed } from "vue";
 import { getArticlePage } from "@/apis/home";
 import { ElMessage } from "element-plus";
 import { usePaginationStore } from "@/store/usePaginationStore";
-import { useServiceStore } from "@/store/useServiceStore";
 import { useSearchStore } from "@/store/useSearchStore";
+import { useDemotion } from "@/composables/useDemotion";
 import { readArticlePage } from "@/utils/file-reader";
 import type { ArticleVO, Page } from "@/types";
 
-const usePagination = usePaginationStore();
-const useService = useServiceStore();
-const searchStore = useSearchStore();
-
 export function useArticleList() {
+  // 移入函数内部，避免 Pinia 初始化前调用
+  const usePagination = usePaginationStore();
+  const searchStore = useSearchStore();
+  const { requestOrRead } = useDemotion();
+
   const articlePagination = usePagination.articlePagination;
 
   const cardList = ref<ArticleVO[]>([]);
@@ -50,7 +51,7 @@ export function useArticleList() {
       return;
     }
 
-    const res = await useService.requestOrRead(
+    const res = await requestOrRead(
       getArticlePage,
       readArticlePage,
       articlePagination.current,

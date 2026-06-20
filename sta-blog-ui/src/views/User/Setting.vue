@@ -1,0 +1,551 @@
+<script setup lang="ts">
+import {ElMessage, FormRules, UploadInstance} from 'element-plus'
+import {Plus, User, Select, Message, Refresh, Unlock} from '@element-plus/icons-vue'
+
+import type {UploadProps} from 'element-plus'
+import { useUserStore } from "@/store/useUserStore";
+import {updateEmail, updateThirdEmail, updateUserAccount} from "@/apis/user";
+import {sendEmail} from "@/apis/email";
+
+
+const uploadRef = ref<UploadInstance>()
+
+const accountForm = ref<any>({
+  nickname: '',
+  gender: undefined,
+  intro: '',
+  avatar: ''
+})
+
+const avatarImg = ref()
+
+const userStore = useUserStore()
+
+const emailForm = reactive({
+  email: '',
+  code: '',
+  password: '',
+})
+
+async function updateUser() {
+  baseFormRef.value.validate(async (isValid: boolean) => {
+    if (isValid) {
+      const resp: any = await updateUserAccount(accountForm.value);
+      if (resp.code == 200) {
+        ElMessage.success('信息更新成功')
+        userStore.getInfo()
+      } else {
+        ElMessage.error(resp.data.msg)
+      }
+    } else ElMessage.warning('请完整填写信息')
+  })
+}
+
+// 第一次的图片路径
+const firstImg = ref('')
+
+const submitUploadAntUpdate = () => {
+  if (firstImg.value !== avatarImg.value) {
+    uploadRef.value!.submit()
+  } else updateUser()
+}
+
+const env = import.meta.env;
+
+// 上传头像
+const uploadAvatar = env.MODE === 'development' ? '/api/user/auth/upload/avatar' : env.VITE_SERVE + '/api/user/auth/upload/avatar'
+// token
+const token = localStorage.getItem('Token') || sessionStorage.getItem('Token') || ''
+
+const handleAvatarSuccess: UploadProps['onSuccess'] = (
+    response
+) => {
+  if (response.code !== 200) {
+    ElMessage.error('头像上传失败！' + response.msg)
+    return
+  }
+  accountForm.value.avatar = response.data
+  updateUser()
+  firstImg.value = avatarImg.value
+}
+
+const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
+  firstImg.value = avatarImg.value
+  if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
+    ElMessage.error('头像图片需要jpg或者png类型的图片！！')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    ElMessage.error('头像图片大小不能超过2MB！')
+    return false
+  }
+  return true
+}
+
+const handleChange = (uploadFile: any) => {
+  avatarImg.value = URL.createObjectURL(uploadFile.raw)
+}
+
+onMounted(() => {
+  watchEffect(() => {
+    if (userStore.userInfo) {
+      accountForm.value = userStore.userInfo
+      avatarImg.value = userStore.userInfo.avatar
+      firstImg.value = userStore.userInfo.avatar
+      emailForm.email = userStore.userInfo.email
+    }
+  });
+})
+
+// 验证用户昵称
+const validateUsername = (_: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('请输入用户昵称'))
+  } else if (!/[a-zA-Z0-9\u4e00-\u9fa5]+$/.test(value)) {
+    callback(new Error('用户名不能包含特殊字符，只能是中/英文'))
+  } else {
+    callback()
+  }
+}
+
+const baseFormRef = ref()
+const emailFormRef = ref()
+
+const nicknameRules = {
+  nickname: [
+    {validator: validateUsername, trigger: ['blur', 'change']},
+    {min: 2, max: 10, message: '用户昵称的长度必须在2-10个字符之间', trigger: ['blur', 'change']}
+  ]
+}
+
+const emailRules: FormRules = {
+  email: [
+    {required: true, message: '请输入邮件地址', trigger: 'blur'},
+    {type: 'email', message: '请输入合法的电子邮件地址', trigger: ['blur', 'change']}
+  ],
+  code: [
+    {required: true, message: '请输入获取的验证码', trigger: 'blur'},
+  ]
+}
+
+const centerDialogVisible = ref(false)
+
+async function updateEmailFunc(){
+  if (emailForm.password === ''){
+    ElMessage.warning('密码不能为空')
+    return
+  }
+  const resp: any = await updateEmail(emailForm);
+  if(resp.code == 200){
+    ElMessage.success('邮件地址更新成功')
+    emailForm.code = ''
+    userStore.getInfo()
+    centerDialogVisible.value = false
+  }else ElMessage.error(resp.msg)
+}
+
+// 更新邮件
+function modifyEmail(){
+  emailFormRef.value.validate((isValid: boolean) => {
+    if (isValid) {
+      centerDialogVisible.value = true
+    } else ElMessage.warning('请完整填写信息')
+  })
+}
+
+// 三方登录绑定邮箱
+async function thirdPartyLoginEmail(){
+  emailFormRef.value.validate(async (isValid: boolean) => {
+    if (isValid) {
+      emailForm.password = '第三方登录'
+      // 发送请求
+      const resp: any = await updateThirdEmail(emailForm);
+      if(resp.code == 200){
+        ElMessage.success('邮件地址更新成功')
+        emailForm.code = ''
+        userStore.getInfo()
+      }else ElMessage.error(resp.msg)
+    } else ElMessage.warning('请完整填写信息')
+  })
+}
+
+// 判断邮箱是否正确
+const isEmailValid = computed(() => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailForm.email))
+
+// 邮件发送验证码冷却时间
+const coldTime = ref(0)
+
+/**
+ * 获取验证码
+ */
+async function getEmailCode(){
+  if (emailForm.email === userStore.userInfo?.email){
+    ElMessage.warning('邮件地址未更改')
+    return
+  }
+  if(isEmailValid){
+    coldTime.value = 60
+    const resp: any = await sendEmail(emailForm.email, 'resetEmail');
+    if (resp.code == 200) {
+      ElMessage.success(`验证码已发送到邮箱：${emailForm.email}，请注意查收`)
+      const intervalId = setInterval(() => {
+        if (coldTime.value === 0) {
+          clearInterval(intervalId);
+        } else {
+          coldTime.value--;
+        }
+      }, 1000)
+    } else {
+      ElMessage.error(resp.msg)
+      coldTime.value = 0
+    }
+  }
+}
+</script>
+
+<template>
+  <div class="setting-page">
+    <el-dialog
+        v-model="centerDialogVisible"
+        title="帐号安全验证"
+        width="500"
+        align-center
+    >
+      <span class="dialog-bold">你正在进行敏感操作, 继续操作前请验证您的身份</span>
+      <div class="dialog-form">
+        <span class="dialog-bold">密码验证</span>
+        <el-input v-model="emailForm.password" type="password" placeholder="请输入密码"/>
+      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="centerDialogVisible = false">关闭</el-button>
+          <el-button type="primary" @click="updateEmailFunc" :icon="Refresh">
+            更新邮件
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
+    <div class="setting-layout">
+      <div class="setting-main">
+        <!-- 账号信息卡片 -->
+        <div class="panel">
+          <div class="panel-header">
+            <el-icon><User/></el-icon>
+            <span class="panel-title">账号信息设置</span>
+          </div>
+          <span class="panel-desc">在这里可以编辑你的个人信息，个人简介等等……</span>
+          <el-divider style="margin-top: 0.5rem"/>
+          <div class="panel-body">
+            <div class="form-wrap">
+              <div class="avatar-section">
+                <el-upload
+                    class="avatar-uploader"
+                    :action="uploadAvatar"
+                    :show-file-list="false"
+                    :on-success="handleAvatarSuccess"
+                    :before-upload="beforeAvatarUpload"
+                    :on-change="handleChange"
+                    :headers="{'Authorization': 'Bearer ' + JSON.parse(token).token}"
+                    :auto-upload="false"
+                    ref="uploadRef"
+                    name="avatarFile"
+                >
+                  <img v-if="avatarImg" :src="avatarImg" class="avatar" alt="头像" style="border-radius: 50%"/>
+                  <el-icon v-else class="avatar-uploader-icon">
+                    <Plus/>
+                  </el-icon>
+                </el-upload>
+              </div>
+              <div class="form-section">
+                <el-form
+                    label-position="top"
+                    label-width="auto"
+                    class="setting-form"
+                    :model="accountForm"
+                    ref="baseFormRef"
+                    :rules="nicknameRules"
+                >
+                  <el-form-item label="用户昵称" prop="nickname">
+                    <el-input placeholder="请输入用户昵称" maxlength="10" v-model="accountForm.nickname"/>
+                  </el-form-item>
+                  <el-form-item label="性别">
+                    <el-radio-group v-model="accountForm.gender">
+                      <el-radio :label="1">男</el-radio>
+                      <el-radio :label="2">女</el-radio>
+                      <el-radio :label="0">保密</el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                  <el-form-item label="个人简介">
+                    <el-input type="textarea" placeholder="请输入个人简介" v-model="accountForm.intro"/>
+                  </el-form-item>
+                </el-form>
+              </div>
+              <el-button type="success" :icon="Select" @click="submitUploadAntUpdate">更新信息</el-button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 邮件设置卡片 -->
+        <div class="panel panel--email">
+          <div class="panel-header">
+            <el-icon><Message/></el-icon>
+            <span class="panel-title">电子邮件设置</span>
+          </div>
+          <span class="panel-desc">在这里可以修改或绑定的电子邮箱信息，绑定后可以开启邮箱提醒！</span>
+          <el-divider style="margin-top: 0.5rem"/>
+          <div class="panel-body">
+            <div class="form-wrap">
+              <div class="form-section">
+                <el-form
+                    label-position="top"
+                    label-width="auto"
+                    class="setting-form"
+                    :model="emailForm"
+                    ref="emailFormRef"
+                    :rules="emailRules"
+                >
+                  <el-form-item label="电子邮件" prop="email">
+                    <el-input placeholder="请输入电子邮件" v-model="emailForm.email"/>
+                  </el-form-item>
+                  <el-form-item prop="code">
+                    <div class="code-row">
+                      <el-input placeholder="请获取验证码" v-model="emailForm.code"/>
+                      <el-button type="success" @click="getEmailCode" plain class="code-btn" :disabled="!isEmailValid || coldTime != 0">
+                        {{ coldTime > 0 ? `请稍后 ${coldTime} 秒` : '获取验证码' }}
+                      </el-button>
+                    </div>
+                  </el-form-item>
+                </el-form>
+              </div>
+              <template v-if="userStore.userInfo?.registerType === 0" >
+                <el-button class="submit-btn" :icon="Unlock" type="success" @click="modifyEmail">安全验证</el-button>
+              </template>
+              <template v-else>
+                <el-button class="submit-btn" :icon="Message" type="success" @click="thirdPartyLoginEmail">确定</el-button>
+              </template>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右侧用户信息卡片 -->
+      <div class="setting-sidebar">
+        <transition name="el-fade-in-linear">
+          <div v-if="userStore.userInfo" class="panel user-card">
+            <div class="user-card-inner">
+              <el-avatar :size="70" :src="userStore.userInfo?.avatar"/>
+              <div class="user-card-name">
+                你好，{{ userStore.userInfo?.nickname }}
+              </div>
+              <el-divider style="margin: 10px 0"/>
+              <div class="user-card-intro">
+                {{ userStore.userInfo?.intro || '这个用户很懒，没有填写个人简介~' }}
+              </div>
+            </div>
+          </div>
+        </transition>
+        <transition name="el-fade-in-linear">
+          <div v-if="userStore.userInfo" class="panel welcome-card">
+            <div class="welcome-title">
+              欢迎加入Ruyu个人博客！
+            </div>
+            <div>注册时间：{{ userStore.userInfo?.createTime }}</div>
+            <div>登录时间：{{ userStore.userInfo?.loginTime }}</div>
+          </div>
+        </transition>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+$bp-md: 768px;
+$bp-2xl: 1536px;
+
+/* ── 页面容器 ── */
+.setting-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.setting-layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2.5rem;
+
+  @media (min-width: $bp-md) {
+    flex-direction: row;
+    margin-top: 4rem;
+  }
+
+  @media (min-width: $bp-2xl) {
+    width: 100rem;
+  }
+}
+
+/* ── 主内容区 ── */
+.setting-main {
+  width: 100%;
+
+  @media (min-width: $bp-md) {
+    width: 50%;
+  }
+}
+
+/* ── 面板卡片 ── */
+.panel {
+  width: 100%;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-radius: $border-radius;
+  background-color: var(--el-bg-color);
+  box-shadow: var(--el-box-shadow-light);
+}
+
+.panel--email {
+  margin-bottom: 7rem;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.panel-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.panel-desc {
+  color: var(--el-text-color-secondary);
+  font-size: 0.8rem;
+}
+
+.panel-body {
+  display: flex;
+  justify-content: center;
+  margin: 0 1.5rem;
+}
+
+.form-wrap {
+  width: 100%;
+  margin-bottom: 1.25rem;
+}
+
+.avatar-section {
+  display: flex;
+  justify-content: center;
+}
+
+.form-section {
+  display: flex;
+  justify-content: center;
+}
+
+.setting-form {
+  width: 100%;
+  margin-top: 1.25rem;
+}
+
+.dialog-bold {
+  font-weight: bold;
+}
+
+.dialog-form {
+  margin-top: 1.5rem;
+}
+
+.code-row {
+  display: flex;
+  width: 100%;
+}
+
+.code-btn {
+  margin-left: 0.5rem;
+}
+
+.submit-btn {
+  margin: 0 1.5rem;
+}
+
+/* ── 右侧边栏 ── */
+.setting-sidebar {
+  width: 100%;
+  padding: 1.25rem;
+
+  @media (min-width: $bp-md) {
+    width: 20rem;
+    margin-left: 2.5rem;
+  }
+}
+
+.user-card {
+  margin-bottom: 0;
+}
+
+.user-card-inner {
+  text-align: center;
+  padding: 15px 15px 10px;
+}
+
+.user-card-name {
+  font-weight: bold;
+}
+
+.user-card-intro {
+  padding: 10px;
+  font-size: 14px;
+  color: var(--el-text-color-secondary);
+}
+
+.welcome-card {
+  margin-top: 1.25rem;
+  padding: 0.75rem;
+}
+
+.welcome-title {
+  font-weight: bold;
+  color: var(--el-text-color-placeholder);
+}
+
+/* ── 头像上传 ── */
+.avatar-uploader .avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 140px;
+  border-radius: 50%;
+  height: 140px;
+  text-align: center;
+}
+
+.avatar-uploader :hover {
+  border-color: var(--el-color-primary);
+}
+
+.avatar-uploader-icon {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+// 修改 el-dialog 内容区的默认padding
+::deep(.el-dialog__body) {
+  padding-top: 0;
+}
+
+::deep(.el-dialog){
+  border-radius: 10px;
+}
+</style>

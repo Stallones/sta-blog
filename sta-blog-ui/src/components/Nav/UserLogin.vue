@@ -1,9 +1,16 @@
 <template>
-  <div v-if="isServiceAvailable" class="user-login">
+  <div class="user-login">
     <!-- 未登录 -->
     <div v-if="!userStore.userInfo">
-      <el-tooltip class="box-item" effect="light" content="点击去登录" placement="right">
-        <el-avatar @click="$router.push('/welcome')" style="margin-right: 3rem">登录</el-avatar>
+      <el-tooltip
+        class="box-item"
+        effect="light"
+        content="点击去登录"
+        placement="right"
+      >
+        <el-avatar @click="$router.push('/login')" style="margin-right: 3rem"
+          >登录</el-avatar
+        >
       </el-tooltip>
     </div>
 
@@ -11,15 +18,23 @@
     <div v-else class="logged-in">
       <div class="profile">
         <div class="profile-username">{{ userStore.userInfo?.username }}</div>
-        <div class="profile-email" v-if="userStore.userInfo?.registerType === 0">
+        <div
+          class="profile-email"
+          v-if="userStore.userInfo?.registerType === 0"
+        >
           {{ userStore.userInfo?.email }}
         </div>
         <div class="profile-email" v-else>
-          {{ userStore.userInfo?.registerType === 1 ? 'Gitee登录' : 'Github登录' }}
+          {{
+            userStore.userInfo?.registerType === 1 ? "Gitee登录" : "Github登录"
+          }}
         </div>
       </div>
       <el-dropdown>
-        <el-avatar style="margin-right: 3rem" :src="userStore.userInfo?.avatar" />
+        <el-avatar
+          style="margin-right: 3rem"
+          :src="userStore.userInfo?.avatar"
+        />
         <template #dropdown>
           <el-dropdown-item @click="router.push('/setting')">
             <el-icon><Setting /></el-icon>
@@ -36,42 +51,47 @@
 </template>
 
 <script setup lang="ts">
-import { Setting, Promotion } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
-import { logout } from '@/apis/user'
-import { REMOVE_TOKEN } from '@/utils/auth.ts'
-import { useUserStore } from '@/store/useUserStore'
-import router from '@/router'
+import { Setting, Promotion } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
+import { logout } from "@/apis/user";
+import { REMOVE_TOKEN } from "@/utils/auth.ts";
+import { useUserStore } from "@/store/useUserStore";
+import router from "@/router";
 
-defineProps<{ isServiceAvailable: boolean }>()
+// defineProps<{ isOnline: boolean }>()
 
-const userStore = useUserStore()
+const userStore = useUserStore();
 
 const logoutSub = async () => {
-  const res: any = await logout()
+  const res: any = await logout();
   if (res.code === 200) {
-    REMOVE_TOKEN()
-    userStore.userInfo = undefined
-    ElMessage.success('退出登录成功')
-    router.push('/')
+    REMOVE_TOKEN();
+    userStore.userInfo = undefined;
+    ElMessage.success("退出登录成功");
+    router.push("/");
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
 .user-login {
-  .logged-in { display: flex; }
+  .logged-in {
+    display: flex;
+  }
 }
 
 .profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   .profile-username {
     font-size: 15px;
     font-weight: bold;
-    color: var(--el-text-color-primary);
+    //color: var(--el-text-color-primary);
   }
   .profile-email {
     font-size: 14px;
-    color: var(--el-text-color-secondary);
+    //color: var(--el-text-color-secondary);
     margin-top: 3px;
   }
 }

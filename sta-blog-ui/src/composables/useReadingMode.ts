@@ -1,10 +1,16 @@
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useFloatingMenu } from "./useFloatingMenu";
 
 /**
  * 阅读模式 composable（全局单例）
- * 管理 isReadingMode 状态，跨组件共享
+ * 激活时自动隐藏 sidebar
  */
 const isReadingMode = ref(false);
+
+watch(isReadingMode, (val) => {
+  const { sidebarVisible } = useFloatingMenu();
+  sidebarVisible.value = !val;
+});
 
 export function useReadingMode() {
   function toggleReadingMode() {

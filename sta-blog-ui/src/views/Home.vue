@@ -1,5 +1,5 @@
 <template>
-  <div class="home-content">
+  <div class="home-content" >
     <!-- 搜索 + 公告 重叠区域 -->
     <div class="hc-header">
       <!-- 公告：底层，被搜索展开后遮挡 -->
@@ -10,7 +10,7 @@
       </div>
       <!-- 搜索：上层，可展开覆盖公告 -->
       <div class="hc-search">
-        <SearchByPagefind v-if="!useService.isServiceAvailable" />
+        <SearchByPagefind v-if="!isOnline" />
       </div>
       <RecommendArticle />
     </div>
@@ -26,12 +26,14 @@
 
 <script setup lang="ts">
 import { useWebsiteStore } from "@/store/useWebsiteStore";
-import { useServiceStore } from "@/store/useServiceStore";
-import { registerHomeItems, unregisterHomeItems } from "@/components/FloatingMenu/registerGlobal";
-
+import { useDemotion } from "@/composables/useDemotion";
+import {
+  registerHomeItems,
+  unregisterHomeItems,
+} from "@/components/FloatingMenu/registerGlobal";
 
 const useWebsite = useWebsiteStore();
-const useService = useServiceStore();
+const { isOnline } = useDemotion();
 onMounted(() => {
   registerHomeItems();
 });
@@ -39,7 +41,6 @@ onMounted(() => {
 onUnmounted(() => {
   unregisterHomeItems();
 });
-
 </script>
 
 <style lang="scss" scoped>
@@ -53,6 +54,9 @@ onUnmounted(() => {
   position: relative;
   margin-bottom: 20px;
   // align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .hc-notice {
@@ -64,7 +68,7 @@ onUnmounted(() => {
   justify-content: center;
   gap: 8px;
   background: var(--el-fill-color-blank);
-  // border: 1px solid var(--border-color-light);
+  // border: 1px solid var(--el-border-color-light);
   transition: all 0.3s ease;
   box-shadow: var(--el-box-shadow-light);
   // 底层：被搜索展开后遮挡
@@ -80,7 +84,7 @@ onUnmounted(() => {
   // justify-content: center;
   // gap: 8px;
   // background: var(--el-fill-color-blank);
-  // border: 1px solid var(--border-color-light);
+  // border: 1px solid var(--el-border-color-light);
   transition: all 0.3s ease;
   // box-shadow: var(--el-box-shadow-light);
   // 底层：被搜索展开后遮挡

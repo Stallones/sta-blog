@@ -146,14 +146,14 @@ $bp: 768px;
 .g-title {
   font-size: 1.15rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--el-text-color-primary);
   line-height: 1.35;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
   &:hover {
-    color: var(--accent-color);
+    color: var(--mao-accent);
   }
 }
 
@@ -162,12 +162,12 @@ $bp: 768px;
   align-items: center;
   gap: 0.35rem;
   font-size: 0.78rem;
-  color: var(--text-secondary);
+  color: var(--el-text-color-secondary);
   flex-wrap: wrap;
 
   .g-divider {
     margin: 0 5px;
-    border-left: 1px var(--text-secondary) var(--el-border-style);
+    border-left: 1px var(--el-text-color-secondary) var(--el-border-style);
   }
   // .g-tag-cat::after { content: "|"; margin-left: 0.35rem; opacity: 0.5; }
   .g-tag-item {
@@ -180,7 +180,7 @@ $bp: 768px;
 //   align-items: center;
 //   gap: 0.25rem;
 //   font-size: 0.72rem;
-//   color: var(--text-secondary);
+//   color: var(--el-text-color-secondary);
 
 //   svg {
 //     width: 14px;
@@ -194,7 +194,7 @@ $bp: 768px;
 .g-desc {
   font-size: 0.82rem;
   line-height: 1.4;
-  color: var(--text-secondary);
+  color: var(--el-text-color-secondary);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -204,6 +204,6 @@ $bp: 768px;
 
 .g-time {
   font-size: 0.72rem;
-  color: var(--text-placeholder);
+  color: var(--el-text-color-placeholder);
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="articleHeader" class="h-a-info">
+  <div id="articleHeader" :class="['h-a-info', variant === 'reading' ? 'h-a-info--reading' : 'h-a-info--cover']">
     <h1 class="h-a-title">{{ article.articleTitle }}</h1>
 
     <div class="h-a-meta">
@@ -28,12 +28,11 @@
           }}</span
         >
         <span class="divider">|</span>
-        <span
-          ><el-icon><Star /></el-icon>点赞：{{ article.likeCount }}</span
-        >
+        <svg-icon name="like"></svg-icon
+        ><span>点赞：{{ article.likeCount }}</span>
         <span class="divider">|</span>
         <span
-          ><el-icon><Collection /></el-icon>收藏：{{
+          ><el-icon><Star /></el-icon>收藏：{{
             article.favoriteCount
           }}</span
         >
@@ -54,23 +53,20 @@ import {
   View,
   ChatDotRound,
   Star,
-  Collection,
-  
 } from "@element-plus/icons-vue";
 import type { ArticleVO } from "@/types";
 
 defineProps<{
   article: ArticleVO;
   wordCount?: string | number;
+  variant?: "cover" | "reading";  // cover=遮罩上, reading=文本流中
 }>();
 </script>
 
 <style scoped lang="scss">
+// ── 基类：共享布局 ──
 .h-a-info {
-  position: absolute;
   width: 100%;
-  bottom: 5px;
-  color: var(--w1);
 
   .h-a-title {
     margin: 10px auto;
@@ -89,7 +85,6 @@ defineProps<{
     font-size: 0.95em;
     line-height: 1.8;
 
-    /* 每行统一 flex 布局，确保图标文字基线对齐 */
     > div {
       display: flex;
       align-items: center;
@@ -97,7 +92,6 @@ defineProps<{
       flex-wrap: wrap;
     }
 
-    /* 图标+文字的 span 用 inline-flex 强制垂直居中 */
     span {
       display: inline-flex;
       align-items: center;
@@ -105,20 +99,37 @@ defineProps<{
       white-space: nowrap;
     }
 
-    /* 竖线分隔符弱化 */
     .divider {
       opacity: 0.45;
       user-select: none;
       margin: 0 2px;
     }
 
-    /* 分类行间距 */
-    .meta-line-1 {
-      margin-bottom: 2px;
+    .meta-line-1 { margin-bottom: 2px; }
+    .meta-line-2 { margin-bottom: 1px; }
+  }
+
+  // ── cover 变体：绝对定位在遮罩上，固定浅色 ──
+  &--cover {
+    position: absolute;
+    bottom: 5px;
+
+    .h-a-title,
+    .h-a-meta {
+      color: var(--mao-overlay-text-secondary);
+    }
+  }
+
+  // ── reading 变体：文档流中，跟随主题色 ──
+  &--reading {
+    position: relative;
+
+    .h-a-title {
+      color: var(--el-text-color-primary);
     }
 
-    .meta-line-2 {
-      margin-bottom: 1px;
+    .h-a-meta {
+      color: var(--el-text-color-regular);
     }
   }
 }

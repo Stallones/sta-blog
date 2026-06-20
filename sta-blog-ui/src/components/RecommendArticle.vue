@@ -6,13 +6,13 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { useServiceStore } from "@/store/useServiceStore";
+import { useDemotion } from "@/composables/useDemotion";
 
 const recommendArticles = ref<any[]>([]);
 
 const modules = ref([Navigation, Pagination, Autoplay]);
 
-const useService = useServiceStore();
+const { isOnline } = useDemotion();
 
 async function loadContent() {
   const res: any = await getRecommendArticleList();
@@ -29,15 +29,15 @@ async function loadContent() {
 </script>
 
 <template>
-  <div v-if="useService.isServiceAvailable" class="recommend-article-container">
-    <div>
+  <div v-if="isOnline" class="recommend-article-container">
+    <!-- <div>
       <el-divider border-style="dashed" content-position="left">
         <div class="recommend-header">
           <SvgIcon name="recommend" color="#409EFF" class="icon" />
           <span class="recommend-label">推荐</span>
         </div>
       </el-divider>
-    </div>
+    </div> -->
     <div v-view-request="{ callback: loadContent }">
       <swiper
         class="recommend recommend--h200"
@@ -78,17 +78,6 @@ async function loadContent() {
 </template>
 
 <style scoped lang="scss">
-.recommend-article-container {
-}
-
-.recommend-header {
-  display: flex;
-  align-items: center;
-}
-
-.recommend-label {
-  margin-left: 5px;
-}
 
 .recommend--h200 {
   height: 200px;

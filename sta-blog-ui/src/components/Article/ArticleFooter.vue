@@ -39,13 +39,17 @@
             </span>
           </template>
         </div>
-        <div v-if="useService.isServiceAvailable" class="af-actions">
+        <div v-if="isOnline" class="af-actions">
           <span class="af-action" @click="handleLike">
             <svg-icon :name="liked ? 'like-selected' : 'like'" />
             <span>{{ article.likeCount }}</span>
           </span>
           <span class="af-action" @click="handleCollection">
-            <svg-icon :name="collected ? 'collection-selected' : 'collection'" />
+            <!-- <svg-icon :name="collected ? 'collection-selected' : 'collection'" /> -->
+            <el-icon>
+              <star v-if="!collected" />
+              <collection v-else />
+            </el-icon>
             <span>{{ article.favoriteCount }}</span>
           </span>
           <span class="af-action" @click="copyToClipboard">
@@ -101,11 +105,12 @@ import { ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { ElMessage } from "element-plus";
 import { useWebsiteStore } from "@/store/useWebsiteStore";
-import { useServiceStore } from "@/store/useServiceStore";
+import { useDemotion } from "@/composables/useDemotion";
 import { cancelFavorite, userFavorite, isFavorite } from "@/apis/favorite";
 import { cancelLike, isLike, userLike } from "@/apis/like";
 import type { ArticleVO } from "@/types";
 import payQr from "@/assets/pay/a77178025b790601a8a0a8361718b148.png";
+import { Collection, Star } from "@element-plus/icons-vue";
 
 const props = defineProps<{
   article: ArticleVO;
@@ -114,7 +119,7 @@ const props = defineProps<{
 const router = useRouter();
 const route = useRoute();
 const websiteStore = useWebsiteStore();
-const useService = useServiceStore();
+const { isOnline } = useDemotion();
 const env = import.meta.env;
 
 // ── 点赞/收藏状态 ──
@@ -124,7 +129,8 @@ const collected = ref(false);
 watch(
   () => props.article.id,
   async () => {
-    if (!useService.isServiceAvailable) return;
+    if (!isOnline) return;
+    if (!props.article.id) return;   // 文章未加载完成时跳过
     liked.value = false;
     collected.value = false;
     await Promise.all([queryIsLike(), queryIsFavorite()]);
@@ -133,18 +139,18 @@ watch(
 );
 
 async function queryIsLike() {
-  const res: any = await isLike(1, props.article.id.toString());
+  const res: any = await isLike(1, String(props.article.id));
   liked.value = res.code === 200;
 }
 
 async function queryIsFavorite() {
-  const res: any = await isFavorite(1, props.article.id.toString());
+  const res: any = await isFavorite(1, String(props.article.id));
   collected.value = res.data === true;
 }
 
 async function handleLike() {
   if (liked.value) {
-    const res: any = await cancelLike(1, props.article.id.toString());
+    const res: any = await cancelLike(1, String(props.article.id));
     if (res.code === 200) {
       props.article.likeCount -= 1;
       liked.value = false;
@@ -153,7 +159,7 @@ async function handleLike() {
       ElMessage.error(res.msg);
     }
   } else {
-    const res: any = await userLike(1, props.article.id.toString());
+    const res: any = await userLike(1, String(props.article.id));
     if (res.code === 200) {
       props.article.likeCount += 1;
       liked.value = true;
@@ -166,7 +172,7 @@ async function handleLike() {
 
 async function handleCollection() {
   if (collected.value) {
-    const res: any = await cancelFavorite(1, props.article.id.toString());
+    const res: any = await cancelFavorite(1, String(props.article.id));
     if (res.code === 200) {
       props.article.favoriteCount -= 1;
       collected.value = false;
@@ -175,7 +181,7 @@ async function handleCollection() {
       ElMessage.error(res.msg);
     }
   } else {
-    const res: any = await userFavorite(1, props.article.id.toString());
+    const res: any = await userFavorite(1, String(props.article.id));
     if (res.code === 200) {
       props.article.favoriteCount += 1;
       collected.value = true;
@@ -204,7 +210,7 @@ async function copyToClipboard() {
   display: flex;
   flex-direction: column;
   gap: $margin-bottom;
-  padding: 0 $padding-lg;
+  padding: 0 $padding-md;
  
 }
 

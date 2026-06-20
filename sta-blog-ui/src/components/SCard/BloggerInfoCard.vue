@@ -66,12 +66,10 @@ const useWebsite = useWebsiteStore();
 <style scoped lang="scss">
 .blogger-info-card {
   box-sizing: border-box;
-  // width: $card-width;
   min-height: 300px;
   margin-bottom: $margin-bottom;
   border-radius: $border-radius;
   text-align: center;
-  // border: 1px solid var(--el-border-color-lighter);
   background: var(--el-fill-color-blank);
   position: relative;
   overflow: hidden;
@@ -106,8 +104,6 @@ const useWebsite = useWebsiteStore();
   }
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--el-box-shadow-light);
   }
 
   > * {
