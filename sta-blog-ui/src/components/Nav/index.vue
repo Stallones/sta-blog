@@ -11,7 +11,7 @@
     <!-- 右侧：导航菜单 + 登录 -->
     <MenuList />
 
-    <UserLogin v-if="isOnline && !isGuestPage" />
+    <!-- <UserLogin v-if="isOnline && !isGuestPage" /> -->
   </nav>
 
   <div class="h-nav-mob">
@@ -23,15 +23,15 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import { useWebsiteStore } from "@/store/useWebsiteStore";
-import UserLogin from "./UserLogin.vue";
-import { useDemotion } from "@/composables/useDemotion";
 
-const { isOnline } = useDemotion();
+// import { useDemotion } from "@/composables/useDemotion";
+// import UserLogin from "./UserLogin.vue";
+// const { isOnline } = useDemotion();
+// const isGuestPage = computed(() => guestNames.includes(String(route.name)));
+// const guestNames = ["login", "register", "reset"];
 const useWebsite = useWebsiteStore();
 const route = useRoute();
 
-const guestNames = ["login", "register", "reset"];
-const isGuestPage = computed(() => guestNames.includes(String(route.name)));
 
 const isHidden = ref(false);
 const isTransparent = ref(false);

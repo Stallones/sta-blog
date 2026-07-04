@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ArticleVO } from "@/types";
 import { Calendar, Folder, View } from "@element-plus/icons-vue";
+import { dayjs } from "element-plus";
 
 defineProps<{ article: ArticleVO }>();
 </script>
@@ -11,17 +12,17 @@ defineProps<{ article: ArticleVO }>();
     <div class="g-cover">
       <div class="g-cover-inner">
         <div class="g-img-wrap">
-          <img class="g-img" v-lazy="true" :data-src="article.articleCover" alt="" />
+          <img class="g-img" v-lazy="true" :data-src="article.coverPath" alt="" />
         </div>
       </div>
     </div>
 
     <!-- 内容区 — 上下居中 -->
     <div class="g-body">
-      <div class="g-title">{{ article.articleTitle }}</div>
+      <div class="g-title">{{ article.title }}</div>
       <div class="g-tags">
         <el-icon><Calendar /></el-icon>
-        <span> 发布于 {{ article.createTime }} </span>
+        <span> 发布于 {{dayjs(article.createTime).format("YYYY-MM-DD") }} </span>
         <el-divider direction="vertical" class="g-divider" />
         <el-icon><Folder /></el-icon>
         <span> {{ article.categoryName }} </span>
@@ -29,7 +30,7 @@ defineProps<{ article: ArticleVO }>();
         <el-icon><View /></el-icon>
         <span> {{ article.visitCount }}</span>
       </div>
-      <p class="g-desc">{{ article.articleContent }}</p>
+      <p class="g-desc">{{ article.summary }}</p>
     </div>
   </div>
 </template>

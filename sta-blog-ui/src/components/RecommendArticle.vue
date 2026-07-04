@@ -1,43 +1,27 @@
 ﻿<script setup lang="ts">
-import { getRecommendArticleList } from "@/apis/home";
+import { getArticleListByVisitCount } from "@/api/AppArticleController";
+import { useDemotion } from "@/composables/useDemotion";
+import { dayjs } from "element-plus";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { useDemotion } from "@/composables/useDemotion";
+
+const { isOnline } = useDemotion();
 
 const recommendArticles = ref<any[]>([]);
 
 const modules = ref([Navigation, Pagination, Autoplay]);
 
-const { isOnline } = useDemotion();
-
 async function loadContent() {
-  const res: any = await getRecommendArticleList();
-  // 过滤内容 提取前 25 个字符
-  res.data = res.data.map((item: any) => {
-    item.articleContent =
-      item.articleContent
-        .replace(/[*#>`~\-\\[\]()\s]|(\n\n)/g, "")
-        .substring(0, 25) + "...";
-    return item;
-  });
-  recommendArticles.value = res.data;
+  const res: any = await getArticleListByVisitCount({});
+  recommendArticles.value = Array.isArray(res) ? res : [];
 }
 </script>
 
 <template>
   <div v-if="isOnline" class="recommend-article-container">
-    <!-- <div>
-      <el-divider border-style="dashed" content-position="left">
-        <div class="recommend-header">
-          <SvgIcon name="recommend" color="#409EFF" class="icon" />
-          <span class="recommend-label">推荐</span>
-        </div>
-      </el-divider>
-    </div> -->
     <div v-view-request="{ callback: loadContent }">
       <swiper
         class="recommend recommend--h200"
@@ -49,28 +33,28 @@ async function loadContent() {
         v-if="recommendArticles.length > 0"
       >
         <swiper-slide
-          v-for="recommendArticle in recommendArticles"
-          :key="recommendArticle.id"
-          @click="$router.push(`/article/${recommendArticle.id}`)"
+          v-for="article in recommendArticles"
+          :key="article.id"
+          @click="$router.push(`/article/${article.id}`)"
         >
           <div class="item_text">
-            <div style="font-size: 30px">
-              {{ recommendArticle.articleTitle }}
+            <div>
+              {{ article.title }}
             </div>
-            <div style="font-size: 15px">
-              {{ recommendArticle.createTime }}
+            <div >
+              {{ dayjs(article.createTime).format("YYYY-MM-DD") }}
             </div>
-            <div style="font-size: 18px">
-              {{ recommendArticle.articleContent }}
+            <div >
+              {{ article.summary }}
             </div>
           </div>
-          <el-image :src="recommendArticle.articleCover" />
+          <el-image v-if="article.coverPath" :src="article.coverPath" />
         </swiper-slide>
         <div class="swiper-pagination"></div>
       </swiper>
     </div>
     <el-skeleton
-      v-if="recommendArticles.length == 0"
+      v-if="recommendArticles.length === 0"
       :rows="5"
       animated
     />
@@ -78,7 +62,6 @@ async function loadContent() {
 </template>
 
 <style scoped lang="scss">
-
 .recommend--h200 {
   height: 200px;
 }
@@ -90,7 +73,6 @@ async function loadContent() {
     position: absolute;
     width: 100%;
     height: 100%;
-    // 文字上下居中
     display: flex;
     justify-content: center;
     align-items: center;
@@ -104,9 +86,7 @@ async function loadContent() {
     line-height: 40px;
   }
 
-  // 图片
   .el-image {
-    // 屏幕大于768时
     @media screen and (min-width: 768px) {
       transform: translate(0, -20%);
     }

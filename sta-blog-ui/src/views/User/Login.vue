@@ -3,7 +3,7 @@ import { User, Lock } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { login } from '@/apis/user'
+import { emailLogin } from '@/api/AppBlogAuthController'
 import { SET_TOKEN } from '@/utils/auth'
 import { useUserStore } from '@/store/useUserStore'
 
@@ -11,31 +11,35 @@ const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
 const formRef = ref()
-const env = import.meta.env
 
 const form = reactive({
-  username: '',
+  email: '',
   password: '',
   remember: false,
 })
 
 const rules = {
-  username: [{ required: true, message: '请输入用户名' }],
+  email: [
+    { required: true, message: '请输入邮箱' },
+    { type: 'email', message: '请输入合法的邮箱地址', trigger: ['blur', 'change'] },
+  ],
   password: [{ required: true, message: '请输入密码' }],
 }
 
 async function handleLogin() {
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) return
-    const res: any = await login(form)
-    if (res.code === 200) {
-      SET_TOKEN(res.data.token, res.data.expire, form.remember)
+    const res: any = await emailLogin({ email: form.email, password: form.password })
+    if (res) {
+      SET_TOKEN({
+        accessToken: res.accessToken,
+        refreshToken: res.refreshToken,
+        expiresTime: res.expiresTime,
+      }, form.remember)
       ElMessage.success('登录成功')
       userStore.getInfo()
       const redirect = (route.query.redirect as string) || '/setting'
       router.push(redirect)
-    } else {
-      ElMessage.error(res.msg)
     }
   })
 }
@@ -43,19 +47,17 @@ async function handleLogin() {
 
 <template>
   <div style="text-align: center; margin: 0 20px">
-    <!-- 标题区 -->
     <div style="margin-top: 150px">
       <div style="font-size: 25px; font-weight: bold">登录</div>
       <div style="font-size: 14px; color: grey; margin-top: 1rem">
-        用户密码使用键式哈希算法加密，请放心注册
+        使用邮箱和密码登录你的账户
       </div>
     </div>
 
-    <!-- 表单 -->
     <div style="margin-top: 50px">
       <el-form :model="form" :rules="rules" ref="formRef">
-        <el-form-item prop="username">
-          <el-input v-model="form.username" maxlength="20" type="text" placeholder="用户名/邮箱">
+        <el-form-item prop="email">
+          <el-input v-model="form.email" maxlength="50" type="email" placeholder="邮箱">
             <template #prefix><el-icon><User /></el-icon></template>
           </el-input>
         </el-form-item>
@@ -83,14 +85,12 @@ async function handleLogin() {
       </el-form>
     </div>
 
-    <!-- 登录按钮 -->
     <div style="margin-top: 30px">
       <el-button style="width: 270px" type="success" plain @click="handleLogin">
         登录
       </el-button>
     </div>
 
-    <!-- 去注册 -->
     <el-divider>
       <span style="font-size: 13px; color: grey">没有账号？</span>
     </el-divider>
@@ -105,11 +105,13 @@ async function handleLogin() {
       <span style="font-size: 13px; color: grey">其他方式</span>
     </el-divider>
     <div class="oauth-links">
-      <el-link :href="env.MODE === 'development' ? env.VITE_SERVE + '/oauth/gitee/render' : env.VITE_SERVE + '/api/oauth/gitee/render'">
-        <svg-icon name="gitee" width="20px" height="20px" color="#4E86F1" />
-      </el-link>
-      <el-link style="margin-left: 1rem" :href="env.MODE === 'development' ? env.VITE_SERVE + '/oauth/github/render' : env.VITE_SERVE + '/api/oauth/github/render'">
+      <!-- GitHub: type=22 -->
+      <el-link @click="() => { window.location.href = '/api/app-api/blog/auth/social-auth-redirect?type=22&redirectUri=' + encodeURIComponent(window.location.origin + '/login') }">
         <svg-icon name="github" width="20px" height="20px" color="#4E86F1" />
+      </el-link>
+      <!-- QQ: type=21 -->
+      <el-link style="margin-left: 1rem" @click="() => { window.location.href = '/api/app-api/blog/auth/social-auth-redirect?type=21&redirectUri=' + encodeURIComponent(window.location.origin + '/login') }">
+        <svg-icon name="gitee" width="20px" height="20px" color="#4E86F1" />
       </el-link>
     </div>
   </div>

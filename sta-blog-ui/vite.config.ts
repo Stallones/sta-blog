@@ -92,15 +92,22 @@ export default defineConfig(({ mode }: ConfigEnv) => {
             port: 50011,
             host: '0.0.0.0',
             proxy: {
-                '/api': {
-                    target: `${loadEnv(mode, process.cwd()).VITE_SERVE}`,
+                // 旧博客后端（逐步废弃）
+                // '/api': {
+                //     target: `${loadEnv(mode, process.cwd()).VITE_SERVE}`,
+                //     changeOrigin: true,
+                //     rewrite: (path) => path.replace(/^\/api/, ''),
+                //     bypass: (req) => {
+                //         if (req.url?.endsWith('.enc') || req.url?.endsWith('.json')) {
+                //             return req.url
+                //         }
+                //     }
+                // },
+                // 新 Ruoyi 后端（http.ts 自动加 /api 前缀，所以路径成了 /api/app-api/...）
+                '/api/app-api': {
+                    target: `${loadEnv(mode, process.cwd()).VITE_YUDAO_SERVE}`,
                     changeOrigin: true,
                     rewrite: (path) => path.replace(/^\/api/, ''),
-                    bypass: (req) => {
-                        if (req.url?.endsWith('.enc') || req.url?.endsWith('.json')) {
-                            return req.url
-                        }
-                    }
                 },
                 '/wapi' : {
                     target: `${loadEnv(mode, process.cwd()).VITE_MUSIC_SERVE}`,

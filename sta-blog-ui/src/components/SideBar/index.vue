@@ -6,9 +6,9 @@
 
   <ClocksCard />
 
-  <div v-if="showRandom">
+  <!-- <div v-if="showRandom">
     <RandomCard />
-  </div>
+  </div> -->
 
   <TagListCard />
 

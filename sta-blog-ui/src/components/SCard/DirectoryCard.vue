@@ -36,6 +36,12 @@ const id = "preview-only";
 .md-editor-catalog {
   text-align: left;
 
+  // 隐藏 h1 目录项文字：标题已在 ArticleHeader 展示
+  // 只隐藏 h1 的 span，保留 .wrapper（h2子级目录）可见
+  > .md-editor-catalog-link > span {
+    display: none;
+  }
+
   // 每个目录项容器（div.md-editor-catalog-link）
   // 注意：这个 div 包含 span(当前行文字) + div.wrapper(子级目录)
   // 所以 padding/background 不能加在这个 div 上，否则会连带子级一起高亮

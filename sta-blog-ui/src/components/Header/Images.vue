@@ -3,10 +3,10 @@
     <ul>
       <li
         class="item"
-        v-for="(image, index) in imageList"
+        v-for="(img, index) in imageList"
         :key="index"
         :style="{
-          'background-image': 'url(' + image + ')',
+          'background-image': 'url(' + img.path + ')',
         }"
       ></li>
     </ul>
@@ -14,16 +14,18 @@
 </template>
 
 <script setup lang="ts">
-import { backGetBanners } from "@/apis/website";
-import { Ref } from "vue";
+import { getImageList } from "@/api/AppImageController";
 import { useDemotion } from "@/composables/useDemotion";
 import { readBanners } from "@/utils/file-reader";
 
-const imageList = <Ref<String[]>>ref();
+const imageList = ref<API.AppImageRespVO[]>();
 const { requestOrRead } = useDemotion();
 
 onMounted(async () => {
-  const res = await requestOrRead(backGetBanners, readBanners);
+  const res = await requestOrRead(
+    () => getImageList({ type: 52 }),
+    readBanners
+  );
   imageList.value = res.data;
 });
 </script>

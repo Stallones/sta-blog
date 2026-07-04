@@ -4,13 +4,13 @@ import { useRoute } from "vue-router";
 import { useTitle } from "@vueuse/core";
 import { ElMessage } from "element-plus";
 import router from "@/router";
-import { addArticleVisit, getArticleDetail } from "@/apis/article";
+import { getArticle, addVisitCount } from "@/api/AppArticleController";
 import { readArticleDetail } from "@/utils/file-reader";
 import { ARTICLE_VISIT_PREFIX } from "@/const";
 import type { ArticleVO, ApiResponse } from "@/types";
 
 type RequestOrReadFn = <T, Args extends any[]>(
-  requestFn: (...args: Args) => Promise<ApiResponse<T>>,
+  requestFn: (...args: Args) => Promise<T>,
   readFn: (...args: Args) => Promise<ApiResponse<T>>,
   ...args: Args
 ) => Promise<ApiResponse<T>>;
@@ -25,7 +25,7 @@ export const useArticleStore = defineStore("article", () => {
 
   // ── Computed ──
   /** 动态封面 URL（供 Header .h-article 使用） */
-  const articleCover = computed(() => articleVO.value.articleCover ?? "");
+  const articleCover = computed(() => articleVO.value.coverPath ?? "");
 
   // ── Actions ──
   async function fetchArticle(
@@ -39,7 +39,7 @@ export const useArticleStore = defineStore("article", () => {
 
     try {
       const res = await demotion.requestOrRead(
-        getArticleDetail,
+        (id: string) => getArticle({ id: Number(id) }),
         readArticleDetail,
         articleId
       );
@@ -51,11 +51,19 @@ export const useArticleStore = defineStore("article", () => {
       }
 
       articleVO.value = res.data as ArticleVO;
-      useTitle(articleVO.value.articleTitle);
+      useTitle(articleVO.value.title ?? "");
 
-      // 时间去掉时分秒
-      articleVO.value.createTime = articleVO.value.createTime?.split(" ")[0];
-      articleVO.value.updateTime = articleVO.value.updateTime?.split(" ")[0];
+      // 时间格式化（后端可能返回数字时间戳或字符串）
+      const rawTime = articleVO.value.createTime;
+      if (rawTime) {
+        articleVO.value.createTime = typeof rawTime === 'number'
+          ? new Date(rawTime).toLocaleDateString('zh-CN')
+          : String(rawTime).split(" ")[0];
+      }
+      // updateTime 在新 API 中不存在于 ArticleVO，先做安全处理
+      if ((articleVO.value as any).updateTime) {
+        (articleVO.value as any).updateTime = (articleVO.value as any).updateTime?.split(" ")[0];
+      }
 
       // 访问统计
       if (
@@ -63,7 +71,7 @@ export const useArticleStore = defineStore("article", () => {
         demotion.isOnline
       ) {
         sessionStorage.setItem(ARTICLE_VISIT_PREFIX + articleId, articleId);
-        addArticleVisit(articleId);
+        addVisitCount({ id: Number(articleId) });
       }
     } finally {
       loading.value = false;

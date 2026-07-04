@@ -4,13 +4,11 @@ import {ElMessage, ElNotification} from "element-plus"
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import {JWT_PREFIX_CONS} from "@/const";
-import {GET_TOKEN} from "@/utils/auth.ts";
+import {GET_TOKEN, GET_REFRESH_TOKEN, UPDATE_ACCESS_TOKEN, REMOVE_TOKEN} from "@/utils/auth.ts";
 import { useLoading } from "@/composables/useLoading";
 import {REQUEST_LOADING_PATH, IGNORE_ERROR_PATH} from "@/utils/enum.ts";
 import { ApiResponse } from '@/types';
-
-// 创建axios实例
-// 说明：response 拦截器返回了 response.data，因此在调用处我们期望 http.get/post 等返回 Promise<ApiResponse<T>>。
+import router from '@/router';
 
 type HttpInstance = {
     <T = any>(config: any): Promise<ApiResponse<T>>;
@@ -22,8 +20,8 @@ type HttpInstance = {
 }
 
 const http: HttpInstance = axios.create({
-    baseURL: import.meta.env.VITE_APP_BASE_API ?? '/', // api的base_url
-    timeout: 8000, // 请求超时时间
+    baseURL: import.meta.env.VITE_APP_BASE_API ?? '/',
+    timeout: 8000,
     headers: {
         'Content-Type': 'application/json;charset=UTF-8'
     }
@@ -31,8 +29,34 @@ const http: HttpInstance = axios.create({
 
 const env = import.meta.env
 const pathRequestCount = new Map();
-const firstRequestPaths = new Set(); // 使用 Set 来记录已经请求过的路径
+const firstRequestPaths = new Set();
 let loadingShown = false;
+
+// ========== refreshToken 续期锁 ==========
+let isRefreshing = false;
+let refreshQueue: Array<{ resolve: (token: string) => void; reject: (err: any) => void }> = [];
+
+async function doRefreshToken(): Promise<string> {
+    const refreshToken = GET_REFRESH_TOKEN();
+    if (!refreshToken) {
+        REMOVE_TOKEN();
+        router.push('/login');
+        throw new Error('refreshToken 不存在');
+    }
+    const res: any = await axios.post(
+        (import.meta.env.VITE_APP_BASE_API ?? '/') + '/app-api/blog/auth/refresh-token',
+        null,
+        { params: { refreshToken } }
+    );
+    const data = res.data?.data || res.data;
+    if (data && data.accessToken) {
+        UPDATE_ACCESS_TOKEN(data.accessToken, data.expiresTime);
+        return data.accessToken;
+    }
+    REMOVE_TOKEN();
+    router.push('/login');
+    throw new Error('token 刷新失败');
+}
 
 // request拦截器
 http.interceptors.request.use((config: InternalAxiosRequestConfig) => {
@@ -40,10 +64,10 @@ http.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     if (url?.startsWith(import.meta.env.VITE_MUSIC_BASE_API)){
         config.baseURL = "";
     }
-    let matchingPath = REQUEST_LOADING_PATH.find(path => url?.startsWith(path));
+    let matchingPath = REQUEST_LOADING_PATH.find((path: string) => url?.startsWith(path));
 
     if (!(url?.startsWith(env.VITE_YIYAN_API)) || matchingPath) {
-        if (matchingPath && !firstRequestPaths.has(matchingPath)) { // 仅在第一次请求时
+        if (matchingPath && !firstRequestPaths.has(matchingPath)) {
             firstRequestPaths.add(matchingPath);
             pathRequestCount.set(matchingPath, (pathRequestCount.get(matchingPath) || 0) + 1);
             if (!loadingShown){
@@ -55,12 +79,11 @@ http.interceptors.request.use((config: InternalAxiosRequestConfig) => {
         } else NProgress.start();
     }
 
-
     config.headers['X-Client-Type'] = 'Frontend'
-    // 请求头添加token
-    if (GET_TOKEN() == null) return config
-    config.headers['Authorization'] = JWT_PREFIX_CONS + GET_TOKEN()
-
+    const token = GET_TOKEN();
+    if (token) {
+        config.headers['Authorization'] = JWT_PREFIX_CONS + token
+    }
     return config
 }, (error: AxiosError) => {
     return Promise.reject(error)
@@ -70,34 +93,65 @@ http.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 http.interceptors.response.use(
     (response: AxiosResponse) => {
         let url = response.config?.url;
-        let matchingPath = REQUEST_LOADING_PATH.find(path => url?.startsWith(path));
+        let matchingPath = REQUEST_LOADING_PATH.find((path: string) => url?.startsWith(path));
 
         if (matchingPath) {
             pathRequestCount.set(matchingPath, pathRequestCount.get(matchingPath) - 1);
-
-            if (pathRequestCount.get(matchingPath) === 0) { // 所有特定路径的请求都已完成
+            if (pathRequestCount.get(matchingPath) === 0) {
                 loadingShown = false;
                 const loadingStore = useLoading();
                 loadingStore.hide();
-                pathRequestCount.clear(); // 清空整个 Map
+                pathRequestCount.clear();
                 NProgress.done();
             }
         } else NProgress.done();
 
-        if(response.data.code === 1012){
-            ElNotification({
-                title: '账号已被封禁',
-                message: response.data.msg,
-                type: 'warning',
-            })
-        }
-
         return response.data
     },
-    (error: AxiosError) => {
+    async (error: AxiosError) => {
+        const config = error.config as any;
+
+        // ========== 401 自动刷新 token ==========
+        if (error.response?.status === 401 && config && !config._retry) {
+            if (!isRefreshing) {
+                isRefreshing = true;
+                try {
+                    const newToken = await doRefreshToken();
+                    // 处理等待队列
+                    refreshQueue.forEach(({ resolve }) => resolve(newToken));
+                    refreshQueue = [];
+                    // 重发原请求
+                    config._retry = true;
+                    config.headers['Authorization'] = JWT_PREFIX_CONS + newToken;
+                    return http(config);
+                } catch (err) {
+                    refreshQueue.forEach(({ reject }) => reject(err));
+                    refreshQueue = [];
+                    REMOVE_TOKEN();
+                    router.push('/login');
+                    return Promise.reject(err);
+                } finally {
+                    isRefreshing = false;
+                }
+            } else {
+                // 等待正在进行的 refresh 完成
+                return new Promise((resolve, reject) => {
+                    refreshQueue.push({
+                        resolve: (token: string) => {
+                            config._retry = true;
+                            config.headers['Authorization'] = JWT_PREFIX_CONS + token;
+                            resolve(http(config));
+                        },
+                        reject,
+                    });
+                });
+            }
+        }
+
+        // ========== 原有错误处理 ==========
         let message = error.message;
         let url = error?.config?.url;
-        let ignorePath = IGNORE_ERROR_PATH.find(path => url?.startsWith(path));
+        let ignorePath = IGNORE_ERROR_PATH.find((path: string) => url?.startsWith(path));
         if (message == "Network Error") {
             message = "后端接口连接异常";
         } else if (message.includes("timeout")) {

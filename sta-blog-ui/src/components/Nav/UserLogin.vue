@@ -1,40 +1,22 @@
 <template>
   <div class="user-login">
     <!-- 未登录 -->
-    <div v-if="!userStore.userInfo">
-      <el-tooltip
-        class="box-item"
-        effect="light"
-        content="点击去登录"
-        placement="right"
-      >
-        <el-avatar @click="$router.push('/login')" style="margin-right: 3rem"
-          >登录</el-avatar
-        >
+    <div v-if="!userStore.userInfo" class="not-logged">
+      <el-tooltip class="box-item" effect="light" content="点击去登录" placement="right">
+        <el-avatar @click="$router.push('/login')" style="cursor: pointer">登录</el-avatar>
       </el-tooltip>
     </div>
 
     <!-- 已登录 -->
     <div v-else class="logged-in">
       <div class="profile">
-        <div class="profile-username">{{ userStore.userInfo?.username }}</div>
-        <div
-          class="profile-email"
-          v-if="userStore.userInfo?.registerType === 0"
-        >
+        <div class="profile-username">{{ userStore.userInfo?.nickname }}</div>
+        <div class="profile-email" v-if="userStore.userInfo?.email">
           {{ userStore.userInfo?.email }}
         </div>
-        <div class="profile-email" v-else>
-          {{
-            userStore.userInfo?.registerType === 1 ? "Gitee登录" : "Github登录"
-          }}
-        </div>
       </div>
-      <el-dropdown>
-        <el-avatar
-          style="margin-right: 3rem"
-          :src="userStore.userInfo?.avatar"
-        />
+      <el-dropdown placement="bottom-end">
+        <el-avatar style="cursor: pointer" :src="userStore.userInfo?.avatar" />
         <template #dropdown>
           <el-dropdown-item @click="router.push('/setting')">
             <el-icon><Setting /></el-icon>
@@ -51,48 +33,61 @@
 </template>
 
 <script setup lang="ts">
-import { Setting, Promotion } from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
-import { logout } from "@/apis/user";
-import { REMOVE_TOKEN } from "@/utils/auth.ts";
-import { useUserStore } from "@/store/useUserStore";
-import router from "@/router";
+import { Setting, Promotion } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+import { logout } from '@/api/AppBlogAuthController'
+import { REMOVE_TOKEN } from '@/utils/auth'
+import { useUserStore } from '@/store/useUserStore'
+import router from '@/router'
 
-// defineProps<{ isOnline: boolean }>()
-
-const userStore = useUserStore();
+const userStore = useUserStore()
 
 const logoutSub = async () => {
-  const res: any = await logout();
-  if (res.code === 200) {
-    REMOVE_TOKEN();
-    userStore.userInfo = undefined;
-    ElMessage.success("退出登录成功");
-    router.push("/");
-  }
-};
+  await logout()
+  REMOVE_TOKEN()
+  userStore.userInfo = undefined
+  ElMessage.success('已退出登录')
+  router.push('/')
+}
 </script>
 
 <style scoped lang="scss">
 .user-login {
+  display: flex;
+  align-items: center;
+
+  .not-logged {
+    display: flex;
+    align-items: center;
+  }
+
   .logged-in {
     display: flex;
+    align-items: center;
   }
 }
 
 .profile {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  margin-right: 0.8rem;
+
   .profile-username {
     font-size: 15px;
     font-weight: bold;
-    //color: var(--el-text-color-primary);
+    color: var(--el-text-color-primary);
+
+    html.dark & {
+      color: #e5e7eb;
+    }
   }
+
   .profile-email {
-    font-size: 14px;
-    //color: var(--el-text-color-secondary);
-    margin-top: 3px;
+    font-size: 12px;
+    color: var(--el-text-color-secondary);
+    margin-top: 2px;
+
+    html.dark & {
+      color: #9ca3af;
+    }
   }
 }
 </style>

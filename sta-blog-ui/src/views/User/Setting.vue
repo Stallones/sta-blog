@@ -1,24 +1,20 @@
 <script setup lang="ts">
 import {ElMessage, FormRules, UploadInstance} from 'element-plus'
 import {Plus, User, Select, Message, Refresh, Unlock} from '@element-plus/icons-vue'
-
 import type {UploadProps} from 'element-plus'
 import { useUserStore } from "@/store/useUserStore";
-import {updateEmail, updateThirdEmail, updateUserAccount} from "@/apis/user";
-import {sendEmail} from "@/apis/email";
-
+import { updateUser as updateUserApi } from "@/api/AppBlogUserController";
+import { sendEmailCode } from "@/api/AppBlogAuthController";
 
 const uploadRef = ref<UploadInstance>()
 
 const accountForm = ref<any>({
   nickname: '',
-  gender: undefined,
-  intro: '',
+  sex: undefined,
   avatar: ''
 })
 
 const avatarImg = ref()
-
 const userStore = useUserStore()
 
 const emailForm = reactive({
@@ -30,49 +26,47 @@ const emailForm = reactive({
 async function updateUser() {
   baseFormRef.value.validate(async (isValid: boolean) => {
     if (isValid) {
-      const resp: any = await updateUserAccount(accountForm.value);
-      if (resp.code == 200) {
+      const resp: any = await updateUserApi({
+        nickname: accountForm.value.nickname,
+        sex: accountForm.value.sex,
+        avatar: accountForm.value.avatar,
+        email: emailForm.email || undefined,
+      });
+      if (resp) {
         ElMessage.success('信息更新成功')
         userStore.getInfo()
-      } else {
-        ElMessage.error(resp.data.msg)
       }
     } else ElMessage.warning('请完整填写信息')
   })
 }
 
-// 第一次的图片路径
 const firstImg = ref('')
 
-const submitUploadAntUpdate = () => {
+const submitUploadAndUpdate = () => {
   if (firstImg.value !== avatarImg.value) {
     uploadRef.value!.submit()
   } else updateUser()
 }
 
-const env = import.meta.env;
+// 上传头像：使用 yudao 文件上传
+const uploadAvatarUrl = '/api/app-api/infra/file/upload'
 
-// 上传头像
-const uploadAvatar = env.MODE === 'development' ? '/api/user/auth/upload/avatar' : env.VITE_SERVE + '/api/user/auth/upload/avatar'
-// token
-const token = localStorage.getItem('Token') || sessionStorage.getItem('Token') || ''
-
-const handleAvatarSuccess: UploadProps['onSuccess'] = (
-    response
-) => {
-  if (response.code !== 200) {
-    ElMessage.error('头像上传失败！' + response.msg)
-    return
+const handleAvatarSuccess: UploadProps['onSuccess'] = (response: any) => {
+  const data = response?.data || response
+  if (data && data.url) {
+    accountForm.value.avatar = data.url
+    updateUser()
+  } else if (data && data.path) {
+    accountForm.value.avatar = data.path
+    updateUser()
   }
-  accountForm.value.avatar = response.data
-  updateUser()
   firstImg.value = avatarImg.value
 }
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
   firstImg.value = avatarImg.value
   if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
-    ElMessage.error('头像图片需要jpg或者png类型的图片！！')
+    ElMessage.error('头像图片需要jpg或者png类型的图片！')
     return false
   } else if (rawFile.size / 1024 / 1024 > 2) {
     ElMessage.error('头像图片大小不能超过2MB！')
@@ -88,15 +82,14 @@ const handleChange = (uploadFile: any) => {
 onMounted(() => {
   watchEffect(() => {
     if (userStore.userInfo) {
-      accountForm.value = userStore.userInfo
-      avatarImg.value = userStore.userInfo.avatar
-      firstImg.value = userStore.userInfo.avatar
-      emailForm.email = userStore.userInfo.email
+      accountForm.value = { ...userStore.userInfo }
+      avatarImg.value = userStore.userInfo.avatar || ''
+      firstImg.value = userStore.userInfo.avatar || ''
+      emailForm.email = userStore.userInfo.email || ''
     }
   });
 })
 
-// 验证用户昵称
 const validateUsername = (_: any, value: any, callback: any) => {
   if (value === '') {
     callback(new Error('请输入用户昵称'))
@@ -122,29 +115,32 @@ const emailRules: FormRules = {
     {required: true, message: '请输入邮件地址', trigger: 'blur'},
     {type: 'email', message: '请输入合法的电子邮件地址', trigger: ['blur', 'change']}
   ],
-  code: [
-    {required: true, message: '请输入获取的验证码', trigger: 'blur'},
-  ]
+  code: [{required: true, message: '请输入获取的验证码', trigger: 'blur'}],
 }
 
 const centerDialogVisible = ref(false)
 
-async function updateEmailFunc(){
-  if (emailForm.password === ''){
-    ElMessage.warning('密码不能为空')
+async function updateEmailFunc() {
+  if (emailForm.email === userStore.userInfo?.email) {
+    ElMessage.warning('邮件地址未更改')
     return
   }
-  const resp: any = await updateEmail(emailForm);
-  if(resp.code == 200){
+  // 直接更新用户信息（包含新邮箱）
+  const resp: any = await updateUserApi({
+    nickname: accountForm.value.nickname,
+    sex: accountForm.value.sex,
+    avatar: accountForm.value.avatar,
+    email: emailForm.email,
+  });
+  if (resp) {
     ElMessage.success('邮件地址更新成功')
     emailForm.code = ''
     userStore.getInfo()
     centerDialogVisible.value = false
-  }else ElMessage.error(resp.msg)
+  }
 }
 
-// 更新邮件
-function modifyEmail(){
+function modifyEmail() {
   emailFormRef.value.validate((isValid: boolean) => {
     if (isValid) {
       centerDialogVisible.value = true
@@ -152,81 +148,58 @@ function modifyEmail(){
   })
 }
 
-// 三方登录绑定邮箱
-async function thirdPartyLoginEmail(){
-  emailFormRef.value.validate(async (isValid: boolean) => {
-    if (isValid) {
-      emailForm.password = '第三方登录'
-      // 发送请求
-      const resp: any = await updateThirdEmail(emailForm);
-      if(resp.code == 200){
-        ElMessage.success('邮件地址更新成功')
-        emailForm.code = ''
-        userStore.getInfo()
-      }else ElMessage.error(resp.msg)
-    } else ElMessage.warning('请完整填写信息')
-  })
-}
-
-// 判断邮箱是否正确
 const isEmailValid = computed(() => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailForm.email))
 
-// 邮件发送验证码冷却时间
 const coldTime = ref(0)
 
-/**
- * 获取验证码
- */
-async function getEmailCode(){
-  if (emailForm.email === userStore.userInfo?.email){
-    ElMessage.warning('邮件地址未更改')
-    return
-  }
-  if(isEmailValid){
-    coldTime.value = 60
-    const resp: any = await sendEmail(emailForm.email, 'resetEmail');
-    if (resp.code == 200) {
-      ElMessage.success(`验证码已发送到邮箱：${emailForm.email}，请注意查收`)
-      const intervalId = setInterval(() => {
-        if (coldTime.value === 0) {
-          clearInterval(intervalId);
-        } else {
-          coldTime.value--;
-        }
-      }, 1000)
+async function getEmailCode() {
+  if (!isEmailValid.value) return
+  coldTime.value = 60
+  await sendEmailCode({ email: emailForm.email, scene: 'resetEmail' });
+  ElMessage.success(`验证码已发送到邮箱：${emailForm.email}，请注意查收`)
+  const intervalId = setInterval(() => {
+    if (coldTime.value === 0) {
+      clearInterval(intervalId);
     } else {
-      ElMessage.error(resp.msg)
-      coldTime.value = 0
+      coldTime.value--;
     }
-  }
+  }, 1000)
 }
+
+// token for upload auth header
+const token = localStorage.getItem('Token') || sessionStorage.getItem('Token') || ''
+const uploadHeaders = ref<Record<string, string>>({
+  'Authorization': 'Bearer ' + (() => {
+    try {
+      const obj = JSON.parse(token)
+      return obj.accessToken || ''
+    } catch {
+      return token
+    }
+  })(),
+})
 </script>
 
 <template>
   <div class="setting-page">
     <el-dialog
         v-model="centerDialogVisible"
-        title="帐号安全验证"
+        title="确认修改邮箱"
         width="500"
         align-center
     >
-      <span class="dialog-bold">你正在进行敏感操作, 继续操作前请验证您的身份</span>
-      <div class="dialog-form">
-        <span class="dialog-bold">密码验证</span>
-        <el-input v-model="emailForm.password" type="password" placeholder="请输入密码"/>
-      </div>
+      <span class="dialog-bold">你正在更改邮箱为：{{ emailForm.email }}</span>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="centerDialogVisible = false">关闭</el-button>
           <el-button type="primary" @click="updateEmailFunc" :icon="Refresh">
-            更新邮件
+            确认更新
           </el-button>
         </div>
       </template>
     </el-dialog>
     <div class="setting-layout">
       <div class="setting-main">
-        <!-- 账号信息卡片 -->
         <div class="panel">
           <div class="panel-header">
             <el-icon><User/></el-icon>
@@ -239,15 +212,15 @@ async function getEmailCode(){
               <div class="avatar-section">
                 <el-upload
                     class="avatar-uploader"
-                    :action="uploadAvatar"
+                    :action="uploadAvatarUrl"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload"
                     :on-change="handleChange"
-                    :headers="{'Authorization': 'Bearer ' + JSON.parse(token).token}"
+                    :headers="uploadHeaders"
                     :auto-upload="false"
                     ref="uploadRef"
-                    name="avatarFile"
+                    name="file"
                 >
                   <img v-if="avatarImg" :src="avatarImg" class="avatar" alt="头像" style="border-radius: 50%"/>
                   <el-icon v-else class="avatar-uploader-icon">
@@ -268,29 +241,25 @@ async function getEmailCode(){
                     <el-input placeholder="请输入用户昵称" maxlength="10" v-model="accountForm.nickname"/>
                   </el-form-item>
                   <el-form-item label="性别">
-                    <el-radio-group v-model="accountForm.gender">
+                    <el-radio-group v-model="accountForm.sex">
                       <el-radio :label="1">男</el-radio>
                       <el-radio :label="2">女</el-radio>
                       <el-radio :label="0">保密</el-radio>
                     </el-radio-group>
                   </el-form-item>
-                  <el-form-item label="个人简介">
-                    <el-input type="textarea" placeholder="请输入个人简介" v-model="accountForm.intro"/>
-                  </el-form-item>
                 </el-form>
               </div>
-              <el-button type="success" :icon="Select" @click="submitUploadAntUpdate">更新信息</el-button>
+              <el-button type="success" :icon="Select" @click="submitUploadAndUpdate">更新信息</el-button>
             </div>
           </div>
         </div>
 
-        <!-- 邮件设置卡片 -->
         <div class="panel panel--email">
           <div class="panel-header">
             <el-icon><Message/></el-icon>
             <span class="panel-title">电子邮件设置</span>
           </div>
-          <span class="panel-desc">在这里可以修改或绑定的电子邮箱信息，绑定后可以开启邮箱提醒！</span>
+          <span class="panel-desc">在这里可以修改或绑定的电子邮箱信息</span>
           <el-divider style="margin-top: 0.5rem"/>
           <div class="panel-body">
             <div class="form-wrap">
@@ -316,18 +285,12 @@ async function getEmailCode(){
                   </el-form-item>
                 </el-form>
               </div>
-              <template v-if="userStore.userInfo?.registerType === 0" >
-                <el-button class="submit-btn" :icon="Unlock" type="success" @click="modifyEmail">安全验证</el-button>
-              </template>
-              <template v-else>
-                <el-button class="submit-btn" :icon="Message" type="success" @click="thirdPartyLoginEmail">确定</el-button>
-              </template>
+              <el-button class="submit-btn" :icon="Unlock" type="success" @click="modifyEmail">更新邮箱</el-button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 右侧用户信息卡片 -->
       <div class="setting-sidebar">
         <transition name="el-fade-in-linear">
           <div v-if="userStore.userInfo" class="panel user-card">
@@ -336,20 +299,7 @@ async function getEmailCode(){
               <div class="user-card-name">
                 你好，{{ userStore.userInfo?.nickname }}
               </div>
-              <el-divider style="margin: 10px 0"/>
-              <div class="user-card-intro">
-                {{ userStore.userInfo?.intro || '这个用户很懒，没有填写个人简介~' }}
-              </div>
             </div>
-          </div>
-        </transition>
-        <transition name="el-fade-in-linear">
-          <div v-if="userStore.userInfo" class="panel welcome-card">
-            <div class="welcome-title">
-              欢迎加入Ruyu个人博客！
-            </div>
-            <div>注册时间：{{ userStore.userInfo?.createTime }}</div>
-            <div>登录时间：{{ userStore.userInfo?.loginTime }}</div>
           </div>
         </transition>
       </div>
@@ -359,193 +309,34 @@ async function getEmailCode(){
 
 <style scoped lang="scss">
 $bp-md: 768px;
-$bp-2xl: 1536px;
-
-/* ── 页面容器 ── */
-.setting-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.setting-layout {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  margin-top: 2.5rem;
-
-  @media (min-width: $bp-md) {
-    flex-direction: row;
-    margin-top: 4rem;
-  }
-
-  @media (min-width: $bp-2xl) {
-    width: 100rem;
-  }
-}
-
-/* ── 主内容区 ── */
-.setting-main {
-  width: 100%;
-
-  @media (min-width: $bp-md) {
-    width: 50%;
-  }
-}
-
-/* ── 面板卡片 ── */
-.panel {
-  width: 100%;
-  padding: 1.25rem;
-  margin-bottom: 1.25rem;
-  border-radius: $border-radius;
-  background-color: var(--el-bg-color);
-  box-shadow: var(--el-box-shadow-light);
-}
-
-.panel--email {
-  margin-bottom: 7rem;
-}
-
-.panel-header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.panel-title {
-  font-size: 1.25rem;
-  font-weight: bold;
-}
-
-.panel-desc {
-  color: var(--el-text-color-secondary);
-  font-size: 0.8rem;
-}
-
-.panel-body {
-  display: flex;
-  justify-content: center;
-  margin: 0 1.5rem;
-}
-
-.form-wrap {
-  width: 100%;
-  margin-bottom: 1.25rem;
-}
-
-.avatar-section {
-  display: flex;
-  justify-content: center;
-}
-
-.form-section {
-  display: flex;
-  justify-content: center;
-}
-
-.setting-form {
-  width: 100%;
-  margin-top: 1.25rem;
-}
-
-.dialog-bold {
-  font-weight: bold;
-}
-
-.dialog-form {
-  margin-top: 1.5rem;
-}
-
-.code-row {
-  display: flex;
-  width: 100%;
-}
-
-.code-btn {
-  margin-left: 0.5rem;
-}
-
-.submit-btn {
-  margin: 0 1.5rem;
-}
-
-/* ── 右侧边栏 ── */
-.setting-sidebar {
-  width: 100%;
-  padding: 1.25rem;
-
-  @media (min-width: $bp-md) {
-    width: 20rem;
-    margin-left: 2.5rem;
-  }
-}
-
-.user-card {
-  margin-bottom: 0;
-}
-
-.user-card-inner {
-  text-align: center;
-  padding: 15px 15px 10px;
-}
-
-.user-card-name {
-  font-weight: bold;
-}
-
-.user-card-intro {
-  padding: 10px;
-  font-size: 14px;
-  color: var(--el-text-color-secondary);
-}
-
-.welcome-card {
-  margin-top: 1.25rem;
-  padding: 0.75rem;
-}
-
-.welcome-title {
-  font-weight: bold;
-  color: var(--el-text-color-placeholder);
-}
-
-/* ── 头像上传 ── */
-.avatar-uploader .avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-
-.el-icon.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 140px;
-  border-radius: 50%;
-  height: 140px;
-  text-align: center;
-}
-
-.avatar-uploader :hover {
-  border-color: var(--el-color-primary);
-}
-
-.avatar-uploader-icon {
-  border: 1px dashed var(--el-border-color);
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: var(--el-transition-duration-fast);
-}
-
-// 修改 el-dialog 内容区的默认padding
-::deep(.el-dialog__body) {
-  padding-top: 0;
-}
-
-::deep(.el-dialog){
-  border-radius: 10px;
-}
+.setting-page { display: flex; justify-content: center; align-items: center; }
+.setting-layout { display: flex; flex-direction: column; width: 100%; margin-top: 2.5rem;
+  @media (min-width: $bp-md) { flex-direction: row; margin-top: 4rem; } }
+.setting-main { width: 100%;
+  @media (min-width: $bp-md) { width: 50%; } }
+.panel { width: 100%; padding: 1.25rem; margin-bottom: 1.25rem; border-radius: 10px; background-color: var(--el-bg-color); box-shadow: var(--el-box-shadow-light); }
+.panel--email { margin-bottom: 7rem; }
+.panel-header { display: flex; align-items: center; gap: 0.5rem; }
+.panel-title { font-size: 1.25rem; font-weight: bold; }
+.panel-desc { color: var(--el-text-color-secondary); font-size: 0.8rem; }
+.panel-body { display: flex; justify-content: center; margin: 0 1.5rem; }
+.form-wrap { width: 100%; margin-bottom: 1.25rem; }
+.avatar-section { display: flex; justify-content: center; }
+.form-section { display: flex; justify-content: center; }
+.setting-form { width: 100%; margin-top: 1.25rem; }
+.dialog-bold { font-weight: bold; }
+.code-row { display: flex; width: 100%; }
+.code-btn { margin-left: 0.5rem; }
+.submit-btn { margin: 0 1.5rem; }
+.setting-sidebar { width: 100%; padding: 1.25rem;
+  @media (min-width: $bp-md) { width: 20rem; margin-left: 2.5rem; } }
+.user-card { margin-bottom: 0; }
+.user-card-inner { text-align: center; padding: 15px 15px 10px; }
+.user-card-name { font-weight: bold; }
+.avatar-uploader .avatar { width: 178px; height: 178px; display: block; }
+.el-icon.avatar-uploader-icon { font-size: 28px; color: #8c939d; width: 140px; border-radius: 50%; height: 140px; text-align: center; }
+.avatar-uploader :hover { border-color: var(--el-color-primary); }
+.avatar-uploader-icon { border: 1px dashed var(--el-border-color); border-radius: 6px; cursor: pointer; overflow: hidden; transition: var(--el-transition-duration-fast); }
+::deep(.el-dialog__body) { padding-top: 0; }
+::deep(.el-dialog){ border-radius: 10px; }
 </style>

@@ -41,10 +41,12 @@ function onHtmlChanged(htmlText: string) {
 <style lang="scss">
 .md-editor {
   --md-bk-color: var(--el-fill-color-blank);
-  // margin-bottom: $margin-bottom;
   border-radius: $border-radius;
-  // box-shadow: var(--el-box-shadow-light);
-  // padding: 0 $padding-md ;
+
+  // 隐藏 h1：标题已在 ArticleHeader 展示
+  .md-editor-preview h1 {
+    display: none;
+  }
 }
 
 .md-editor-dark {

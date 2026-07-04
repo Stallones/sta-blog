@@ -136,6 +136,7 @@ import { useFloatingMenu } from "@/composables/useFloatingMenu";
 import { useReadingProgress } from "@/composables/useReadingProgress";
 import { useReadingMode } from "@/composables/useReadingMode";
 import { useGalleryLayout } from "@/composables/useGalleryLayout";
+import { useScroll } from "@/composables/useScroll";
 import { MdCatalog } from "md-editor-v3";
 import {
   Tools,
@@ -166,6 +167,7 @@ const isDark = computed(() => colorMode.value === "dark");
 const { scrollPercentage: readingProgress } = useReadingProgress();
 const { toggleReadingMode } = useReadingMode();
 const galleryMode = useGalleryLayout();
+const { scrollToTop, scrollToBottom } = useScroll();
 
 // ── 布局浮层状态 ──
 const layoutPopoverVisible = ref(false);
@@ -257,17 +259,6 @@ const showArrowInsteadOfPercent = computed(
 );
 
 // ── 导航函数 ──
-function backToTop() {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-function backToBottom() {
-  window.scrollTo({
-    top: document.documentElement.scrollHeight,
-    behavior: "smooth",
-  });
-}
-
 function toggleColorMode() {
   colorMode.value = isDark.value ? "light" : "dark";
 }
@@ -292,7 +283,7 @@ function handleButtonClick(id: string) {
       toggleExpanded();
       break;
     case "scrollPercentage":
-      backToTop();
+      scrollToTop();
       break;
     case "colorMode":
       toggleColorMode();
@@ -301,7 +292,7 @@ function handleButtonClick(id: string) {
       toggleReadingMode();
       break;
     case "toComment":
-      backToBottom();
+      scrollToBottom();
       break;
     case "sidebarHide":
       toggleSidebar();
@@ -508,6 +499,11 @@ function handleButtonClick(id: string) {
 }
 
 .move_catalog {
+  // 隐藏 h1 目录项文字：标题已在 ArticleHeader 展示
+  :deep(.md-editor-catalog > .md-editor-catalog-link > span) {
+    display: none;
+  }
+
   :deep(.md-editor-catalog-active) {
     & > span {
       background-color: var(--el-color-primary-light-9);

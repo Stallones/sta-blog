@@ -9,7 +9,7 @@ import {
 } from "@element-plus/icons-vue";
 import { useSearchStore } from "@/store/useSearchStore";
 import { useDemotion } from "@/composables/useDemotion";
-import { searchArticleContent } from "@/apis/article";
+import { getArticleListByTitleAndContent } from "@/api/AppArticleController";
 import { searchLocalArticles } from "@/utils/file-reader";
 import type { ArticleVO } from "@/types";
 import router from "@/router";
@@ -97,14 +97,14 @@ async function doSearch(q: string) {
 
 // ── 在线搜索：后端 API ──
 async function doOnlineSearch(q: string) {
-  const res: any = await searchArticleContent(q);
-  if (res.code === 200 && res.data) {
-    resultList.value = res.data.map((item: ArticleVO) => ({
+  try {
+    const res = await getArticleListByTitleAndContent({ keyword: q });
+    resultList.value = (res || []).map((item: ArticleVO) => ({
       ...item,
-      articleContent: highlightKeyword(item.articleContent || "", q),
-      articleTitle: highlightKeyword(item.articleTitle || "", q),
+      summary: highlightKeyword(item.summary || "", q),
+      title: highlightKeyword(item.title || "", q),
     }));
-  } else {
+  } catch {
     resultList.value = [];
   }
 }
@@ -123,7 +123,7 @@ async function doOfflineSearch(q: string) {
   const validIds = ids.filter(Boolean);
   if (validIds.length) {
     const pageResult = await searchLocalArticles(validIds);
-    resultList.value = pageResult.page || [];
+    resultList.value = pageResult.list || [];
   } else {
     resultList.value = [];
   }
@@ -164,7 +164,8 @@ function highlightKeyword(text: string, keyword: string): string {
 }
 
 // ── 点击结果 ──
-function clickResult(articleId: number) {
+function clickResult(articleId: number | undefined) {
+  if (!articleId) return;
   closeDialog();
   router.push("/article/" + articleId);
 }
@@ -264,13 +265,13 @@ onUnmounted(() => {
               @click="clickResult(item.id)"
             >
               <div class="search-result-item__main">
-                <div class="search-result-item__title" v-html="item.articleTitle" />
+                <div class="search-result-item__title" v-html="item.title" />
                 <div class="search-result-item__meta">
                   <el-tag size="small">{{ item.categoryName }}</el-tag>
                   <span
-                    v-if="item.articleContent"
+                    v-if="item.summary"
                     class="search-result-item__content"
-                    v-html="item.articleContent"
+                    v-html="item.summary"
                   />
                 </div>
               </div>

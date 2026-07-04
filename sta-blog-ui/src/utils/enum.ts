@@ -19,20 +19,17 @@ export const LYRICTYPE = {
  */
 export const REQUEST_LOADING_PATH = [
     "/wapi/toplist/detail",
-    "/websiteInfo/front",
     "/wapi/playlist/",
-    "/banners/list",
+    "/app-api/blog/website-info/get",
+    "/app-api/blog/image/list",
 ]
 
 export const MUSIC_API_PROXY = "/wapi"
 
 /**
- * 
+ * 忽略错误提示的请求路径
  */
-const myYiyanApi = import.meta.env.VITE_YIYAN_API
 export const IGNORE_ERROR_PATH = [
-    "/websiteInfo/health",
-    "https://v1.hitokoto.cn",
-    myYiyanApi,
+    "/app-api/blog/website-info",
 ]
 

@@ -3,8 +3,7 @@ import { User, Lock, EditPen, Message } from '@element-plus/icons-vue'
 import { computed, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { register } from '@/apis/user'
-import { sendEmail } from '@/apis/email'
+import { emailRegister, sendEmailCode } from '@/api/AppBlogAuthController'
 
 const router = useRouter()
 const formRef = ref()
@@ -56,15 +55,14 @@ async function askCode() {
     return
   }
   coldTime.value = 60
-  const res: any = await sendEmail(form.email, 'register')
-  if (res.code === 200) {
+  const res: any = await sendEmailCode({ email: form.email, scene: 'register' })
+  if (res) {
     ElMessage.success(`验证码已发送到邮箱：${form.email}，请注意查收`)
     const intervalId = setInterval(() => {
       if (coldTime.value === 0) clearInterval(intervalId)
       else coldTime.value--
     }, 1000)
   } else {
-    ElMessage.warning(res.msg)
     coldTime.value = 0
   }
 }
@@ -75,12 +73,15 @@ async function handleRegister() {
       ElMessage.warning('请完整填写注册表单内容')
       return
     }
-    const res: any = await register(form)
-    if (res.code === 200) {
+    const res: any = await emailRegister({
+      username: form.username,
+      email: form.email,
+      password: form.password,
+      code: form.code,
+    })
+    if (res) {
       ElMessage.success('注册成功，欢迎加入我们')
       router.push('/login')
-    } else {
-      ElMessage.warning(res.msg)
     }
   })
 }
@@ -88,15 +89,13 @@ async function handleRegister() {
 
 <template>
   <div style="text-align: center; margin: 0 20px">
-    <!-- 标题区 -->
     <div style="margin-top: 100px">
       <div style="font-size: 25px; font-weight: bold">注册新用户</div>
       <div style="font-size: 14px; color: grey; margin-top: 1rem">
-        欢迎注册我们的学习平台，请在下方填写相关信息
+        欢迎注册，请在下方填写相关信息
       </div>
     </div>
 
-    <!-- 表单 -->
     <div style="margin-top: 50px">
       <el-form :model="form" :rules="rules" ref="formRef">
         <el-form-item prop="username">
@@ -136,14 +135,12 @@ async function handleRegister() {
       </el-form>
     </div>
 
-    <!-- 注册按钮 -->
     <div style="margin-top: 80px">
       <el-button style="width: 270px" type="warning" plain @click="handleRegister">
         立即注册
       </el-button>
     </div>
 
-    <!-- 去登录 -->
     <el-divider>
       <span style="font-size: 13px; color: grey">已有账号？</span>
     </el-divider>

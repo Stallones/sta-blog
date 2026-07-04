@@ -11,13 +11,13 @@
     <div class="sticky_layout">
       <DirectoryCard />
 
-      <RandomCard
+      <!-- <RandomCard
         :categoryId="articleVO.categoryId.toString()"
         :articleId="(route.params.id as string) || undefined"
         title="相关推荐"
         prefix-icon="query_tasks"
         v-if="showRandom"
-      />
+      /> -->
     </div>
   </div>
 </template>

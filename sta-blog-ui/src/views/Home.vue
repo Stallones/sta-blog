@@ -12,7 +12,7 @@
       <div class="hc-search">
         <SearchByPagefind v-if="!isOnline" />
       </div>
-      <RecommendArticle />
+      <!-- <RecommendArticle /> -->
     </div>
 
     <div>

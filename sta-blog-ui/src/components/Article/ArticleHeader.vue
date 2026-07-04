@@ -1,6 +1,6 @@
 <template>
   <div id="articleHeader" :class="['h-a-info', variant === 'reading' ? 'h-a-info--reading' : 'h-a-info--cover']">
-    <h1 class="h-a-title">{{ article.articleTitle }}</h1>
+    <h1 class="h-a-title">{{ article.title }}</h1>
 
     <div class="h-a-meta">
       <div class="meta-line-1">
@@ -9,8 +9,8 @@
           {{ article.categoryName }}
         </span>
         <span class="divider">|</span>
-        <span v-for="tag in article.tags" :key="tag.id" class="tag">
-          #{{ tag.tagName }}
+        <span v-for="(tagName, idx) in article.tagNames" :key="idx" class="tag">
+          #{{ tagName }}
         </span>
       </div>
       <div class="meta-line-2">
@@ -38,9 +38,8 @@
         >
       </div>
       <div class="meta-line-3">
-        <span>发布：{{ article.createTime }}</span>
-        <span class="divider">|</span>
-        <span>更新：{{ article.updateTime }}</span>
+        <span>发布：{{ dayjs(article.createTime).format("YYYY-MM-DD") }}</span>
+        <!-- updateTime 在新 API 中不存在于 ArticleVO -->
       </div>
     </div>
   </div>
@@ -54,6 +53,7 @@ import {
   ChatDotRound,
   Star,
 } from "@element-plus/icons-vue";
+import { dayjs } from "element-plus";
 import type { ArticleVO } from "@/types";
 
 defineProps<{

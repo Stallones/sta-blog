@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { getRandomArticle, getRelatedArticle } from "@/apis/home";
+import { getArticleListByVisitCount, getArticleListByCategoryId } from "@/api/AppArticleController";
+import { dayjs } from "element-plus";
 import { ref, watch } from "vue";
-
 
 const props = defineProps({
   title: {
@@ -14,55 +14,54 @@ const props = defineProps({
   },
   // 分类id
   categoryId: {
-    type: String,
+    type: [String, Number],
     default: "",
   },
   // 文章id
   articleId: {
-    type: String,
+    type: [String, Number],
     default: "",
   },
 });
 
-const randomArticles = ref([
-  {
-    id: "",
-    articleTitle: "",
-    articleCover: "",
-    createTime: "",
-  },
-]);
+const randomArticles = ref<any[]>([]);
 
 function randomArticleBtn() {
   imgRefresh.value = true;
-  getRandomArticleList();
+  getRandomArticleData();
 }
 
-async function getRandomArticleList() {
-  const res = await getRandomArticle();
-  res.data = formatDate(res.data);
-  randomArticles.value = res.data;
+async function getRandomArticleData() {
+  const res: any = await getArticleListByVisitCount({ limit: 5 });
+  const list = Array.isArray(res) ? res : [];
+  formatDate(list);
+  randomArticles.value = list;
 }
 
 // 监听参数变化
 watch(
   () => props.articleId,
   () => {
-    relatedRecommendBtn(props.categoryId, props.articleId);
+    if (props.categoryId && props.articleId) {
+      relatedRecommendBtn(Number(props.categoryId), Number(props.articleId));
+    }
   }
 );
 
 // 相关推荐
-async function relatedRecommendBtn(categoryId: string, articleId: string) {
-  const res = await getRelatedArticle(categoryId, articleId);
-  res.data = formatDate(res.data);
-  randomArticles.value = res.data;
+async function relatedRecommendBtn(categoryId: number, articleId: number) {
+  const res: any = await getArticleListByCategoryId({ categoryId, articleId });
+  const list = Array.isArray(res) ? res : [];
+  formatDate(list);
+  randomArticles.value = list;
 }
 
-// 去掉时分秒
-function formatDate(date: []) {
+// 格式化日期，去掉时分秒
+function formatDate(date: any[]) {
   date.forEach((item: any) => {
-    item.createTime = item.createTime.split(" ")[0];
+    if (item.createTime) {
+      item.createTime = dayjs(item.createTime).format("YYYY-MM-DD");
+    }
   });
   return date;
 }
@@ -70,19 +69,22 @@ function formatDate(date: []) {
 const imgRefresh = ref(false);
 
 function loadContent() {
-  if (props.title == "随机文章") {
-    getRandomArticleList();
+  if (props.title === "随机文章") {
+    getRandomArticleData();
   }
-  if (props.title == "相关推荐") {
-    relatedRecommendBtn(props.categoryId, props.articleId);
+  if (props.title === "相关推荐") {
+    relatedRecommendBtn(Number(props.categoryId), Number(props.articleId));
   }
 }
+
+onMounted(() => {
+  loadContent();
+});
 </script>
 
 <template>
   <!-- 随机文章 -->
   <Card
-    name="random"
     variant="refresh"
     :title="title"
     :prefix-icon="prefixIcon"
@@ -90,21 +92,21 @@ function loadContent() {
     @invoke="randomArticleBtn"
     v-view-request="{ callback: loadContent }"
   >
-    <div class="random_container" v-for="randomArticle in randomArticles">
+    <div class="random_container" v-for="randomArticle in randomArticles" :key="randomArticle.id">
       <div
         class="random_image"
         @click="$router.push('/article/' + randomArticle.id)"
       >
         <img
-          v-if="randomArticle.articleCover"
-          :src="imgRefresh ? randomArticle.articleCover : ''"
-          :data-src="randomArticle.articleCover"
+          v-if="randomArticle.coverPath"
+          :src="imgRefresh ? randomArticle.coverPath : ''"
+          :data-src="randomArticle.coverPath"
           v-lazy="true"
           alt="文章封面"
         />
       </div>
       <div class="random_text" :key="randomArticle.id">
-        <div>{{ randomArticle.articleTitle }}</div>
+        <div>{{ randomArticle.title }}</div>
         <div>{{ randomArticle.createTime }}</div>
       </div>
     </div>
@@ -141,20 +143,21 @@ function loadContent() {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    line-height: 30px;
     text-align: left;
-    margin-left:20px;
+    line-height: 30px;
 
     :first-child {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
 
+      margin-left: 1rem;
       font-size: 1em;
-      color: var(text-primary);
+      color: var(--el-text-color-regular);
     }
 
     :last-child {
+      margin-left: 1rem;
       font-size: 0.8em;
     }
   }

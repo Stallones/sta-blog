@@ -7,7 +7,7 @@
       </span>
     </div>
 
-    <div class="item" @click="router.push('/')">
+    <div class="item" @click="navigateTo('/')">
       <span>
         <el-icon><HomeFilled /></el-icon>
         <span>首页</span>
@@ -21,19 +21,19 @@
         <el-icon class="arrow"><ArrowDownBold /></el-icon>
       </span>
       <ul class="menus_item_child">
-        <li @click="router.push('/category')">
+        <li @click="navigateTo('/category')">
           <span>
             <el-icon><DocumentCopy /></el-icon>
             <span>分类</span>
           </span>
         </li>
-        <li @click="router.push('/tags')">
+        <li @click="navigateTo('/tags')">
           <span>
             <el-icon><PriceTag /></el-icon>
             <span>标签</span>
           </span>
         </li>
-        <li @click="router.push('/timeline')">
+        <li @click="navigateTo('/timeline')">
           <span>
             <el-icon><Clock /></el-icon>
             <span>时间轴</span>
@@ -49,25 +49,25 @@
         <el-icon class="arrow"><ArrowDownBold /></el-icon>
       </span>
       <ul class="menus_item_child">
-        <li @click="router.push('/link')">
+        <li @click="navigateTo('/link')">
           <span>
             <el-icon><Link /></el-icon>
             <span>友链</span>
           </span>
         </li>
-        <li @click="router.push('/tree-hole')">
+        <li @click="navigateTo('/tree-hole')">
           <span>
             <el-icon><Fries /></el-icon>
             <span>树洞</span>
           </span>
         </li>
-        <li v-if="env.VITE_MUSIC_FRONTEND_URL" @click="router.push('/music')">
+        <li v-if="env.VITE_MUSIC_FRONTEND_URL" @click="navigateTo('/music')">
           <span>
             <el-icon><Headset /></el-icon>
             <span>音乐</span>
           </span>
         </li>
-        <li @click="router.push('/photo')">
+        <li @click="navigateTo('/photo')">
           <span>
             <el-icon><Picture /></el-icon>
             <span>相册</span>
@@ -76,19 +76,21 @@
       </ul>
     </div>
 
-    <div class="item" @click="router.push('/message')">
+    <div class="item" @click="navigateTo('/message')">
       <span>
         <el-icon><Promotion /></el-icon>
         <span>留言</span>
       </span>
     </div>
 
-    <div class="item" @click="router.push('/about')">
+    <div class="item" @click="navigateTo('/about')">
       <span>
         <el-icon><InfoFilled /></el-icon>
         <span>关于</span>
       </span>
     </div>
+
+    <UserLogin v-if="isOnline && !isGuestPage" />
   </div>
 </template>
 
@@ -111,9 +113,24 @@ import {
 } from "@element-plus/icons-vue";
 import router from "@/router";
 import { useSearchStore } from "@/store/useSearchStore";
+import { useScroll } from "@/composables/useScroll";
+
+import { useDemotion } from "@/composables/useDemotion";
+import UserLogin from "./UserLogin.vue";
+const route = useRoute();
+const { isOnline } = useDemotion();
+const isGuestPage = computed(() => guestNames.includes(String(route.name)));
+const guestNames = ["login", "register", "reset"];
 
 const searchStore = useSearchStore();
 const env = import.meta.env;
+const { scrollToTop } = useScroll();
+
+/** 导航跳转后平滑滚动到顶部 */
+function navigateTo(path: string) {
+  router.push(path);
+  scrollToTop();
+}
 </script>
 
 <style scoped lang="scss">

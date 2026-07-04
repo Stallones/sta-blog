@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref, onMounted, nextTick} from 'vue';
-import {getTimeLine} from "@/apis/article";
+import {getArticleListByCreateTime} from "@/api/AppArticleController";
 import {readTimeLine} from "@/utils/file-reader";
 import {useDemotion} from "@/composables/useDemotion";
 
@@ -8,11 +8,12 @@ import {useDemotion} from "@/composables/useDemotion";
 function handleData(data: any[]) : Record<string, any[]> {
   // 过滤内容
   data = data.map((item: any) => {
-    item.articleContent = item.articleContent.replace(/[*#>`~\-\\[\]()\s]|(\n\n)/g, '');
-    // 提取前 50 个字符
-    item.articleContent = item.articleContent.substring(0, 60) + '...';
+    // 新 API 返回 summary，旧离线数据可能返回 articleContent
+    item.summary = (item.summary || item.articleContent || '').replace(/[*#>`~\-\\[\]()\s]|(\n\n)/g, '');
+    // 提取前 60 个字符
+    item.summary = item.summary.substring(0, 60) + '...';
     // 时间去掉时分秒
-    item.createTime = item.createTime.substring(0, 10);
+    item.createTime = item.createTime?.substring(0, 10);
     return item;
   });
   const groupedArticles = data.reduce((groups: Record<string, any[]>, article: any) => {
@@ -31,7 +32,7 @@ const shellRef = ref<HTMLElement | null>(null);
 const items = ref<any>({});
 
 onMounted(async () => {
-  const res: any = await requestOrRead(getTimeLine, readTimeLine);
+  const res: any = await requestOrRead(getArticleListByCreateTime, readTimeLine);
   items.value = handleData(res.data);
   await nextTick(() => {
     const shell = shellRef.value;
@@ -77,9 +78,9 @@ onMounted(async () => {
               <div class="year">--{{ year }}--</div>
               <div class="item" @click="$router.push(`/article/${i.id}`)" :data-text="i.createTime" v-for="i in item">
                 <div class="content">
-                  <img class="img" :src="i.articleCover"/>
-                  <h2 class="content-title">{{ i.articleTitle }}</h2>
-                  <p class="content-desc">{{ i.articleContent }}</p>
+                  <img class="img" :src="i.coverPath"/>
+                  <h2 class="content-title">{{ i.title }}</h2>
+                  <p class="content-desc">{{ i.summary }}</p>
                 </div>
               </div>
             </template>

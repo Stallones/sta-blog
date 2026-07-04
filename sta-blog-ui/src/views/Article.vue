@@ -19,7 +19,7 @@
     <div class="article-main">
       <div class="article-scroll"></div>
       <MdEditor
-        :content="articleVO.articleContent"
+        :content="articleVO.content ?? ''"
         :editorId="editorId"
         :theme="mode"
         @htmlChanged="mdHtml"
@@ -28,10 +28,9 @@
       <SComment
         v-if="showComment"
         :serverOn="isOnline"
-        :authorId="articleVO.userId"
-        :commentType="COMMENT_ARTICLE_CONS"
-        :commentPId="articleVO.id"
-        :liketype="2"
+        :authorId="0"
+        :articleId="(articleVO.id as number)"
+        :likeType="BlogType.COMMENT"
       />
     </div>
     <div v-if="sidebarVisible" class="article-sidebar">
@@ -53,7 +52,7 @@
       />
       <el-divider></el-divider>
       <MdEditor
-        :content="articleVO.articleContent"
+        :content="articleVO.content ?? ''"
         :editorId="editorId"
         :theme="mode"
         @htmlChanged="mdHtml"
@@ -72,7 +71,7 @@ import { useDemotion } from "@/composables/useDemotion";
 import { useArticleStore } from "@/store/useArticleStore";
 import { useReadingProgress } from "@/composables/useReadingProgress";
 import { useReadingMode } from "@/composables/useReadingMode";
-import { COMMENT_ARTICLE_CONS } from "@/const";
+import { BlogType } from "@/const";
 import {
   registerArticleItems,
   unregisterArticleItems,
@@ -128,9 +127,8 @@ watch(
 
 async function getArticleDetailById() {
   await articleStore.fetchArticle(route.params.id as string, { requestOrRead, isOnline: isOnline.value });
-  if (isOnline) {
-    showComment.value = true;
-  }
+  // 始终渲染评论区，由 SComment 组件内部根据 serverOn 控制可用性
+  showComment.value = true;
 }
 
 function mdHtml(htmlText: string) {
@@ -217,7 +215,7 @@ useReadingProgress(".progress");
   background-color: var(--el-fill-color-blank);
   box-shadow: var(--el-box-shadow-light);
   border-radius: $border-radius;
-  padding: 0 $padding-md $padding-md;
+  padding: $padding-md;
 
   @include tablet-down($breakpoint: $bp-tablet) {
     flex: none;

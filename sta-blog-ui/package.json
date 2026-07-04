@@ -7,7 +7,8 @@
     "dev": "vite",
     "page": "node src/utils/pagefind-dev.mjs",
     "build": "vite build --mode production && node src/utils/generate-article-pages.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "openapi": "tsx openapi2ts.config.ts && tsx scripts/gen-enum-consts.ts"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
@@ -32,6 +33,7 @@
     "vue3-danmaku": "^1.6.0"
   },
   "devDependencies": {
+    "@umijs/openapi": "^1.14.1",
     "@vitejs/plugin-vue": "^6.0.1",
     "autoprefixer": "^10.4.18",
     "css-loader": "^6.8.1",
@@ -41,6 +43,7 @@
     "sass": "^1.85.1",
     "sass-loader": "^13.3.2",
     "style-loader": "^3.3.3",
+    "tsx": "^4.19.0",
     "typescript": "^5.0.2",
     "unplugin-auto-import": "^0.16.6",
     "unplugin-vue-components": "^0.25.2",

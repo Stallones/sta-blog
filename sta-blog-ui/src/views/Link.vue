@@ -6,26 +6,21 @@ import {
   FormInstance,
   FormRules,
 } from "element-plus";
-import { applyLink, linkList } from "@/apis/link";
-import { MdPreview } from "md-editor-v3";
+import { applyForLink, getLinkList } from "@/api/AppLinkController";
 import { useDemotion } from "@/composables/useDemotion";
 
 const dialogVisible = ref(false);
 const { isOnline } = useDemotion();
 
 onMounted(() => {
-  if (isOnline) linkListFunc();
+  if (isOnline.value) linkListFunc();
 });
 
-const links = ref();
+const links = ref<any[]>([]);
 
 async function linkListFunc() {
-  const res = await linkList();
-  if (res.code === 200) {
-    links.value = res.data;
-  } else {
-    ElMessage.error(res.msg);
-  }
+  const res: any = await getLinkList();
+  links.value = Array.isArray(res) ? res : [];
 }
 
 const form = reactive({
@@ -34,7 +29,6 @@ const form = reactive({
   description: "",
   background: "",
   email: "",
-  type: "1",
 });
 
 const ruleFormRef = ref<FormInstance>();
@@ -50,7 +44,7 @@ const rules = reactive<FormRules<any>>({
   ],
   description: [
     { required: true, message: "请填写网站描述", trigger: "blur" },
-    { min: 3, max: 30, message: "长度小3，最大15", trigger: "blur" },
+    { min: 3, max: 30, message: "长度小3，最大30", trigger: "blur" },
   ],
   background: [
     { required: true, message: "请填写友链背景图链接", trigger: "blur" },
@@ -58,7 +52,7 @@ const rules = reactive<FormRules<any>>({
   ],
   email: [
     { required: true, message: "请填写电子邮件地址", trigger: "blur" },
-    { min: 3, max: 20, message: "长度小3，最大15", trigger: "blur" },
+    { min: 3, max: 20, message: "长度小3，最大20", trigger: "blur" },
   ],
 });
 
@@ -66,8 +60,8 @@ const rules = reactive<FormRules<any>>({
 function applyLinkFunc() {
   ruleFormRef.value?.validate(async (valid) => {
     if (valid) {
-      const res = await applyLink(form);
-      if (res.code === 200) {
+      const res: any = await applyForLink(form);
+      if (res !== undefined) {
         ElNotification({
           title: "成功",
           showClose: false,
@@ -76,11 +70,10 @@ function applyLinkFunc() {
           type: "success",
         });
         dialogVisible.value = false;
-      } else {
-        ElMessage.error(res.msg);
+        linkListFunc();
       }
     } else {
-      return false;
+      // validation failed
     }
   });
 }
@@ -159,85 +152,64 @@ function applyLinkFunc() {
         </el-form>
       </div>
     </el-dialog>
-    <div class="link-container">
-      <div class="content">
-        <div class="header">
-          <div class="title">友链</div>
-          <el-button
-            type="primary"
-            :icon="Watermelon"
-            plain
-            @click="dialogVisible = true"
-            style="margin-right: 1rem"
-            >申请友链</el-button
-          >
-        </div>
-        <el-divider />
-        <div class="title_content">
-          <span style="font-size: 1rem; color: grey">欢迎访问友链板块！</span>
-          <span
-            >友链板块是一个旨在促进不同系统间相互协作和交流的平台。通过友链板块，您可以：</span
-          >
-          <span>1、分享自己系统的介绍和链接。</span>
-          <span>2、发现更多的优秀博客网站。</span>
-          <span style="font-size: 1rem; color: grey">注意：</span>
-          <span
-            >1、友链申请前必须先登录本网站，申请通过后会通过邮件的形式通知你。</span
-          >
-          <span>2、点击网站的名称进行友链跳转。</span>
-        </div>
-        <div class="link">
-          <template v-for="link in links" :key="link.id">
-            <div class="item">
-              <div
-                class="bg"
-                :style="{ background: `url(${link.background})` }"
-              ></div>
-              <div class="content_link">
-                <div>
-                  <el-avatar :src="link.avatar" />
-                  <div class="name">
-                    <a :href="link.url">{{ link.name }}</a>
+    <div class="content">
+          <div class="header">
+            <div class="title">友链</div>
+            <el-button
+              type="primary"
+              :icon="Watermelon"
+              plain
+              @click="dialogVisible = true"
+              style="margin-right: 1rem"
+              >申请友链</el-button
+            >
+          </div>
+          <el-divider />
+          <div class="title_content">
+            <span style="font-size: 1rem; color: grey">欢迎访问友链板块！</span>
+            <span
+              >友链板块是一个旨在促进不同系统间相互协作和交流的平台。通过友链板块，您可以：</span
+            >
+            <span>1、分享自己系统的介绍和链接。</span>
+            <span>2、发现更多的优秀博客网站。</span>
+            <span style="font-size: 1rem; color: grey">注意：</span>
+            <span
+              >1、友链申请前必须先登录本网站，申请通过后会通过邮件的形式通知你。</span
+            >
+            <span>2、点击网站的名称进行友链跳转。</span>
+          </div>
+          <div class="link">
+            <template v-for="link in links" :key="link.id">
+              <div v-slide-in class="item">
+                <div
+                  class="bg"
+                  :style="{ background: `url(${link.background})` }"
+                ></div>
+                <div class="content_link">
+                  <div>
+                    <div class="name">
+                      <a :href="link.url" target="_blank">{{ link.name }}</a>
+                    </div>
                   </div>
+                  <div class="description">{{ link.description }}</div>
                 </div>
-                <div class="description">{{ link.description }}</div>
               </div>
-            </div>
-          </template>
+            </template>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 </template>
 
 <style scoped lang="scss">
-@use "@/styles/mixin" as *;
-
-.link-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  background-color: var(--el-fill-color-blank);
-  box-shadow: var(--el-box-shadow-light);
-  border-radius: 1rem;
-  padding: 1rem 1rem 2rem;
-
-  .content {
-    margin-top: 0;
-  }
-}
-
-::deep(.el-dialog__body) {
+:deep(.el-dialog__body) {
   padding-top: 0;
 }
 
-::deep(.el-dialog) {
-  // 过渡时间
+:deep(.el-dialog) {
   transition: all 0.3s ease-in-out;
   @media (max-width: 1000px) {
     width: 60%;
   }
-
   @media (max-width: 550px) {
     width: 90%;
   }
@@ -256,8 +228,10 @@ function applyLinkFunc() {
       height: 13rem;
       border: #0072ff 1px solid;
       border-radius: $border-radius;
-      box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.1);
-      @include flex;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
       flex-direction: column;
       overflow: hidden;
       transition: all 0.3s ease-in-out;
@@ -275,18 +249,10 @@ function applyLinkFunc() {
           height: 50%;
           background: #0072ff;
 
-          .name {
-            color: #fdeeee;
-          }
-
-          .description {
-            color: #fdeeee;
-          }
+          .name { color: #fdeeee; }
+          .description { color: #fdeeee; }
         }
-
-        .bg {
-          filter: blur(2px);
-        }
+        .bg { filter: blur(2px); }
       }
 
       .bg {
@@ -301,7 +267,6 @@ function applyLinkFunc() {
         display: flex;
         flex-direction: column;
         align-items: center;
-        //background: white;
         height: 35%;
         width: 100%;
         padding: 0.5rem 0;
@@ -311,19 +276,12 @@ function applyLinkFunc() {
           align-items: center;
           justify-content: center;
 
-          .el-avatar {
-            width: 2.5rem;
-            height: 2.5rem;
-            margin-left: -3rem;
-          }
-
           .name {
             font-size: 1rem;
             font-weight: bold;
             margin-left: 0.5rem;
 
             a {
-              // 去掉a标签样式
               color: inherit;
               text-decoration: none;
               cursor: pointer;
@@ -349,7 +307,7 @@ function applyLinkFunc() {
     color: #999;
     display: flex;
     flex-direction: column;
-    background: var(--el-fill-color);
+    background: var(--mao-bg-message);
     padding: 0.5rem;
     border-radius: $border-radius;
     margin-bottom: 1rem;
@@ -364,13 +322,8 @@ function applyLinkFunc() {
     display: flex;
     justify-content: space-between;
 
-    .el-button {
-      height: 2.5rem;
-    }
-
-    .title {
-      font-size: 2rem;
-    }
+    .el-button { height: 2.5rem; }
+    .title { font-size: 2rem; }
   }
 }
 </style>

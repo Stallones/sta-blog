@@ -2,14 +2,23 @@
 import { useWindowSize } from "@vueuse/core";
 import { useArticleList } from "@/composables/useArticleList";
 import { useGalleryLayout } from "@/composables/useGalleryLayout";
-import type { ArticleVO, GalleryLayoutMode } from "@/composables/useGalleryLayout";
+import type { GalleryLayoutMode } from "@/composables/useGalleryLayout";
+import type { ArticleVO } from "@/types";
+
+// ── 外部数据（可选）──
+const props = defineProps<{
+  articles?: ArticleVO[];
+}>();
 
 // ── 数据 ──
 const { width } = useWindowSize();
-const { cardList, searchDisplayLimit, fetchArticles, showMoreResults, hasMore, articlePagination } = useArticleList();
+const { cardList: listFromHook, searchDisplayLimit, fetchArticles, showMoreResults, hasMore, articlePagination } = useArticleList();
 import { useSearchStore } from "@/store/useSearchStore";
 
 const searchStore = useSearchStore();
+
+const cardList = computed(() => props.articles ?? listFromHook.value);
+const isExternal = computed(() => props.articles !== undefined);
 
 // ── 布局模式 ──
 const { mode: layoutMode } = useGalleryLayout();
@@ -20,6 +29,12 @@ const isMobile = computed(() => width.value < MOBILE_BREAKPOINT);
 const effectiveMode = computed<GalleryLayoutMode>(() =>
   isMobile.value ? 4 : layoutMode.value
 );
+
+/** 网格 class（外部数据与 hook 共用） */
+const gridClass = computed(() => ({
+  "two-col-grid": [4, 5].includes(effectiveMode.value) && !isMobile.value,
+  "waterfall-grid": [6, 7].includes(effectiveMode.value) && !isMobile.value,
+}));
 
 // ── 子组件映射表 ──
 import HorizontalCard from "./GalleryCard/HorizontalCard.vue";
@@ -54,13 +69,10 @@ function resolveOverlay(mode: GalleryLayoutMode): boolean {
 </script>
 
 <template>
-  <div v-view-request="{ callback: fetchArticles }">
+  <div v-if="!isExternal" v-view-request="{ callback: fetchArticles }">
     <!-- 卡片列表：带 fade 过渡 -->
     <TransitionGroup name="gallery-fade" tag="div"
-      :class="{
-        'two-col-grid': [4, 5].includes(effectiveMode) && !isMobile,
-        'waterfall-grid': [6, 7].includes(effectiveMode) && !isMobile,
-      }"
+      :class="gridClass"
     >
       <template v-for="(article, index) in cardList" :key="article.id">
         <!-- 瀑布流容器：用 CSS column-count -->
@@ -87,8 +99,23 @@ function resolveOverlay(mode: GalleryLayoutMode): boolean {
     </div>
   </div>
 
+  <!-- 外部数据直接渲染（无 fetch/骨架/更多） -->
+  <div v-else :class="gridClass">
+    <template v-for="(article, index) in cardList" :key="article.id">
+      <component
+        :is="resolveComponent(effectiveMode)"
+        :article="article"
+        :direction="resolveDirection(effectiveMode, index)"
+        :overlay="resolveOverlay(effectiveMode)"
+        class="gallery-item"
+        @click="$router.push('/article/' + article.id)"
+        v-slide-in
+      />
+    </template>
+  </div>
+
   <!-- 骨架屏 -->
-  <template v-if="cardList.length == 0">
+  <template v-if="cardList.length == 0 && !isExternal">
     <el-skeleton :rows="8" animated />
   </template>
 </template>
