@@ -85,6 +85,19 @@ export const constantRouter = [
           title: "博客友链",
         },
       },
+      // ── 用户设置 ──
+      {
+        path: "/setting",
+        component: () => import("@/views/User/Setting.vue"),
+        name: "setting",
+        meta: {
+          headerType: "page",
+          title: "用户设置",
+          subtitle: "Setting",
+          sidebarType: "default",
+          showFooter: true,
+        },
+      },
     ],
   },
   // ── 自定义布局（仅 Nav + 裸露内容区，无 wrapper/sidebar） ──
@@ -134,13 +147,6 @@ export const constantRouter = [
             meta: { title: "重置密码", showFooter: false },
           },
         ],
-      },
-      // ── 用户设置 ──
-      {
-        path: "/setting",
-        component: () => import("@/views/User/Setting.vue"),
-        name: "setting",
-        meta: { title: "用户设置", showFooter: true },
       },
       // ── 树洞 ──
       {

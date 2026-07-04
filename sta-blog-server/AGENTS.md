@@ -1,13 +1,30 @@
-## 技能配置
+# sta-blog-server AGENTS.md
 
-### 问题追踪
+**Generated:** 2026-07-05
 
-问题以本地 Markdown 文件形式存放在 `.scratch/` 目录下。详见 `docs/agents/issue-tracker.md`。
+## OVERVIEW
 
-### 分类标签
+Legacy Spring Boot backend for the sta-blog project. Being replaced by `ruoyi-vue-pro/sta-module-blog`. Only maintain for backward compatibility during migration.
 
-五个标准分类角色均使用默认名称。详见 `docs/agents/triage-labels.md`。
+## STRUCTURE
 
-### 领域文档
+```
+sta-blog-server/
+├── src/main/java/           # Java controllers, services, mappers, models
+├── src/main/resources/      # application.yml, static assets, templates
+└── src/test/                # Unit tests
+```
 
-单上下文布局。详见 `docs/agents/domain.md`。
+## STATUS
+
+This server is **legacy** — do not add new features here. New development goes to `ruoyi-vue-pro/sta-module-blog`. The old frontend (`sta-blog-ui/src/apis/`) still references this server's endpoints; migrate those to `sta-blog-ui/src/api/` (auto-generated from Ruoyi backend).
+
+## COMMANDS
+
+```bash
+# Run
+mvn spring-boot:run
+
+# Package
+mvn clean package -DskipTests
+```

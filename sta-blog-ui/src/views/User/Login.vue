@@ -37,7 +37,7 @@ async function handleLogin() {
         expiresTime: res.expiresTime,
       }, form.remember)
       ElMessage.success('登录成功')
-      userStore.getInfo()
+      await userStore.getInfo()
       const redirect = (route.query.redirect as string) || '/setting'
       router.push(redirect)
     }

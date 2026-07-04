@@ -1,23 +1,56 @@
 <template>
   <div class="user-login">
-    <!-- 未登录 -->
-    <div v-if="!userStore.userInfo" class="not-logged">
-      <el-tooltip class="box-item" effect="light" content="点击去登录" placement="right">
-        <el-avatar @click="$router.push('/login')" style="cursor: pointer">登录</el-avatar>
-      </el-tooltip>
+    <!-- 未登录：匹配 MenuList 导航项风格 -->
+    <div v-if="!userStore.isLoggedIn" class="item" @click="router.push('/login')">
+      <span>
+        <el-icon><User /></el-icon>
+        <span>登录</span>
+      </span>
     </div>
 
-    <!-- 已登录 -->
+    <!-- 已登录：仅显示头像，点击展开下拉菜单 -->
     <div v-else class="logged-in">
-      <div class="profile">
-        <div class="profile-username">{{ userStore.userInfo?.nickname }}</div>
-        <div class="profile-email" v-if="userStore.userInfo?.email">
-          {{ userStore.userInfo?.email }}
+      <el-dropdown placement="bottom-end" trigger="click">
+        <div class="avatar-trigger">
+          <!-- 有头像时显示图片 -->
+          <img
+            v-if="userStore.userInfo?.avatar"
+            :src="userStore.userInfo.avatar"
+            class="user-avatar"
+          />
+          <!-- 无头像时回退：HSL 色块 + 首字符 -->
+          <div
+            v-else
+            class="avatar-fallback"
+            :style="fallbackStyle"
+          >
+            {{ avatarFallbackChar }}
+          </div>
         </div>
-      </div>
-      <el-dropdown placement="bottom-end">
-        <el-avatar style="cursor: pointer" :src="userStore.userInfo?.avatar" />
         <template #dropdown>
+          <!-- 用户信息卡片 -->
+          <div class="dropdown-user-card">
+            <!-- 头像 -->
+            <img
+              v-if="userStore.userInfo?.avatar"
+              :src="userStore.userInfo.avatar"
+              class="dropdown-avatar"
+            />
+            <div
+              v-else
+              class="dropdown-avatar fallback"
+              :style="fallbackStyle"
+            >
+              {{ avatarFallbackChar }}
+            </div>
+            <!-- 昵称 -->
+            <div class="dropdown-name">{{ userStore.userInfo?.nickname }}</div>
+            <!-- 邮箱 -->
+            <div class="dropdown-email" v-if="userStore.userInfo?.email">
+              {{ userStore.userInfo?.email }}
+            </div>
+          </div>
+          <el-divider style="margin: 6px 0" />
           <el-dropdown-item @click="router.push('/setting')">
             <el-icon><Setting /></el-icon>
             个人设置
@@ -33,19 +66,32 @@
 </template>
 
 <script setup lang="ts">
-import { Setting, Promotion } from '@element-plus/icons-vue'
+import { computed } from "vue"
+import { Setting, Promotion, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { logout } from '@/api/AppBlogAuthController'
-import { REMOVE_TOKEN } from '@/utils/auth'
 import { useUserStore } from '@/store/useUserStore'
+import { avatarFallbackStyle, fallbackChar } from '@/utils/avatar'
 import router from '@/router'
 
 const userStore = useUserStore()
 
+const fallbackStyle = computed(() => {
+  const nickname = userStore.userInfo?.nickname || "用户"
+  return avatarFallbackStyle(nickname)
+})
+
+const avatarFallbackChar = computed(() => {
+  return fallbackChar(userStore.userInfo?.nickname || "用户")
+})
+
 const logoutSub = async () => {
-  await logout()
-  REMOVE_TOKEN()
-  userStore.userInfo = undefined
+  try {
+    await logout()
+  } catch {
+    // 即使后端登出失败也清除本地登录态
+  }
+  userStore.clearUser()
   ElMessage.success('已退出登录')
   router.push('/')
 }
@@ -55,39 +101,122 @@ const logoutSub = async () => {
 .user-login {
   display: flex;
   align-items: center;
+}
 
-  .not-logged {
-    display: flex;
-    align-items: center;
+/* ── 未登录：匹配 MenuList 导航项 ── */
+.item {
+  display: flex;
+  width: 80px;
+  justify-content: center;
+  position: relative;
+  color: var(--el-text-color-primary);
+  cursor: pointer;
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--el-color-primary);
+    transition: width 0.3s;
   }
 
-  .logged-in {
+  &:hover {
+    &::before {
+      width: 75%;
+    }
+  }
+
+  span {
     display: flex;
     align-items: center;
+    gap: 1px;
   }
 }
 
-.profile {
-  margin-right: 0.8rem;
+/* ── 已登录：头像触发器 ── */
+.logged-in {
+  display: flex;
+  align-items: center;
+}
 
-  .profile-username {
-    font-size: 15px;
-    font-weight: bold;
-    color: var(--el-text-color-primary);
+.avatar-trigger {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
 
-    html.dark & {
-      color: #e5e7eb;
-    }
+  &:hover {
+    transform: scale(1.08);
   }
+}
 
-  .profile-email {
-    font-size: 12px;
-    color: var(--el-text-color-secondary);
-    margin-top: 2px;
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 8px hsla(0, 0%, 0%, 0.12);
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
 
-    html.dark & {
-      color: #9ca3af;
-    }
+  &:hover {
+    border-color: var(--el-color-primary);
   }
+}
+
+.avatar-fallback {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  user-select: none;
+  box-shadow: 0 2px 8px hsla(0, 0%, 0%, 0.12);
+}
+
+/* ── 下拉菜单用户卡片 ── */
+.dropdown-user-card {
+  padding: 16px 20px 8px;
+  text-align: center;
+  min-width: 180px;
+}
+
+.dropdown-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 8px;
+
+  &.fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 600;
+    user-select: none;
+  }
+}
+
+.dropdown-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--el-text-color-primary);
+  margin-bottom: 4px;
+}
+
+.dropdown-email {
+  font-size: 12px;
+  color: var(--el-text-color-secondary);
+}
+
+:deep(.el-dropdown-menu__item) {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 </style>

@@ -17,7 +17,7 @@ export const useWebsiteStore = defineStore("website", () => {
     ) => Promise<ApiResponse<T>>
   ) => {
     const res = await requestOrRead(getWebsiteInfo, readWebsiteInfo);
-    webInfo.value = res.data as API.AppWebsiteInfoRespVO;
+    webInfo.value = (res?.data ?? undefined) as API.AppWebsiteInfoRespVO | undefined;
   };
 
   const getArticleTitleList = async () => {

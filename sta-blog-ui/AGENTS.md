@@ -1,6 +1,6 @@
-# AGENTS.md
+# sta-blog-ui AGENTS.md
 
-This file provides guidance to Qoder (qoder.com) when working with code in this repository.
+**Generated:** 2026-07-05
 
 ## Project Overview
 

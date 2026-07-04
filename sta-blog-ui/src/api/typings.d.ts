@@ -308,6 +308,8 @@ declare namespace API {
     email?: string;
     /** 用户性别 */
     sex?: number;
+    /** 创建时间 */
+    createTime?: string;
   };
 
   type AppUserUpdateReqVO = {
@@ -324,6 +326,12 @@ declare namespace API {
   type AppWebsiteInfoRespVO = {
     /** 网站信息编号 */
     id: number;
+    /** 文章数量（手动追加，OpenAPI spec 未生成） */
+    articleCount?: number;
+    /** 分类数量（手动追加，OpenAPI spec 未生成） */
+    categoryCount?: number;
+    /** 评论数量（手动追加，OpenAPI spec 未生成） */
+    commentCount?: number;
     /** 站长头像 */
     webmasterAvatar?: string;
     /** 站长名称 */
