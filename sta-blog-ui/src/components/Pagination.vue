@@ -1,25 +1,23 @@
 ﻿<script setup lang="ts">
-import { usePaginationStore } from "@/store/usePaginationStore";
+import { useGalleryComponent } from "@/composables/useGalleryComponent";
 
-const usePagination = usePaginationStore();
-const articlePagination = usePagination.articlePagination
-
+const { articlePagination } = useGalleryComponent();
 </script>
 
 <template>
   <div class="pag">
-    <el-pagination background layout="prev, pager, next"
-                   :total="articlePagination.total"
-                   :hide-on-single-page="true"
-                   :page-size="articlePagination.pageSize"
-                   @current-change="articlePagination.current = $event"
-
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="articlePagination.total"
+      :hide-on-single-page="true"
+      :page-size="articlePagination.pageSize"
+      @current-change="articlePagination.current = $event"
     />
   </div>
 </template>
 
 <style scoped lang="scss">
-
 .pag {
   width: 100%;
   height: 100%;

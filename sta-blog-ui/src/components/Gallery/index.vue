@@ -1,27 +1,22 @@
 <script setup lang="ts">
 import { useWindowSize } from "@vueuse/core";
-import { useArticleList } from "@/composables/useArticleList";
-import { useGalleryLayout } from "@/composables/useGalleryLayout";
-import type { GalleryLayoutMode } from "@/composables/useGalleryLayout";
-import type { ArticleVO } from "@/types";
+import { useGalleryComponent } from "@/composables/useGalleryComponent";
+import type { GalleryLayoutMode } from "@/composables/useGalleryComponent";
+import type { AppArticleRespVO } from "@/types";
 
 // ── 外部数据（可选）──
 const props = defineProps<{
-  articles?: ArticleVO[];
+  articles?: AppArticleRespVO[];
 }>();
 
 // ── 数据 ──
 const { width } = useWindowSize();
-const { cardList: listFromHook, searchDisplayLimit, fetchArticles, showMoreResults, hasMore, articlePagination } = useArticleList();
-import { useSearchStore } from "@/store/useSearchStore";
-
-const searchStore = useSearchStore();
+const { cardList: listFromHook, fetchArticles, showMoreResults, hasMore, articlePagination, mode: layoutMode } = useGalleryComponent();
 
 const cardList = computed(() => props.articles ?? listFromHook.value);
 const isExternal = computed(() => props.articles !== undefined);
 
 // ── 布局模式 ──
-const { mode: layoutMode } = useGalleryLayout();
 const MOBILE_BREAKPOINT = 768;
 
 /** 移动端统一降级为 VerticalCard */

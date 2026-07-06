@@ -2,7 +2,7 @@
 
 import {Close} from "@element-plus/icons-vue";
 import {MdCatalog} from 'md-editor-v3';
-import { useFloatingMenu } from "@/composables/useFloatingMenu";
+import { useArticleView } from "@/composables/useArticleView";
 
 const props = defineProps<{
   id: string,
@@ -10,17 +10,17 @@ const props = defineProps<{
 }>()
 
 // 从全局状态读取目录抽屉显隐
-const { catalogDrawerVisible, toggleCatalogDrawer } = useFloatingMenu();
+const { catalogPopoverVisible, toggleCatalogPopover } = useArticleView();
 
 // 关闭抽屉
 const handleClose = () => {
-  toggleCatalogDrawer();
+  toggleCatalogPopover();
 }
 </script>
 
 <template>
   <div v-if="scrollElement">
-    <el-drawer v-model="catalogDrawerVisible" :with-header="true" size="50%" direction="rtl" :show-close="false" :before-close="handleClose">
+    <el-drawer v-model="catalogPopoverVisible" :with-header="true" size="50%" direction="rtl" :show-close="false" :before-close="handleClose">
       <template #header>
         <span style="font-size: 1.2rem">目录</span>
         <el-button :icon="Close" style="background: none;font-size: 1.5rem;width: 30px;border: none"

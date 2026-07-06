@@ -12,11 +12,9 @@ import { ref, onMounted, onUnmounted, watch } from "vue";
 import { createParallax } from "./layers/BackgroundParallax";
 import { createMouseTrail } from "./layers/MouseTrail";
 import { createParticlesEffect } from "./layers/Particles";
-import { useBackgroundParallax, useMouseTrail, useParticles } from "./index";
+import { useCanvasEffects } from "./index";
 
-const { canvasHeaderH, setImageUrl } = useBackgroundParallax();
-const { mouseTrailEnabled } = useMouseTrail();
-const { particlesEnabled } = useParticles();
+const { canvasHeaderH, setImageUrl, mouseTrailEnabled, particlesEnabled } = useCanvasEffects();
 
 const props = defineProps<{
   /** 背景图片 URL（可选） */

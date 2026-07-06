@@ -133,10 +133,9 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useColorMode } from "@vueuse/core";
 import { useFloatingMenu } from "@/composables/useFloatingMenu";
-import { useReadingProgress } from "@/composables/useReadingProgress";
-import { useReadingMode } from "@/composables/useReadingMode";
-import { useGalleryLayout } from "@/composables/useGalleryLayout";
-import { useScroll } from "@/composables/useScroll";
+import { useArticleView } from "@/composables/useArticleView";
+import { useGalleryComponent } from "@/composables/useGalleryComponent";
+import { scrollToTop, scrollToBottom } from "@/utils/scroll";
 import { MdCatalog } from "md-editor-v3";
 import {
   Tools,
@@ -152,22 +151,28 @@ const {
   registeredItems,
   isExpanded,
   toggleExpanded,
-  hiddenByScroll,
-  setHiddenByScroll,
   toggleSidebar,
+} = useFloatingMenu();
+
+const {
   catalogPopoverVisible,
   toggleCatalogPopover,
   catalogEditorId,
   catalogScrollElement,
-} = useFloatingMenu();
+} = useArticleView();
+
+// ── 滚动隐藏：降级为本地 ref（仅 FloatingMenu 内部使用）──
+const hiddenByScroll = ref(false);
+function setHiddenByScroll(val: boolean) {
+  hiddenByScroll.value = val;
+}
 
 const colorMode = useColorMode();
 const isDark = computed(() => colorMode.value === "dark");
 
-const { scrollPercentage: readingProgress } = useReadingProgress();
-const { toggleReadingMode } = useReadingMode();
-const galleryMode = useGalleryLayout();
-const { scrollToTop, scrollToBottom } = useScroll();
+const { scrollPercentage: readingProgress, toggleReadingMode } = useArticleView();
+const galleryMode = useGalleryComponent();
+
 
 // ── 布局浮层状态 ──
 const layoutPopoverVisible = ref(false);

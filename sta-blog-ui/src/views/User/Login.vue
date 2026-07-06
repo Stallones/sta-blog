@@ -4,12 +4,13 @@ import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { emailLogin } from '@/api/AppBlogAuthController'
-import { SET_TOKEN } from '@/utils/auth'
 import { useUserStore } from '@/store/useUserStore'
+import { useAccessStore } from '@/store/useAccessStore'
 
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
+const accessStore = useAccessStore()
 const formRef = ref()
 
 const form = reactive({
@@ -29,17 +30,21 @@ const rules = {
 async function handleLogin() {
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) return
-    const res: any = await emailLogin({ email: form.email, password: form.password })
-    if (res) {
-      SET_TOKEN({
-        accessToken: res.accessToken,
-        refreshToken: res.refreshToken,
-        expiresTime: res.expiresTime,
-      }, form.remember)
-      ElMessage.success('登录成功')
-      await userStore.getInfo()
-      const redirect = (route.query.redirect as string) || '/setting'
-      router.push(redirect)
+    try {
+      const res: any = await emailLogin({ email: form.email, password: form.password })
+      if (res) {
+        accessStore.setToken({
+          accessToken: res.accessToken,
+          refreshToken: res.refreshToken,
+          expiresTime: res.expiresTime,
+        })
+        ElMessage.success('登录成功')
+        await userStore.getInfo()
+        const redirect = (route.query.redirect as string) || '/setting'
+        router.push(redirect)
+      }
+    } catch (e: any) {
+      ElMessage.error(e?.msg || '登录失败')
     }
   })
 }
@@ -47,7 +52,7 @@ async function handleLogin() {
 
 <template>
   <div style="text-align: center; margin: 0 20px">
-    <div style="margin-top: 150px">
+    <div style="margin-top: 100px">
       <div style="font-size: 25px; font-weight: bold">登录</div>
       <div style="font-size: 14px; color: grey; margin-top: 1rem">
         使用邮箱和密码登录你的账户
@@ -79,7 +84,7 @@ async function handleLogin() {
             </el-form-item>
           </el-col>
           <el-col :span="12" style="text-align: right">
-            <el-link @click="$router.push('/reset')">忘记密码</el-link>
+            <el-link @click="$router.push('/user/reset')">忘记密码</el-link>
           </el-col>
         </el-row>
       </el-form>
@@ -95,7 +100,7 @@ async function handleLogin() {
       <span style="font-size: 13px; color: grey">没有账号？</span>
     </el-divider>
     <div>
-      <el-button style="width: 270px" type="danger" plain @click="$router.push('/register')">
+      <el-button style="width: 270px" type="danger" plain @click="$router.push('/user/register')">
         去注册
       </el-button>
     </div>
@@ -106,11 +111,11 @@ async function handleLogin() {
     </el-divider>
     <div class="oauth-links">
       <!-- GitHub: type=22 -->
-      <el-link @click="() => { window.location.href = '/api/app-api/blog/auth/social-auth-redirect?type=22&redirectUri=' + encodeURIComponent(window.location.origin + '/login') }">
+      <el-link @click="() => { window.location.href = '/api/app-api/blog/auth/social-auth-redirect?type=22&redirectUri=' + encodeURIComponent(window.location.origin + '/user/login') }">
         <svg-icon name="github" width="20px" height="20px" color="#4E86F1" />
       </el-link>
       <!-- QQ: type=21 -->
-      <el-link style="margin-left: 1rem" @click="() => { window.location.href = '/api/app-api/blog/auth/social-auth-redirect?type=21&redirectUri=' + encodeURIComponent(window.location.origin + '/login') }">
+      <el-link style="margin-left: 1rem" @click="() => { window.location.href = '/api/app-api/blog/auth/social-auth-redirect?type=21&redirectUri=' + encodeURIComponent(window.location.origin + '/user/login') }">
         <svg-icon name="gitee" width="20px" height="20px" color="#4E86F1" />
       </el-link>
     </div>

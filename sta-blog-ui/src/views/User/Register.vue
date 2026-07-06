@@ -55,15 +55,20 @@ async function askCode() {
     return
   }
   coldTime.value = 60
-  const res: any = await sendEmailCode({ email: form.email, scene: 'register' })
-  if (res) {
-    ElMessage.success(`验证码已发送到邮箱：${form.email}，请注意查收`)
-    const intervalId = setInterval(() => {
-      if (coldTime.value === 0) clearInterval(intervalId)
-      else coldTime.value--
-    }, 1000)
-  } else {
+  try {
+    const res: any = await sendEmailCode({ email: form.email, scene: 'register' })
+    if (res) {
+      ElMessage.success(`验证码已发送到邮箱：${form.email}，请注意查收`)
+      const intervalId = setInterval(() => {
+        if (coldTime.value === 0) clearInterval(intervalId)
+        else coldTime.value--
+      }, 1000)
+    } else {
+      coldTime.value = 0
+    }
+  } catch {
     coldTime.value = 0
+    ElMessage.error('验证码发送失败，请稍后重试')
   }
 }
 
@@ -73,15 +78,19 @@ async function handleRegister() {
       ElMessage.warning('请完整填写注册表单内容')
       return
     }
-    const res: any = await emailRegister({
-      username: form.username,
-      email: form.email,
-      password: form.password,
-      code: form.code,
-    })
-    if (res) {
-      ElMessage.success('注册成功，欢迎加入我们')
-      router.push('/login')
+    try {
+      const res: any = await emailRegister({
+        username: form.username,
+        email: form.email,
+        password: form.password,
+        code: form.code,
+      })
+      if (res) {
+        ElMessage.success('注册成功，欢迎加入我们')
+        router.push('/user/login')
+      }
+    } catch (e: any) {
+      ElMessage.error(e?.msg || '注册失败，请稍后重试')
     }
   })
 }
@@ -145,7 +154,7 @@ async function handleRegister() {
       <span style="font-size: 13px; color: grey">已有账号？</span>
     </el-divider>
     <div>
-      <el-button style="width: 270px" plain @click="$router.push('/login')">
+      <el-button style="width: 270px"  plain @click="$router.push('/user/login')">
         去登录
       </el-button>
     </div>

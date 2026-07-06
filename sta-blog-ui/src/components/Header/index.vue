@@ -30,11 +30,11 @@
 <script setup lang="ts">
 import { computed, watch } from "vue";
 import Nav from "@/components/Nav/index.vue";
-import { useBackgroundParallax } from "@/composables/useBackgroundParallax";
+import { useCanvasEffects } from "@/composables/useCanvasEffects";
 import Images from "@/components/Header/Images.vue";
 import Brand from "@/components/Header/Brand.vue";
 
-const { canvasHeaderH } = useBackgroundParallax();
+const { canvasHeaderH } = useCanvasEffects();
 
 
 interface HeaderConfig {

@@ -2,9 +2,9 @@
  * BackgroundParallax — 背景视差滚动层
  * 从 composables 读取共享状态
  */
-import { useBackgroundParallax } from '@/composables/useBackgroundParallax';
+import { useCanvasEffects } from '@/composables/useCanvasEffects';
 
-const { canvasHeaderH, canvasImageUrl } = useBackgroundParallax();
+const { canvasHeaderH, canvasImageUrl } = useCanvasEffects();
 
 export interface ParallaxInstance {
   init(canvas: HTMLCanvasElement): void;

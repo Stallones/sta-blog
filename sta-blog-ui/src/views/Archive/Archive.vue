@@ -325,8 +325,9 @@ $year-dot-size: 8px;
   }
 
   .tl-date {
-    font-size: 13px;
-    color: var(--el-text-color-secondary);
+    font-size: 15px;
+    font-weight: bold;
+    color: var(--el-text-color-primary);
     display: flex;
     align-items: center;
     gap: 4px;
@@ -334,7 +335,6 @@ $year-dot-size: 8px;
 
   .tl-title {
     font-size: 15px;
-    font-weight: 600;
     color: var(--el-text-color-secondary);
     margin: 0;
     line-height: 1.4;

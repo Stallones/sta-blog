@@ -34,7 +34,7 @@
       />
     </div>
     <div v-if="sidebarVisible" class="article-sidebar">
-      <ArticleSideBar />
+      <ArticleSideBar :article="articleVO" />
     </div>
   </div>
 
@@ -65,38 +65,37 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted, defineAsyncComponent } from "vue";
 import { useRoute } from "vue-router";
-import { useColorMode } from "@vueuse/core";
-import { storeToRefs } from "pinia";
+import { useColorMode, useTitle } from "@vueuse/core";
+import { ElMessage } from "element-plus";
 import { useDemotion } from "@/composables/useDemotion";
-import { useArticleStore } from "@/store/useArticleStore";
-import { useReadingProgress } from "@/composables/useReadingProgress";
-import { useReadingMode } from "@/composables/useReadingMode";
-import { BlogType } from "@/const";
+import { useArticleView } from "@/composables/useArticleView";
+import { BlogType, ARTICLE_VISIT_PREFIX } from "@/const";
 import {
   registerArticleItems,
   unregisterArticleItems,
 } from "@/components/FloatingMenu/registerGlobal";
 import { useFloatingMenu } from "@/composables/useFloatingMenu";
+import { getArticle, addVisitCount } from "@/api/AppArticleController";
+import { readArticleDetail } from "@/utils/file-reader";
+import type { AppArticleRespVO } from "@/types";
+import router from "@/router";
 import ArticleFooter from "@/components/Article/ArticleFooter.vue";
 import ArticleHeader from "@/components/Article/ArticleHeader.vue";
 import ArticleSideBar from "@/components/SideBar/ArticleSideBar.vue";
 const SComment = defineAsyncComponent(() => import("@/components/SComment/index.vue"));
 const MdEditor = defineAsyncComponent(() => import("@/components/Article/MdEditor.vue"));
 
-// ── Store ──
+// ── 本地状态（原 useArticleStore 降级）──
 const route = useRoute();
 const { isOnline, requestOrRead } = useDemotion();
-const articleStore = useArticleStore();
-const {
-  articleVO,
-  countMd,
-  loading: articleLoading,
-  articleCover,
-} = storeToRefs(articleStore);
+const articleVO = ref<AppArticleRespVO>({} as AppArticleRespVO);
+const countMd = ref<string | number>(0);
+const articleLoading = ref(false);
+const articleCover = computed(() => articleVO.value.coverPath ?? "");
 
 // ── Composables ──
-const { isReadingMode } = useReadingMode();
-const { sidebarVisible, setCatalogContext } = useFloatingMenu();
+const { isReadingMode, setCatalogContext } = useArticleView(".progress");
+const { sidebarVisible } = useFloatingMenu();
 
 onMounted(async () => {
   registerArticleItems();
@@ -126,9 +125,52 @@ watch(
 );
 
 async function getArticleDetailById() {
-  await articleStore.fetchArticle(route.params.id as string, { requestOrRead, isOnline: isOnline.value });
-  // 始终渲染评论区，由 SComment 组件内部根据 serverOn 控制可用性
-  showComment.value = true;
+  const articleId = route.params.id as string;
+  if (!articleId) return;
+
+  articleLoading.value = true;
+
+  try {
+    const res = await requestOrRead(
+      (id: string) => getArticle({ id: Number(id) }),
+      readArticleDetail,
+      articleId
+    );
+
+    if (res.code !== 200) {
+      ElMessage.warning({ message: res.msg });
+      router.push({ path: "/" });
+      return;
+    }
+
+    articleVO.value = res.data as AppArticleRespVO;
+    useTitle(articleVO.value.title ?? "");
+
+    // 时间格式化（后端可能返回数字时间戳或字符串）
+    const rawTime = articleVO.value.createTime;
+    if (rawTime) {
+      articleVO.value.createTime = typeof rawTime === 'number'
+        ? new Date(rawTime).toLocaleDateString('zh-CN')
+        : String(rawTime).split(" ")[0];
+    }
+    if ((articleVO.value as any).updateTime) {
+      (articleVO.value as any).updateTime = (articleVO.value as any).updateTime?.split(" ")[0];
+    }
+
+    // 访问统计
+    if (
+      !sessionStorage.getItem(ARTICLE_VISIT_PREFIX + articleId) &&
+      isOnline.value
+    ) {
+      sessionStorage.setItem(ARTICLE_VISIT_PREFIX + articleId, articleId);
+      addVisitCount({ id: Number(articleId) });
+    }
+
+    // 始终渲染评论区，由 SComment 组件内部根据 serverOn 控制可用性
+    showComment.value = true;
+  } finally {
+    articleLoading.value = false;
+  }
 }
 
 function mdHtml(htmlText: string) {
@@ -137,10 +179,11 @@ function mdHtml(htmlText: string) {
     .replace(/[\r\n]/g, "")
     .replace(/[ ]/g, "")
     .replace(/[\s+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……&*（）]+/g, "");
-  articleStore.setWordCount(text.length);
+  countMd.value =
+    text.length <= 1000 ? text.length : Number((text.length / 1000).toFixed(1)) + "k";
 }
 
-useReadingProgress(".progress");
+
 </script>
 
 <style scoped lang="scss">

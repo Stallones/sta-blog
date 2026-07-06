@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
-import type { ArticleVO, Page } from '@/types'
+import type { AppArticleRespVO, Page } from '@/types'
 
 export const useSearchStore = defineStore('search', () => {
   // ── Dialog 可见性（全局通信）──
@@ -16,9 +16,9 @@ export const useSearchStore = defineStore('search', () => {
   }
 
   // ── 搜索结果 ──
-  const searchResults = ref<Page<ArticleVO> | null>(null)
+  const searchResults = ref<Page<AppArticleRespVO> | null>(null)
 
-  function setSearchResults(results: Page<ArticleVO>) {
+  function setSearchResults(results: Page<AppArticleRespVO>) {
     searchResults.value = results
   }
 

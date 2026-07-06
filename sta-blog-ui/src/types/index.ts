@@ -58,12 +58,7 @@ export interface Page<T = any> {
   total: number
 }
 
-// ── 新 API 类型别名（对齐 src/api/typings.d.ts 中的 API namespace）──
-export type TagVO = API.AppTagRespVO
-export type ArticleVO = API.AppArticleRespVO
-export type CommentVO = API.AppCommentRespVO
-
-/** 文章内容（仅保留 id+content，详情页通过 ArticleVO.content 获取） */
+/** 文章内容（仅保留 id+content，详情页通过 AppArticleRespVO.content 获取） */
 export interface ArticleContentVO {
     id: number
     content: string

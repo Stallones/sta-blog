@@ -2,7 +2,7 @@
   <div class="menu-items">
     <div class="item" @click="searchStore.openDialog()">
       <span>
-         <el-icon><Search /></el-icon>
+        <el-icon><Search /></el-icon>
         <span>搜索</span>
       </span>
     </div>
@@ -90,7 +90,19 @@
       </span>
     </div>
 
-    <UserLogin v-if="isOnline && !isGuestPage" />
+    <div
+      v-if="isOnline && !userStore.isLoggedIn"
+      class="item"
+      @click="navigateTo('/user/login')"
+    >
+      <span>
+        <el-icon><UserFilled /></el-icon>
+        <span>登录</span>
+      </span>
+    </div>
+    <div v-else-if="isOnline && userStore.isLoggedIn" class="item-user">
+      <UserLogin />
+    </div>
   </div>
 </template>
 
@@ -109,23 +121,21 @@ import {
   Promotion,
   InfoFilled,
   ArrowDownBold,
-  Search
+  Search,
+  UserFilled,
 } from "@element-plus/icons-vue";
 import router from "@/router";
 import { useSearchStore } from "@/store/useSearchStore";
-import { useScroll } from "@/composables/useScroll";
+import { scrollToTop } from "@/utils/scroll";
 
 import { useDemotion } from "@/composables/useDemotion";
 import UserLogin from "./UserLogin.vue";
-const route = useRoute();
+import { useUserStore } from "@/store/useUserStore.ts";
 const { isOnline } = useDemotion();
-const isGuestPage = computed(() => guestNames.includes(String(route.name)));
-const guestNames = ["login", "register", "reset"];
 
+const userStore = useUserStore();
 const searchStore = useSearchStore();
 const env = import.meta.env;
-const { scrollToTop } = useScroll();
-
 /** 导航跳转后平滑滚动到顶部 */
 function navigateTo(path: string) {
   router.push(path);
@@ -172,6 +182,12 @@ function navigateTo(path: string) {
     }
   }
 
+  .item-user {
+    // display: flex;
+    // width: 80px;
+    // justify-content: center;
+  }
+
   span {
     display: flex;
     align-items: center;
@@ -183,6 +199,15 @@ function navigateTo(path: string) {
     transition: all 0.5s;
     transform: rotate(0deg);
     color: var(--el-color-primary);
+  }
+}
+
+/* 已登录头像项：保留 80px 占位，去掉 hover 下划线 */
+.user-item {
+  cursor: default;
+
+  &:hover::before {
+    width: 0;
   }
 }
 

@@ -2,9 +2,9 @@
  * Particles — 漂浮粒子+连线效果层
  * 从 composables 读取共享状态
  */
-import { useParticles } from '@/composables/useParticles';
+import { COLORS, useCanvasEffects } from '@/composables/useCanvasEffects';
 
-const { particleConfig, particlesEnabled, PARTICLE_COLORS } = useParticles();
+const { particleConfig, particlesEnabled } = useCanvasEffects();
 
 interface Particle {
   x: number; y: number; size: number;
@@ -34,7 +34,7 @@ function createParticles(count: number, w: number, h: number): Particle[] {
       size: Math.random() * (cfg.sizeRange[1] - cfg.sizeRange[0]) + cfg.sizeRange[0],
       speedX: Math.random() * (cfg.speedRange[1] - cfg.speedRange[0]) + cfg.speedRange[0] - cfg.speedRange[0] / 2,
       speedY: Math.random() * (cfg.speedRange[1] - cfg.speedRange[0]) + cfg.speedRange[0] - cfg.speedRange[0] / 2,
-      color: PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)],
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
     });
   }
   return list;

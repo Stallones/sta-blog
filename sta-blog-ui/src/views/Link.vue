@@ -80,7 +80,7 @@ function applyLinkFunc() {
 </script>
 
 <template>
-  <div>
+  <div class="link-page">
     <el-dialog
       v-model="dialogVisible"
       title="申请友链"
@@ -152,55 +152,62 @@ function applyLinkFunc() {
         </el-form>
       </div>
     </el-dialog>
-    <div class="content">
-          <div class="header">
-            <div class="title">友链</div>
-            <el-button
-              type="primary"
-              :icon="Watermelon"
-              plain
-              @click="dialogVisible = true"
-              style="margin-right: 1rem"
-              >申请友链</el-button
-            >
-          </div>
-          <el-divider />
-          <div class="title_content">
-            <span style="font-size: 1rem; color: grey">欢迎访问友链板块！</span>
-            <span
-              >友链板块是一个旨在促进不同系统间相互协作和交流的平台。通过友链板块，您可以：</span
-            >
-            <span>1、分享自己系统的介绍和链接。</span>
-            <span>2、发现更多的优秀博客网站。</span>
-            <span style="font-size: 1rem; color: grey">注意：</span>
-            <span
-              >1、友链申请前必须先登录本网站，申请通过后会通过邮件的形式通知你。</span
-            >
-            <span>2、点击网站的名称进行友链跳转。</span>
-          </div>
-          <div class="link">
-            <template v-for="link in links" :key="link.id">
-              <div v-slide-in class="item">
-                <div
-                  class="bg"
-                  :style="{ background: `url(${link.background})` }"
-                ></div>
-                <div class="content_link">
-                  <div>
-                    <div class="name">
-                      <a :href="link.url" target="_blank">{{ link.name }}</a>
-                    </div>
-                  </div>
-                  <div class="description">{{ link.description }}</div>
-                </div>
+
+    <div class="header">
+      <div class="title">友链</div>
+      <el-button
+        type="primary"
+        :icon="Watermelon"
+        plain
+        @click="dialogVisible = true"
+        style="margin-right: 1rem"
+        >申请友链</el-button
+      >
+    </div>
+    <el-divider />
+    <div class="title_content">
+      <span style="font-size: 1rem; color: grey">欢迎访问友链板块！</span>
+      <span
+        >友链板块是一个旨在促进不同系统间相互协作和交流的平台。通过友链板块，您可以：</span
+      >
+      <span>1、分享自己系统的介绍和链接。</span>
+      <span>2、发现更多的优秀博客网站。</span>
+      <span style="font-size: 1rem; color: grey">注意：</span>
+      <span
+        >1、友链申请前必须先登录本网站，申请通过后会通过邮件的形式通知你。</span
+      >
+      <span>2、点击网站的名称进行友链跳转。</span>
+    </div>
+    <div class="link">
+      <template v-for="link in links" :key="link.id">
+        <div v-slide-in class="item">
+          <div
+            class="bg"
+            :style="{ background: `url(${link.background})` }"
+          ></div>
+          <div class="content_link">
+            <div>
+              <div class="name">
+                <a :href="link.url" target="_blank">{{ link.name }}</a>
               </div>
-            </template>
+            </div>
+            <div class="description">{{ link.description }}</div>
           </div>
         </div>
-      </div>
+      </template>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
+.link-page {
+  width: 100%;
+  background: var(--el-fill-color-blank);
+  border-radius: $border-radius;
+  box-shadow: var(--el-box-shadow-light);
+  padding: 2.5rem;
+}
+
 :deep(.el-dialog__body) {
   padding-top: 0;
 }
@@ -215,115 +222,121 @@ function applyLinkFunc() {
   }
 }
 
-.content {
-  margin-top: 1.5rem;
+.link {
+  display: flex;
+  flex-wrap: wrap;
 
-  .link {
+  .item {
+    margin: 0.5rem;
+    width: calc(100% / 3 - 1rem);
+    height: 13rem;
+    border: #0072ff 1px solid;
+    border-radius: $border-radius;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     display: flex;
-    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
 
-    .item {
-      margin: 0.5rem;
-      width: calc(100% / 3 - 1rem);
-      height: 13rem;
-      border: #0072ff 1px solid;
-      border-radius: $border-radius;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      overflow: hidden;
-      transition: all 0.3s ease-in-out;
+    @media screen and (max-width: 830px) {
+      width: calc(100% / 2 - 1rem);
+    }
 
-      @media screen and (max-width: 830px) {
-        width: calc(100% / 2 - 1rem);
-      }
+    @media screen and (max-width: 580px) {
+      width: calc(100% - 1rem);
+    }
 
-      @media screen and (max-width: 580px) {
-        width: calc(100% - 1rem);
-      }
-
-      &:hover {
-        .content_link {
-          height: 50%;
-          background: #0072ff;
-
-          .name { color: #fdeeee; }
-          .description { color: #fdeeee; }
-        }
-        .bg { filter: blur(2px); }
-      }
-
-      .bg {
-        background-size: cover !important;
-        background-position: center !important;
-        width: 100%;
-        height: 65%;
-      }
-
+    &:hover {
       .content_link {
-        transition: all 0.3s ease-in-out;
+        height: 50%;
+        background: #0072ff;
+
+        .name {
+          color: #fdeeee;
+        }
+        .description {
+          color: #fdeeee;
+        }
+      }
+      .bg {
+        filter: blur(2px);
+      }
+    }
+
+    .bg {
+      background-size: cover !important;
+      background-position: center !important;
+      width: 100%;
+      height: 65%;
+    }
+
+    .content_link {
+      transition: all 0.3s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 35%;
+      width: 100%;
+      padding: 0.5rem 0;
+
+      div {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        height: 35%;
-        width: 100%;
-        padding: 0.5rem 0;
+        justify-content: center;
 
-        div {
-          display: flex;
-          align-items: center;
-          justify-content: center;
+        .name {
+          font-size: 1rem;
+          font-weight: bold;
+          margin-left: 0.5rem;
 
-          .name {
-            font-size: 1rem;
-            font-weight: bold;
-            margin-left: 0.5rem;
-
-            a {
-              color: inherit;
-              text-decoration: none;
-              cursor: pointer;
-            }
+          a {
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
           }
         }
+      }
 
-        .description {
-          line-height: 1rem;
-          width: 15rem;
-          font-size: 0.85rem;
-          margin-left: 0.5rem;
-          margin-top: 0.5rem;
-          color: #7c7c7c;
-        }
+      .description {
+        line-height: 1rem;
+        width: 15rem;
+        font-size: 0.85rem;
+        margin-left: 0.5rem;
+        margin-top: 0.5rem;
+        color: #7c7c7c;
       }
     }
   }
+}
 
-  .title_content {
-    font-weight: bold;
-    font-size: 0.8rem;
-    color: #999;
-    display: flex;
-    flex-direction: column;
-    background: var(--mao-bg-message);
-    padding: 0.5rem;
-    border-radius: $border-radius;
+.title_content {
+  font-weight: bold;
+  font-size: 0.8rem;
+  color: #999;
+  display: flex;
+  flex-direction: column;
+  background: var(--mao-bg-message);
+  padding: 0.5rem;
+  border-radius: $border-radius;
+  margin-bottom: 1rem;
+
+  span {
     margin-bottom: 1rem;
-
-    span {
-      margin-bottom: 1rem;
-      line-height: 1rem;
-    }
+    line-height: 1rem;
   }
+}
 
-  .header {
-    display: flex;
-    justify-content: space-between;
+.header {
+  display: flex;
+  justify-content: space-between;
 
-    .el-button { height: 2.5rem; }
-    .title { font-size: 2rem; }
+  .el-button {
+    height: 2.5rem;
+  }
+  .title {
+    font-size: 2rem;
   }
 }
 </style>

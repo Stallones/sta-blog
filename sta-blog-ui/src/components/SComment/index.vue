@@ -5,6 +5,8 @@ import { createComment } from "@/api/AppCommentController";
 import { createMessage } from "@/api/AppMessageController";
 import { BlogType } from "@/const";
 import { useCommentReply } from "@/composables/useCommentReply";
+import { useUserStore } from "@/store/useUserStore";
+import router from "@/router";
 import CommentCard from "./CommentCard.vue";
 import ReplySection from "./ReplySection.vue";
 import ReplyBox from "./ReplyBox.vue";
@@ -47,7 +49,7 @@ const likeTypeForItem = computed(() =>
   props.mode === "comment" ? BlogType.COMMENT : BlogType.MESSAGE
 );
 
-// 注册全局刷新回调
+// 注册全局刷新回调 + IntersectionObserver 无限滚动
 let unsubRefresh: (() => void) | null = null;
 onMounted(() => {
   unsubRefresh = onRefresh(() => {
@@ -58,9 +60,23 @@ onMounted(() => {
   if (props.serverOn && (props.articleId > 0 || props.mode === "message")) {
     fetchPage();
   }
+
+  // 初始化 IntersectionObserver 无限滚动
+  scrollObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting && hasMore.value && !loading.value) {
+        fetchPage(true);
+      }
+    },
+    { rootMargin: "100px" }
+  );
+  nextTick(() => {
+    if (sentinelRef.value) scrollObserver?.observe(sentinelRef.value);
+  });
 });
 onUnmounted(() => {
   unsubRefresh?.();
+  scrollObserver?.disconnect();
 });
 
 async function fetchPage(append = false) {
@@ -112,17 +128,21 @@ function handleSortChange(val: string) {
   fetchPage();
 }
 
-// ── 加载更多（无限滚动） ──
-function loadMore() {
-  if (hasMore.value && !loading.value) {
-    fetchPage(true);
-  }
-}
+// ── 无限滚动（IntersectionObserver，替换废弃的 v-infinite-scroll） ──
+const sentinelRef = ref<HTMLElement | null>(null);
+let scrollObserver: IntersectionObserver | null = null;
 
 // ── 发布顶级评论/留言 ──
 async function handleSubmit(content: string) {
   if (!content.trim()) {
     ElMessage.error(`${pageTitle.value}内容不能为空`);
+    return;
+  }
+  // 未登录检查
+  const userStore = useUserStore();
+  if (!userStore.isLoggedIn) {
+    ElMessage.warning('请先登录后再发表' + pageTitle.value);
+    router.push('/user/login');
     return;
   }
   let res: any;
@@ -202,8 +222,8 @@ watch(
       </el-dropdown>
     </div>
 
-    <!-- 列表 -->
-    <div v-if="serverOn" class="s-comment__list" v-infinite-scroll="loadMore" :infinite-scroll-disabled="!hasMore || loading" :infinite-scroll-distance="100">
+    <!-- 列表（IntersectionObserver 实现无限滚动） -->
+    <div v-if="serverOn" class="s-comment__list">
       <div
         v-for="item in items"
         :key="item.id"
@@ -248,6 +268,9 @@ watch(
       <div v-if="!loading && items.length === 0" class="s-comment__empty">
         暂无{{ pageTitle }}，来抢沙发吧~
       </div>
+
+      <!-- IntersectionObserver 哨兵：监测靠近底部时加载更多 -->
+      <div ref="sentinelRef" class="s-comment__sentinel"></div>
     </div>
   </div>
 </template>
@@ -327,6 +350,11 @@ watch(
   padding: 2rem;
   color: var(--el-text-color-placeholder);
   font-size: 14px;
+}
+
+/* 无限滚动哨兵（不可见，IntersectionObserver 监测用） */
+.s-comment__sentinel {
+  height: 1px;
 }
 
 /* 回复框展开动画 */

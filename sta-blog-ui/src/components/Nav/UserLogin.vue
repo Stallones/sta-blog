@@ -1,100 +1,95 @@
 <template>
   <div class="user-login">
-    <!-- 未登录：匹配 MenuList 导航项风格 -->
-    <div v-if="!userStore.isLoggedIn" class="item" @click="router.push('/login')">
-      <span>
-        <el-icon><User /></el-icon>
-        <span>登录</span>
-      </span>
-    </div>
-
     <!-- 已登录：仅显示头像，点击展开下拉菜单 -->
-    <div v-else class="logged-in">
-      <el-dropdown placement="bottom-end" trigger="click">
-        <div class="avatar-trigger">
-          <!-- 有头像时显示图片 -->
+    <el-dropdown v-if="hasUserData" placement="bottom-end" trigger="click">
+      <div class="avatar-trigger">
+        <!-- 有头像时显示图片 -->
+        <img
+          v-if="userStore.userInfo?.avatar"
+          :src="userStore.userInfo.avatar"
+          class="user-avatar"
+        />
+        <!-- 无头像时回退：HSL 色块 + 首字符 -->
+        <div v-else class="avatar-fallback" :style="fallbackStyle">
+          {{ avatarFallbackChar }}
+        </div>
+      </div>
+      <template #dropdown>
+        <!-- 用户信息卡片 -->
+        <div class="dropdown-user-card">
+          <!-- 头像 -->
           <img
             v-if="userStore.userInfo?.avatar"
             :src="userStore.userInfo.avatar"
-            class="user-avatar"
+            class="dropdown-avatar"
           />
-          <!-- 无头像时回退：HSL 色块 + 首字符 -->
-          <div
-            v-else
-            class="avatar-fallback"
-            :style="fallbackStyle"
-          >
+          <div v-else class="dropdown-avatar fallback" :style="fallbackStyle">
             {{ avatarFallbackChar }}
           </div>
-        </div>
-        <template #dropdown>
-          <!-- 用户信息卡片 -->
-          <div class="dropdown-user-card">
-            <!-- 头像 -->
-            <img
-              v-if="userStore.userInfo?.avatar"
-              :src="userStore.userInfo.avatar"
-              class="dropdown-avatar"
-            />
-            <div
-              v-else
-              class="dropdown-avatar fallback"
-              :style="fallbackStyle"
-            >
-              {{ avatarFallbackChar }}
-            </div>
-            <!-- 昵称 -->
-            <div class="dropdown-name">{{ userStore.userInfo?.nickname }}</div>
-            <!-- 邮箱 -->
-            <div class="dropdown-email" v-if="userStore.userInfo?.email">
-              {{ userStore.userInfo?.email }}
-            </div>
+          <!-- 昵称 -->
+          <div class="dropdown-name">{{ userStore.userInfo?.nickname }}</div>
+          <!-- 邮箱 -->
+          <div class="dropdown-email" v-if="userStore.userInfo?.email">
+            {{ userStore.userInfo?.email }}
           </div>
-          <el-divider style="margin: 6px 0" />
-          <el-dropdown-item @click="router.push('/setting')">
-            <el-icon><Setting /></el-icon>
-            个人设置
-          </el-dropdown-item>
-          <el-dropdown-item @click="logoutSub">
-            <el-icon><Promotion /></el-icon>
-            退出登录
-          </el-dropdown-item>
-        </template>
-      </el-dropdown>
-    </div>
+        </div>
+        <el-divider style="margin: 6px 0" />
+        <el-dropdown-item @click="router.push('/setting')">
+          <el-icon><Setting /></el-icon>
+          个人设置
+        </el-dropdown-item>
+        <el-dropdown-item @click="logoutSub">
+          <el-icon><Promotion /></el-icon>
+          退出登录
+        </el-dropdown-item>
+      </template>
+    </el-dropdown>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue"
-import { Setting, Promotion, User } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
-import { logout } from '@/api/AppBlogAuthController'
-import { useUserStore } from '@/store/useUserStore'
-import { avatarFallbackStyle, fallbackChar } from '@/utils/avatar'
-import router from '@/router'
+import { computed } from "vue";
+import { Setting, Promotion } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { logout } from "@/api/AppBlogAuthController";
+import { useUserStore } from "@/store/useUserStore";
+import { useAccessStore } from "@/store/useAccessStore";
+import { avatarFallbackStyle, fallbackChar } from "@/utils/avatar";
+import router from "@/router";
 
-const userStore = useUserStore()
+const userStore = useUserStore();
+const accessStore = useAccessStore();
+
+/** 有用户信息且已登录才显示头像 */
+const hasUserData = computed(() => !!(userStore.userInfo && accessStore.accessToken));
 
 const fallbackStyle = computed(() => {
-  const nickname = userStore.userInfo?.nickname || "用户"
-  return avatarFallbackStyle(nickname)
-})
+  const nickname = userStore.userInfo?.nickname || "用户";
+  return avatarFallbackStyle(nickname);
+});
 
 const avatarFallbackChar = computed(() => {
-  return fallbackChar(userStore.userInfo?.nickname || "用户")
-})
+  return fallbackChar(userStore.userInfo?.nickname || "用户");
+});
 
-const logoutSub = async () => {
-  try {
-    await logout()
-  } catch {
-    // 即使后端登出失败也清除本地登录态
-  }
-  userStore.clearUser()
-  ElMessage.success('已退出登录')
-  router.push('/')
-}
+const logoutSub = () => {
+  ElMessageBox.confirm("确定要退出登录吗？", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(async () => {
+      try {
+        await logout();
+      } catch {
+        // 即使后端登出失败也清除本地登录态
+      }
+      userStore.clearUser();
+      ElMessage.success("已退出登录");
+      router.push("/");
+    })
+    .catch(() => {});
+};
 </script>
 
 <style scoped lang="scss">

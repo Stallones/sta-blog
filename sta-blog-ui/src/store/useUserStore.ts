@@ -1,23 +1,23 @@
 import { defineStore } from "pinia"
 import { computed, shallowRef } from "vue"
-import { GET_TOKEN, REMOVE_TOKEN } from "@/utils/auth.ts"
+import { useAccessStore } from "@/store/useAccessStore"
 import { getUserInfo } from "@/api/AppBlogUserController"
 
 export const useUserStore = defineStore("user", () => {
   const userInfo = shallowRef<API.AppUserInfoRespVO>()
+  const accessStore = useAccessStore()
 
-  /** 是否已登录（userInfo 已加载） */
-  const isLoggedIn = computed(() => !!userInfo.value)
+  /** 是否已登录 — 依赖 useAccessStore.accessToken（响应式 ref，自动追踪变化） */
+  const isLoggedIn = computed(() => !!accessStore.accessToken)
 
-  /** 是否已有本地 Token（每次重新读取 localStorage） */
+  /** 是否已有本地 Token */
   function hasToken(): boolean {
-    return !!GET_TOKEN()
+    return !!accessStore.accessToken
   }
 
   // 获取用户信息
   const getInfo = async () => {
-    const token = GET_TOKEN()
-    if (!token) {
+    if (!accessStore.accessToken) {
       userInfo.value = undefined
       return
     }
@@ -27,14 +27,14 @@ export const useUserStore = defineStore("user", () => {
     } catch {
       // token 无效或过期 → 清除登录态
       userInfo.value = undefined
-      REMOVE_TOKEN()
+      accessStore.clear()
     }
   }
 
   // 清除登录态
   const clearUser = () => {
     userInfo.value = undefined
-    REMOVE_TOKEN()
+    accessStore.clear()
   }
 
   return {

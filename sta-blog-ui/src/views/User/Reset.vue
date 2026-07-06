@@ -5,9 +5,9 @@ import { sendEmailCode, resetPassword } from "@/api/AppBlogAuthController";
 
 const router = useRouter();
 
-const active = ref(0)
 const coldTime = ref(0)
 const formRef = ref()
+const loading = ref(false)
 
 const form = reactive({
   email: '',
@@ -44,37 +44,44 @@ const rules = {
 }
 
 async function askCode() {
-  if (isEmailValid.value) {
-    coldTime.value = 60
+  if (!isEmailValid.value) {
+    ElMessage.warning('请输入正确的电子邮件')
+    return
+  }
+  coldTime.value = 60
+  try {
     await sendEmailCode({ email: form.email, scene: 'reset' })
     ElMessage.success(`验证码已发送到邮箱：${form.email}，请注意查收`)
-    setInterval(() => coldTime.value--, 1000)
-  } else {
-    ElMessage.warning('请输入正确的电子邮件')
+    const intervalId = setInterval(() => {
+      if (coldTime.value === 0) clearInterval(intervalId)
+      else coldTime.value--
+    }, 1000)
+  } catch (e: any) {
+    coldTime.value = 0
+    ElMessage.error(e?.msg || '验证码发送失败，请稍后重试')
   }
 }
 
 const isEmailValid = computed(() => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(form.email))
 
-async function confirmReset() {
-  formRef.value.validate(async (valid: boolean) => {
-    if (valid) {
-      active.value++
-    }
-  })
-}
-
 async function doReset() {
   formRef.value.validate(async (valid: boolean) => {
     if (valid) {
-      const res: any = await resetPassword({
-        email: form.email,
-        code: form.code,
-        password: form.password,
-      })
-      if (res) {
-        ElMessage.success('密码重置成功，请重新登录')
-        router.push('/login')
+      loading.value = true
+      try {
+        const res: any = await resetPassword({
+          email: form.email,
+          code: form.code,
+          password: form.password,
+        })
+        if (res) {
+          ElMessage.success('密码重置成功，请重新登录')
+          router.push('/user/login')
+        }
+      } catch (e: any) {
+        ElMessage.error(e?.msg || '密码重置失败，请稍后重试')
+      } finally {
+        loading.value = false
       }
     }
   })
@@ -84,19 +91,17 @@ async function doReset() {
 
 <template>
   <div style="text-align: center">
-    <div style="margin-top: 30px">
-      <el-steps align-center :active="active" finish-status="success">
-        <el-step title="验证电子邮件"/>
-        <el-step title="重写设定密码"/>
-      </el-steps>
-    </div>
-    <div style="margin: 0 20px" v-if="active === 0">
-      <div style="margin-top: 80px">
+    <div style="margin: 0 20px">
+      <div style="margin-top: 100px">
         <div style="font-size: 25px;font-weight: bold">重置密码</div>
         <div style="font-size: 14px;color: grey;margin-top: 1rem">请输入需要重置密码的电子邮件地址</div>
       </div>
       <div style="margin-top: 50px">
         <el-form :model="form" :rules="rules" ref="formRef">
+          <!-- 验证身份 -->
+          <div style="text-align: left;margin-bottom: 12px">
+            <span style="font-size: 13px;color: #909399;font-weight: 500">验证身份</span>
+          </div>
           <el-form-item prop="email">
             <el-input v-model="form.email" type="email" placeholder="电子邮件地址">
               <template #prefix><el-icon><Message/></el-icon></template>
@@ -116,40 +121,37 @@ async function doReset() {
               </el-col>
             </el-row>
           </el-form-item>
-        </el-form>
-      </div>
-      <div style="margin-top: 80px">
-        <el-button @click="confirmReset" type="warning" style="width: 270px" plain>开始重置密码</el-button>
-      </div>
-    </div>
-    <div style="margin: 0 20px" v-if="active === 1">
-      <div>
-        <div style="margin-top: 80px">
-          <div style="font-size: 25px;font-weight: bold">重置密码</div>
-          <div style="font-size: 14px;color: grey;margin-top: 1rem">请填写你的新密码，务必牢记，防止丢失</div>
-        </div>
-      </div>
-      <div style="margin-top: 50px">
-        <el-form :model="form" :rules="rules" ref="formRef">
+
+
+          <!-- 设定新密码 -->
+          <div style="text-align: left;margin: 50px 0 12px">
+            <span style="font-size: 13px;color: #909399;font-weight: 500">设定新密码</span>
+          </div>
           <el-form-item prop="password">
-            <el-input v-model="form.password" maxlength="20" type="password" placeholder="密码">
+            <el-input v-model="form.password" maxlength="20" type="password" placeholder="新密码（6-20个字符）">
               <template #prefix><el-icon><Lock/></el-icon></template>
             </el-input>
           </el-form-item>
           <el-form-item prop="password_repeat">
-            <el-input v-model="form.password_repeat" maxlength="20" type="password" placeholder="重复密码">
+            <el-input v-model="form.password_repeat" maxlength="20" type="password" placeholder="确认新密码">
               <template #prefix><el-icon><Lock/></el-icon></template>
             </el-input>
           </el-form-item>
         </el-form>
       </div>
-      <div style="margin-top: 80px">
-        <el-button type="danger" style="width: 270px" plain @click="doReset">立即重置密码</el-button>
+      <div style="margin-top: 50px">
+        <el-button type="danger" style="width: 270px" plain @click="doReset" :loading="loading">
+          重置密码
+        </el-button>
       </div>
     </div>
-    <div style="margin-top: 20px">
-      <span style="font-size: 14px;line-height: 15px;color: grey">改变注意?</span>
-      <el-link style="translate: 0 -1px" @click="$router.push('/login')">返回登录</el-link>
+    <el-divider>
+      <span style="font-size: 13px; color: grey">已有账号？</span>
+    </el-divider>
+    <div>
+      <el-button style="width: 270px"  plain @click="$router.push('/user/login')">
+        去登录
+      </el-button>
     </div>
   </div>
 </template>

@@ -1,43 +1,43 @@
 <script setup lang="ts">
-import { getTagList } from '@/api/AppTagController'
-import { getHslCircleColors, getHslColors } from '@/utils/colorHsl'
+import { getTagList } from "@/api/AppTagController";
+import { getHslCircleColors, getHslColors } from "@/utils/colorHsl";
 
-const tags = ref<any[]>([])
+const tags = ref<any[]>([]);
 
 // 字体大小池（根据文章数量分级）
-const FONT_SIZES = ['1.2em', '2.0em', '2.5em']
+const FONT_SIZES = ["1.2em", "2.0em", "2.5em"];
 
 // 动态生成颜色池 - 每次刷新页面颜色不同
-let colorPool: string[] = []
+let colorPool: string[] = [];
 
 function getColor(index: number): string {
   // 如果颜色池为空或不够用，重新生成
   if (colorPool.length === 0 || index >= colorPool.length) {
-    const needed = Math.max(tags.value.length, 5) // 至少生成13个颜色
-    colorPool = getHslCircleColors(needed)
+    const needed = Math.max(tags.value.length, 5); // 至少生成13个颜色
+    colorPool = getHslCircleColors(needed);
     // colorPool = getHslColors(needed)
   }
-  return colorPool[index % colorPool.length]
+  return colorPool[index % colorPool.length];
 }
 
 function getTagStyle(index: number, articleCount: number) {
-  const bgColor = getColor(index)
+  const bgColor = getColor(index);
   // 根据文章数量决定字体大小
-  let fontSize = FONT_SIZES[0]
-  if (articleCount >= 7) fontSize = FONT_SIZES[2]
-  else if (articleCount >= 3) fontSize = FONT_SIZES[1]
-  
+  let fontSize = FONT_SIZES[0];
+  if (articleCount >= 7) fontSize = FONT_SIZES[2];
+  else if (articleCount >= 3) fontSize = FONT_SIZES[1];
+
   return {
-    '--tag-bg': bgColor,
-    '--tag-text': '#fff',
-    '--tag-font-size': fontSize,
-  }
+    "--tag-bg": bgColor,
+    "--tag-text": "#fff",
+    "--tag-font-size": fontSize,
+  };
 }
 
 onMounted(async () => {
-  const res: any = await getTagList()
-  tags.value = Array.isArray(res) ? res : []
-})
+  const res: any = await getTagList();
+  tags.value = Array.isArray(res) ? res : [];
+});
 </script>
 
 <template>
@@ -62,6 +62,9 @@ onMounted(async () => {
 <style scoped lang="scss">
 .tags-page {
   width: 100%;
+  background: var(--el-fill-color-blank);
+  border-radius: $border-radius;
+  box-shadow: var(--el-box-shadow-light);
 }
 
 .tag-cloud {
@@ -69,10 +72,7 @@ onMounted(async () => {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  background: var(--el-fill-color-blank);
-  border-radius: 10px;
   padding: 2.5rem;
-  box-shadow: var(--el-box-shadow-light);
   align-items: center;
   overflow: hidden;
 }
@@ -114,7 +114,8 @@ onMounted(async () => {
 
   // 默认状态：跟随遮罩变淡
   opacity: 1;
-  transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, z-index 0s;
+  transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease,
+    z-index 0s;
 
   &:hover {
     // hover 时使用强调色（橙色）并上浮，同时提升到遮罩之上

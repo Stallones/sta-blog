@@ -24,7 +24,7 @@ export const BlogType = {
 export const JWT_PREFIX_CONS = 'Bearer ';
 
 // Token 名称常量
-export const TOKEN_KEY = 'Token';
+export const TOKEN_KEY = 'sta-blog-app-token';
 
 // 文章访问量统计 前缀常量
 export const ARTICLE_VISIT_PREFIX = 'article_visit_';

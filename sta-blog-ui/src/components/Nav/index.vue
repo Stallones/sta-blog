@@ -10,8 +10,6 @@
 
     <!-- 右侧：导航菜单 + 登录 -->
     <MenuList />
-
-    <!-- <UserLogin v-if="isOnline && !isGuestPage" /> -->
   </nav>
 
   <div class="h-nav-mob">
@@ -20,15 +18,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import { useWebsiteStore } from "@/store/useWebsiteStore";
 
-// import { useDemotion } from "@/composables/useDemotion";
-// import UserLogin from "./UserLogin.vue";
-// const { isOnline } = useDemotion();
-// const isGuestPage = computed(() => guestNames.includes(String(route.name)));
-// const guestNames = ["login", "register", "reset"];
 const useWebsite = useWebsiteStore();
 const route = useRoute();
 

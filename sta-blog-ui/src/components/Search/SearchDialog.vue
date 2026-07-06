@@ -11,7 +11,7 @@ import { useSearchStore } from "@/store/useSearchStore";
 import { useDemotion } from "@/composables/useDemotion";
 import { getArticleListByTitleAndContent } from "@/api/AppArticleController";
 import { searchLocalArticles } from "@/utils/file-reader";
-import type { ArticleVO } from "@/types";
+import type { AppArticleRespVO } from "@/types";
 import router from "@/router";
 
 const searchStore = useSearchStore();
@@ -20,7 +20,7 @@ const isOnline = useDemotion().isOnline;
 // ── 搜索状态 ──
 const query = ref("");
 const loading = ref(false);
-const resultList = ref<ArticleVO[]>([]);
+const resultList = ref<AppArticleRespVO[]>([]);
 const inputRef = ref<HTMLInputElement | null>(null);
 
 // ── 防抖 ──
@@ -99,7 +99,7 @@ async function doSearch(q: string) {
 async function doOnlineSearch(q: string) {
   try {
     const res = await getArticleListByTitleAndContent({ keyword: q });
-    resultList.value = (res || []).map((item: ArticleVO) => ({
+    resultList.value = (res || []).map((item: AppArticleRespVO) => ({
       ...item,
       summary: highlightKeyword(item.summary || "", q),
       title: highlightKeyword(item.title || "", q),

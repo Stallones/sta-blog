@@ -7,13 +7,16 @@ import {
   Message,
   Refresh,
   Unlock,
+  Lock,
 } from "@element-plus/icons-vue";
 import type { UploadProps } from "element-plus";
 import { useUserStore } from "@/store/useUserStore";
-import { updateUser as updateUserApi } from "@/api/AppBlogUserController";
+import { useAccessStore } from "@/store/useAccessStore";
+import { updateUser as updateUserApi, updatePassword } from "@/api/AppBlogUserController";
 import { sendEmailCode } from "@/api/AppBlogAuthController";
 
 const uploadRef = ref<UploadInstance>();
+const accessStore = useAccessStore();
 
 const accountForm = ref<any>({
   nickname: "",
@@ -23,11 +26,19 @@ const accountForm = ref<any>({
 
 const avatarImg = ref();
 const userStore = useUserStore();
+const router = useRouter();
 
 const emailForm = reactive({
-  email: "",
+  newEmail: "",
   code: "",
-  password: "",
+});
+
+const maskedEmail = computed(() => {
+  const email = userStore.userInfo?.email;
+  if (!email) return "";
+  const [name, domain] = email.split("@");
+  if (name.length <= 2) return name[0] + "***@" + domain;
+  return name.slice(0, 2) + "***@" + domain;
 });
 
 async function updateUser() {
@@ -37,7 +48,7 @@ async function updateUser() {
         nickname: accountForm.value.nickname,
         sex: accountForm.value.sex,
         avatar: accountForm.value.avatar,
-        email: emailForm.email || undefined,
+        email: userStore.userInfo?.email || undefined,
       });
       if (resp) {
         ElMessage.success("信息更新成功");
@@ -59,11 +70,15 @@ const submitUploadAndUpdate = () => {
 const uploadAvatarUrl = "/api/app-api/infra/file/upload";
 
 const handleAvatarSuccess: UploadProps["onSuccess"] = (response: any) => {
+  // 后端返回 CommonResult<String>，data 就是 URL 字符串
   const data = response?.data || response;
-  if (data && data.url) {
+  if (typeof data === "string") {
+    accountForm.value.avatar = data;
+    updateUser();
+  } else if (data?.url) {
     accountForm.value.avatar = data.url;
     updateUser();
-  } else if (data && data.path) {
+  } else if (data?.path) {
     accountForm.value.avatar = data.path;
     updateUser();
   }
@@ -92,7 +107,7 @@ onMounted(() => {
       accountForm.value = { ...userStore.userInfo };
       avatarImg.value = userStore.userInfo.avatar || "";
       firstImg.value = userStore.userInfo.avatar || "";
-      emailForm.email = userStore.userInfo.email || "";
+      emailForm.newEmail = "";
     }
   });
 });
@@ -123,8 +138,8 @@ const nicknameRules = {
 };
 
 const emailRules: FormRules = {
-  email: [
-    { required: true, message: "请输入邮件地址", trigger: "blur" },
+  newEmail: [
+    { required: true, message: "请输入新邮件地址", trigger: "blur" },
     {
       type: "email",
       message: "请输入合法的电子邮件地址",
@@ -137,22 +152,36 @@ const emailRules: FormRules = {
 const centerDialogVisible = ref(false);
 
 async function updateEmailFunc() {
-  if (emailForm.email === userStore.userInfo?.email) {
-    ElMessage.warning("邮件地址未更改");
-    return;
-  }
-  // 直接更新用户信息（包含新邮箱）
-  const resp: any = await updateUserApi({
-    nickname: accountForm.value.nickname,
-    sex: accountForm.value.sex,
-    avatar: accountForm.value.avatar,
-    email: emailForm.email,
-  });
-  if (resp) {
-    ElMessage.success("邮件地址更新成功");
-    emailForm.code = "";
-    userStore.getInfo();
-    centerDialogVisible.value = false;
+  try {
+    if (!emailForm.newEmail) {
+      ElMessage.warning("请先输入新邮箱");
+      return;
+    }
+    if (emailForm.newEmail === userStore.userInfo?.email) {
+      ElMessage.warning("新邮箱与当前邮箱相同");
+      return;
+    }
+    if (!emailForm.code) {
+      ElMessage.warning("请先获取并输入验证码");
+      return;
+    }
+    // 提交新邮箱 + 验证码，后端校验通过后才会更新
+    const resp: any = await updateUserApi({
+      nickname: accountForm.value.nickname,
+      sex: accountForm.value.sex,
+      avatar: accountForm.value.avatar,
+      email: emailForm.newEmail,
+      code: emailForm.code,
+    });
+    if (resp) {
+      ElMessage.success("邮件地址更新成功");
+      emailForm.code = "";
+      emailForm.newEmail = "";
+      userStore.getInfo();
+      centerDialogVisible.value = false;
+    }
+  } catch (e: any) {
+    ElMessage.error(e?.msg || '邮箱更新失败');
   }
 }
 
@@ -165,40 +194,90 @@ function modifyEmail() {
 }
 
 const isEmailValid = computed(() =>
-  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailForm.email),
+  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailForm.newEmail),
 );
 
 const coldTime = ref(0);
 
 async function getEmailCode() {
   if (!isEmailValid.value) return;
+  if (emailForm.newEmail === userStore.userInfo?.email) {
+    ElMessage.warning("新邮箱与当前邮箱相同");
+    return;
+  }
   coldTime.value = 60;
-  await sendEmailCode({ email: emailForm.email, scene: "resetEmail" });
-  ElMessage.success(`验证码已发送到邮箱：${emailForm.email}，请注意查收`);
-  const intervalId = setInterval(() => {
-    if (coldTime.value === 0) {
-      clearInterval(intervalId);
-    } else {
-      coldTime.value--;
-    }
-  }, 1000);
+  try {
+    await sendEmailCode({ email: emailForm.newEmail, scene: "resetEmail" });
+    ElMessage.success(`验证码已发送到邮箱：${emailForm.newEmail}，请注意查收`);
+    const intervalId = setInterval(() => {
+      if (coldTime.value === 0) {
+        clearInterval(intervalId);
+      } else {
+        coldTime.value--;
+      }
+    }, 1000);
+  } catch (e: any) {
+    coldTime.value = 0;
+    ElMessage.error(e?.msg || "验证码发送失败，请稍后重试");
+  }
 }
 
-// token for upload auth header
-const token =
-  localStorage.getItem("Token") || sessionStorage.getItem("Token") || "";
-const uploadHeaders = ref<Record<string, string>>({
-  Authorization:
-    "Bearer " +
-    (() => {
-      try {
-        const obj = JSON.parse(token);
-        return obj.accessToken || "";
-      } catch {
-        return token;
-      }
-    })(),
+const passwordForm = reactive({
+  oldPassword: "",
+  newPassword: "",
+  confirmPassword: "",
 });
+
+const passwordFormRef = ref();
+
+const passwordRules: FormRules = {
+  oldPassword: [{ required: true, message: "请输入旧密码", trigger: "blur" }],
+  newPassword: [
+    { required: true, message: "请输入新密码", trigger: "blur" },
+    { min: 6, max: 20, message: "新密码长度为 6-20 位", trigger: "blur" },
+  ],
+  confirmPassword: [
+    { required: true, message: "请确认新密码", trigger: "blur" },
+    {
+      validator: (_: any, value: any, callback: any) => {
+        if (value !== passwordForm.newPassword) {
+          callback(new Error("两次输入的密码不一致"));
+        } else {
+          callback();
+        }
+      },
+      trigger: "blur",
+    },
+  ],
+};
+
+async function handlePasswordChange() {
+  passwordFormRef.value.validate(async (isValid: boolean) => {
+    if (!isValid) return;
+    try {
+      const resp = await updatePassword({
+        oldPassword: passwordForm.oldPassword,
+        newPassword: passwordForm.newPassword,
+      });
+      if (resp) {
+        ElMessage.success("密码修改成功");
+        passwordForm.oldPassword = "";
+        passwordForm.newPassword = "";
+        passwordForm.confirmPassword = "";
+        userStore.clearUser();
+        ElMessage.success("密码已修改，请重新登录");
+        router.push("/user/login");
+      }
+    } catch (e: any) {
+      ElMessage.error(e?.msg || "密码修改失败");
+    }
+  });
+}
+
+// token for upload auth header — 从响应式 store 读取
+const uploadHeaders = computed<Record<string, string>>(() => ({
+  Authorization: 'Bearer ' + (accessStore.accessToken || ''),
+}));
 </script>
 
 <template>
@@ -209,7 +288,7 @@ const uploadHeaders = ref<Record<string, string>>({
       width="500"
       align-center
     >
-      <span class="dialog-bold">你正在更改邮箱为：{{ emailForm.email }}</span>
+      <span class="dialog-bold">你正在更改邮箱为：{{ emailForm.newEmail }}</span>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="centerDialogVisible = false">关闭</el-button>
@@ -275,9 +354,9 @@ const uploadHeaders = ref<Record<string, string>>({
                   </el-form-item>
                   <el-form-item label="性别">
                     <el-radio-group v-model="accountForm.sex">
-                      <el-radio :label="1">男</el-radio>
-                      <el-radio :label="2">女</el-radio>
-                      <el-radio :label="0">保密</el-radio>
+                      <el-radio :value="1" label="男" />
+                      <el-radio :value="2" label="女" />
+                      <el-radio :value="0" label="保密" />
                     </el-radio-group>
                   </el-form-item>
                 </el-form>
@@ -310,10 +389,17 @@ const uploadHeaders = ref<Record<string, string>>({
                   ref="emailFormRef"
                   :rules="emailRules"
                 >
-                  <el-form-item label="电子邮件" prop="email">
+                  <el-form-item label="当前邮箱">
                     <el-input
-                      placeholder="请输入电子邮件"
-                      v-model="emailForm.email"
+                      :model-value="maskedEmail"
+                      disabled
+                      placeholder="未绑定邮箱"
+                    />
+                  </el-form-item>
+                  <el-form-item label="新邮箱" prop="newEmail">
+                    <el-input
+                      placeholder="请输入新邮箱"
+                      v-model="emailForm.newEmail"
                     />
                   </el-form-item>
                   <el-form-item prop="code">
@@ -347,6 +433,61 @@ const uploadHeaders = ref<Record<string, string>>({
             </div>
           </div>
         </div>
+
+        <div class="panel panel--password">
+          <div class="panel-header">
+            <el-icon><Lock /></el-icon>
+            <span class="panel-title">密码设置</span>
+          </div>
+          <span class="panel-desc">在这里可以修改你的登录密码</span>
+          <el-divider style="margin-top: 0.5rem" />
+          <div class="panel-body">
+            <div class="form-wrap">
+              <div class="form-section">
+                <el-form
+                  label-position="top"
+                  label-width="auto"
+                  class="setting-form"
+                  :model="passwordForm"
+                  ref="passwordFormRef"
+                  :rules="passwordRules"
+                >
+                  <el-form-item label="旧密码" prop="oldPassword">
+                    <el-input
+                      type="password"
+                      show-password
+                      placeholder="请输入旧密码"
+                      v-model="passwordForm.oldPassword"
+                    />
+                  </el-form-item>
+                  <el-form-item label="新密码" prop="newPassword">
+                    <el-input
+                      type="password"
+                      show-password
+                      placeholder="请输入新密码"
+                      v-model="passwordForm.newPassword"
+                    />
+                  </el-form-item>
+                  <el-form-item label="确认新密码" prop="confirmPassword">
+                    <el-input
+                      type="password"
+                      show-password
+                      placeholder="请再次输入新密码"
+                      v-model="passwordForm.confirmPassword"
+                    />
+                  </el-form-item>
+                </el-form>
+              </div>
+              <el-button
+                class="submit-btn"
+                :icon="Lock"
+                type="primary"
+                @click="handlePasswordChange"
+                >修改密码</el-button
+              >
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -361,21 +502,19 @@ $bp-md: 768px;
   display: flex;
   flex-direction: column;
   width: 100%;
-
 }
 .setting-main {
-
 }
 .panel {
   width: 100%;
-  padding: 1.25rem;
-  margin-bottom: 1.25rem;
+  padding: 2rem;
+  margin-bottom: 1rem;
   border-radius: 10px;
   background-color: var(--el-bg-color);
   box-shadow: var(--el-box-shadow-light);
 }
 .panel--email {
-  margin-bottom: 7rem;
+  margin-bottom: 1rem;
 }
 .panel-header {
   display: flex;
@@ -393,7 +532,6 @@ $bp-md: 768px;
 .panel-body {
   display: flex;
   justify-content: center;
-  margin: 0 1.5rem;
 }
 .form-wrap {
   width: 100%;
@@ -409,7 +547,6 @@ $bp-md: 768px;
 }
 .setting-form {
   width: 100%;
-  margin-top: 1.25rem;
 }
 .dialog-bold {
   font-weight: bold;
@@ -422,7 +559,7 @@ $bp-md: 768px;
   margin-left: 0.5rem;
 }
 .submit-btn {
-  margin: 0 1.5rem;
+  
 }
 .avatar-uploader .avatar {
   width: 178px;

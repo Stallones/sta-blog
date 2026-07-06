@@ -1,5 +1,14 @@
 <script setup lang="ts">
+import { useRouter } from "vue-router";
+import { ArrowLeft } from "@element-plus/icons-vue";
+import { beforeLoginPath } from "@/router";
+
+const router = useRouter();
 const login_bg = import.meta.env.VITE_MINIO_SERVE + '/blog/@SYB1[VP3FD01[03P`HBGQ0.png';
+
+function goBack() {
+  router.push(beforeLoginPath.value || "/");
+}
 </script>
 
 <template>
@@ -15,6 +24,12 @@ const login_bg = import.meta.env.VITE_MINIO_SERVE + '/blog/@SYB1[VP3FD01[03P`HBG
     </div>
     <!-- 右边区域 -->
     <div class="right-card">
+      <div class="right-card__top">
+        <el-button class="back-btn" @click="goBack">
+          <el-icon><ArrowLeft /></el-icon>
+          返回
+        </el-button>
+      </div>
       <router-view v-slot="{Component}">
         <transition name="el-fade-in-linear" mode="out-in">
           <component :is="Component"/>
@@ -34,7 +49,10 @@ const login_bg = import.meta.env.VITE_MINIO_SERVE + '/blog/@SYB1[VP3FD01[03P`HBG
   width: 400px;
   z-index: 1;
   background-color: var(--el-bg-color);
+  padding: 20px;
+  position: relative;
 }
+
 
 @media screen and (max-width: 600px) {
   .left-card {

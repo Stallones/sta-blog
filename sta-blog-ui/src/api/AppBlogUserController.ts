@@ -24,3 +24,18 @@ export async function updateUser(
     ...(options || {}),
   });
 }
+
+/** 修改密码 PUT /app-api/blog/user/update-password */
+export async function updatePassword(
+  body: { oldPassword: string; newPassword: string },
+  options?: { [key: string]: any }
+) {
+  return request<boolean>("/app-api/blog/user/update-password", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

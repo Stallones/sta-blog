@@ -54,10 +54,10 @@ import {
   Star,
 } from "@element-plus/icons-vue";
 import { dayjs } from "element-plus";
-import type { ArticleVO } from "@/types";
+import type { AppArticleRespVO } from "@/types";
 
 defineProps<{
-  article: ArticleVO;
+  article: AppArticleRespVO;
   wordCount?: string | number;
   variant?: "cover" | "reading";  // cover=遮罩上, reading=文本流中
 }>();

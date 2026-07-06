@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { ArticleVO } from "@/types";
+import type { AppArticleRespVO } from "@/types";
 import { Calendar, Folder, View } from "@element-plus/icons-vue";
 import { dayjs } from "element-plus";
 
-defineProps<{ article: ArticleVO }>();
+defineProps<{ article: AppArticleRespVO }>();
 </script>
 
 <template>

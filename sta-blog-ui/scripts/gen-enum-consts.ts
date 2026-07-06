@@ -24,8 +24,8 @@ const ENUM_DEFS: Record<string, string> = {
 const PRESERVED = `// Jwt 前缀常量
 export const JWT_PREFIX_CONS = 'Bearer ';
 
-// Token 名称常量
-export const TOKEN_KEY = 'Token';
+// Token 名称常量（命名空间化，避免与 vben admin、ruoyi 系统用户冲突）
+export const TOKEN_KEY = 'sta-blog-app-token';
 
 // 文章访问量统计 前缀常量
 export const ARTICLE_VISIT_PREFIX = 'article_visit_';

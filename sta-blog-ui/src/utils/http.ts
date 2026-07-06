@@ -4,7 +4,8 @@ import {ElMessage, ElNotification} from "element-plus"
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import {JWT_PREFIX_CONS} from "@/const";
-import {GET_TOKEN, GET_REFRESH_TOKEN, UPDATE_ACCESS_TOKEN, REMOVE_TOKEN} from "@/utils/auth.ts";
+import {GET_TOKEN, UPDATE_ACCESS_TOKEN} from "@/utils/auth.ts";
+import { useAccessStore } from "@/store/useAccessStore";
 import { useLoading } from "@/composables/useLoading";
 import {REQUEST_LOADING_PATH, IGNORE_ERROR_PATH} from "@/utils/enum.ts";
 import { ApiResponse } from '@/types';
@@ -37,10 +38,10 @@ let isRefreshing = false;
 let refreshQueue: Array<{ resolve: (token: string) => void; reject: (err: any) => void }> = [];
 
 async function doRefreshToken(): Promise<string> {
-    const refreshToken = GET_REFRESH_TOKEN();
+    const refreshToken = useAccessStore().refreshToken;
     if (!refreshToken) {
-        REMOVE_TOKEN();
-        router.push('/login');
+        useAccessStore().clear();
+        router.push('/user/login');
         throw new Error('refreshToken 不存在');
     }
     const res: any = await axios.post(
@@ -53,9 +54,50 @@ async function doRefreshToken(): Promise<string> {
         UPDATE_ACCESS_TOKEN(data.accessToken, data.expiresTime);
         return data.accessToken;
     }
-    REMOVE_TOKEN();
-    router.push('/login');
+    useAccessStore().clear();
+    router.push('/user/login');
     throw new Error('token 刷新失败');
+}
+
+// ========== 共享的 token 刷新处理 ==========
+async function handleTokenRefresh(config: any): Promise<any> {
+    // 如果根本没有 refreshToken（未登录状态），直接跳转登录页，不要抛异常
+    if (!useAccessStore().refreshToken) {
+        useAccessStore().clear();
+        router.push('/user/login');
+        return Promise.reject(new Error('请先登录'));
+    }
+
+    if (!isRefreshing) {
+        isRefreshing = true;
+        try {
+            const newToken = await doRefreshToken();
+            refreshQueue.forEach(({ resolve }) => resolve(newToken));
+            refreshQueue = [];
+            config._retry = true;
+            config.headers['Authorization'] = JWT_PREFIX_CONS + newToken;
+            return http(config);
+        } catch (err) {
+            refreshQueue.forEach(({ reject }) => reject(err));
+            refreshQueue = [];
+            useAccessStore().clear();
+            router.push('/user/login');
+            return Promise.reject(err);
+        } finally {
+            isRefreshing = false;
+        }
+    } else {
+        return new Promise((resolve, reject) => {
+            refreshQueue.push({
+                resolve: (token: string) => {
+                    config._retry = true;
+                    config.headers['Authorization'] = JWT_PREFIX_CONS + token;
+                    resolve(http(config));
+                },
+                reject,
+            });
+        });
+    }
 }
 
 // request拦截器
@@ -106,46 +148,21 @@ http.interceptors.response.use(
             }
         } else NProgress.done();
 
+        // Yudao returns HTTP 200 with code 401 in body
+        if (response.data?.code === 401) {
+            return handleTokenRefresh(response.config);
+        }
+
         return response.data
     },
     async (error: AxiosError) => {
         const config = error.config as any;
 
-        // ========== 401 自动刷新 token ==========
-        if (error.response?.status === 401 && config && !config._retry) {
-            if (!isRefreshing) {
-                isRefreshing = true;
-                try {
-                    const newToken = await doRefreshToken();
-                    // 处理等待队列
-                    refreshQueue.forEach(({ resolve }) => resolve(newToken));
-                    refreshQueue = [];
-                    // 重发原请求
-                    config._retry = true;
-                    config.headers['Authorization'] = JWT_PREFIX_CONS + newToken;
-                    return http(config);
-                } catch (err) {
-                    refreshQueue.forEach(({ reject }) => reject(err));
-                    refreshQueue = [];
-                    REMOVE_TOKEN();
-                    router.push('/login');
-                    return Promise.reject(err);
-                } finally {
-                    isRefreshing = false;
-                }
-            } else {
-                // 等待正在进行的 refresh 完成
-                return new Promise((resolve, reject) => {
-                    refreshQueue.push({
-                        resolve: (token: string) => {
-                            config._retry = true;
-                            config.headers['Authorization'] = JWT_PREFIX_CONS + token;
-                            resolve(http(config));
-                        },
-                        reject,
-                    });
-                });
-            }
+        // ========== 401 自动刷新 token（支持 HTTP 401 和响应体 code 401） ==========
+        const is401 = error.response?.status === 401
+                   || (error.response?.data as any)?.code === 401;
+        if (is401 && config && !config._retry) {
+            return handleTokenRefresh(config);
         }
 
         // ========== 原有错误处理 ==========

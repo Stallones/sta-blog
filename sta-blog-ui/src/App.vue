@@ -21,7 +21,7 @@ import { useLoading } from "@/composables/useLoading";
 import Loading from "@/components/Loading.vue";
 import CanvasLayer from "@/components/CanvasLayer/index.vue";
 
-const { isReady, checkService, requestOrRead } = useDemotion();
+const { isReady, checkService } = useDemotion();
 const { show: showLoading, hide: hideLoading } = useLoading();
 const useWebsite = useWebsiteStore();
 const useUser = useUserStore();
@@ -34,7 +34,7 @@ onMounted(async () => {
   await checkService();
 
   // 2. 并行获取数据
-  const tasks: Promise<any>[] = [useWebsite.getInfo(requestOrRead)];
+  const tasks: Promise<any>[] = [useWebsite.getInfo()];
 
   // 有本地 Token 时恢复登录态（hasToken 每次重新读 localStorage）
   if (useUser.hasToken()) {

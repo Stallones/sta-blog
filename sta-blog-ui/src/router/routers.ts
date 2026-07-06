@@ -105,46 +105,46 @@ export const constantRouter = [
     path: "/",
     name: "custom-layout",
     component: () => import("@/Layout/CustomLayout.vue"),
+    meta: { showFooter: false, showNav: false },
     children: [
       // ── 文章详情（自含 header + sidebar，完整自主布局）──
       {
         path: "article/:id",
         component: () => import("@/views/Article.vue"),
         name: "article",
-        meta: { title: "文章详情", showFooter: true },
+        meta: { title: "文章详情", showFooter: true, showNav: true },
       },
       // ── 关于 ──
       {
         path: "about",
         component: () => import("@/views/About.vue"),
         name: "about",
-        meta: { title: "关于" },
+        meta: { title: "关于", showNav: true },
       },
       // ── 用户认证（左右分栏包裹）──
       {
-        path: "/user",
+        path: "user",
         component: () => import("@/views/User/index.vue"),
         name: "user",
-        redirect: "/login",
-        meta: { showFooter: false },
+        redirect: "/user/login",
         children: [
           {
-            path: "/login",
+            path: "login",
             component: () => import("@/views/User/Login.vue"),
             name: "login",
-            meta: { title: "用户登录", showFooter: false },
+            meta: { title: "用户登录" },
           },
           {
-            path: "/register",
+            path: "register",
             component: () => import("@/views/User/Register.vue"),
             name: "register",
-            meta: { title: "用户注册", showFooter: false },
+            meta: { title: "用户注册" },
           },
           {
-            path: "/reset",
+            path: "reset",
             component: () => import("@/views/User/Reset.vue"),
             name: "reset",
-            meta: { title: "重置密码", showFooter: false },
+            meta: { title: "重置密码" },
           },
         ],
       },
@@ -153,7 +153,7 @@ export const constantRouter = [
         path: "tree-hole",
         component: () => import("@/views/TreeHole.vue"),
         name: "treeHole",
-        meta: { title: "树洞" },
+        meta: { title: "树洞", showNav: true },
       },
       // ── 音乐 ──
       {
@@ -167,7 +167,7 @@ export const constantRouter = [
         path: "photo",
         component: () => import("@/views/Photo/index.vue"),
         name: "photo",
-        meta: { title: "相册" },
+        meta: { title: "相册", showNav: true },
       },
     ],
   },

@@ -2,9 +2,9 @@
  * MouseTrail — 鼠标拖尾效果层
  * 从 composables 读取共享状态
  */
-import { useMouseTrail } from '@/composables/useMouseTrail';
+import { useCanvasEffects } from '@/composables/useCanvasEffects';
 
-const { mouseTrailConfig, mouseTrailEnabled } = useMouseTrail();
+const { mouseTrailConfig, mouseTrailEnabled } = useCanvasEffects();
 
 interface Point {
   x: number; y: number; size: number; color: string; age: number;

@@ -2,10 +2,9 @@
 import { BlogType } from "@/const";
 import { toggleLike, isLike } from "@/api/AppLikeController";
 import { toggleFavorite, isFavorite } from "@/api/AppFavoriteController";
-import { useUserStore } from "@/store/useUserStore";
+import { GET_TOKEN } from "@/utils/auth";
 
 const props = defineProps<{ article: any }>();
-const userStore = useUserStore();
 
 const liked = ref(false);
 const favorited = ref(false);
@@ -16,7 +15,7 @@ onMounted(async () => {
   likeCount.value = props.article.likeCount || 0;
   favoriteCount.value = props.article.favoriteCount || 0;
 
-  if (userStore.token) {
+  if (GET_TOKEN()) {
     const likeRes: any = await isLike({ type: BlogType.ARTICLE, typeId: props.article.id });
     liked.value = !!likeRes;
     const favRes: any = await isFavorite({ type: BlogType.ARTICLE, typeId: props.article.id });
@@ -25,7 +24,7 @@ onMounted(async () => {
 });
 
 async function handleLike() {
-  if (!userStore.token) {
+  if (!GET_TOKEN()) {
     ElMessage.warning('请先登录');
     return;
   }
@@ -37,14 +36,14 @@ async function handleLike() {
 }
 
 async function handleFavorite() {
-  if (!userStore.token) {
+  if (!GET_TOKEN()) {
     ElMessage.warning('请先登录');
     return;
   }
   const res: any = await toggleFavorite({ type: BlogType.ARTICLE, typeId: props.article.id });
   if (res !== undefined) {
-    favorited.value = true;
-    favoriteCount.value++;
+    favorited.value = res;
+    favoriteCount.value += res ? 1 : -1;
   }
 }
 </script>

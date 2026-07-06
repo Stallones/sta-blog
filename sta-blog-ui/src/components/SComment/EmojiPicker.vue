@@ -21,12 +21,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits([
-  'select-emoji', 
-  'operation-complete', 
-  'mousedown',  // 新增：声明接收 mousedown 事件
-  'click'       // 新增：声明接收 click 事件
-])
+const emit = defineEmits(['select-emoji', 'mousedown', 'click'])
 
 // 选中下标
 const optionsIndex = ref(0)
@@ -50,9 +45,6 @@ function optionEmoji(index: number) {
   }
   // 给选中的div添加样式
   options.value.children[index].classList.add('active');
-  
-  // 立即触发操作完成事件，而不是等到下一个事件循环
-  emit('operation-complete');
 }
 
 // 添加创建点击效果的函数
@@ -76,7 +68,6 @@ function addEmoji(emoji: string, event) {
   
   // 原有逻辑不变
   emit('select-emoji', emoji);
-  emit('operation-complete');
 }
 
 // 显示文字表情预览

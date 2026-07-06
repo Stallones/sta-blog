@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { getCategoryList } from '@/api/AppCategoryController'
+import { getCategoryList } from "@/api/AppCategoryController";
 
-const categorys = ref<any[]>([])
+const categorys = ref<any[]>([]);
 
 onMounted(async () => {
-  const res: any = await getCategoryList()
-  categorys.value = Array.isArray(res) ? res : []
-})
+  const res: any = await getCategoryList();
+  categorys.value = Array.isArray(res) ? res : [];
+});
 </script>
 
 <template>
@@ -30,6 +30,9 @@ onMounted(async () => {
 <style scoped lang="scss">
 .cat-page {
   width: 100%;
+  background: var(--el-fill-color-blank);
+  border-radius: $border-radius;
+  box-shadow: var(--el-box-shadow-light);
 
   .cat-page-title {
     font-size: 1.7rem;
@@ -43,11 +46,7 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  background: var(--el-fill-color-blank);
-  border-radius: 10px;
   padding: 1rem 1.25rem;
-  box-shadow: var(--el-box-shadow-light);
-  border: 1px solid var(--el-border-color-light);
 }
 
 .cat-item {

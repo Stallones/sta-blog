@@ -1,54 +1,33 @@
-﻿// 获取token（适配 yudao 格式：{ accessToken, refreshToken, expiresTime }）
-import {TOKEN_KEY} from "@/const";
-import {ElMessage} from "element-plus";
+﻿/**
+ * Token 工具层 — 委托 useAccessStore（Pinia 响应式 state）
+ *
+ * vben-aligned：useAccessStore 是唯一数据源，持久化由 store 内部 watch 自动处理。
+ * 所有 GET_* / SET_* / REMOVE_* 函数都是 thin wrapper，确保调用方无需感知 store 实现。
+ */
+import { useAccessStore } from '@/store/useAccessStore'
 
-export const GET_TOKEN = () => {
-    const str = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY)
-    if (!str) return null
-    try {
-        const authObject = JSON.parse(str)
-        // 判断 token 是否过期
-        if (authObject.expiresTime && new Date(authObject.expiresTime) <= new Date()) {
-            return null // 过期不删，留给 refreshToken 续期
-        }
-        return authObject.accessToken || null
-    } catch {
-        REMOVE_TOKEN()
-        return null
-    }
+export const GET_TOKEN = (): string | null => {
+  return useAccessStore().accessToken
 }
 
-export const GET_REFRESH_TOKEN = () => {
-    const str = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY)
-    if (!str) return null
-    try {
-        return JSON.parse(str).refreshToken || null
-    } catch {
-        return null
-    }
+export const GET_REFRESH_TOKEN = (): string | null => {
+  return useAccessStore().refreshToken
 }
 
-// 设置token（yudao 格式）
-export const SET_TOKEN = (data: { accessToken: string; refreshToken: string; expiresTime: string }, remember: boolean) => {
-    const str = JSON.stringify(data);
-    remember ? localStorage.setItem(TOKEN_KEY, str) : sessionStorage.setItem(TOKEN_KEY, str)
+/** 登录成功后设置完整 token（remember 参数保留兼容，持久化由插件统一处理） */
+export const SET_TOKEN = (
+  data: { accessToken: string; refreshToken: string; expiresTime: string },
+  _remember?: boolean,
+) => {
+  useAccessStore().setToken(data)
 }
 
-// 更新 token（refresh 后局部更新 accessToken）
+/** token 刷新后局部更新 accessToken + expiresTime */
 export const UPDATE_ACCESS_TOKEN = (accessToken: string, expiresTime: string) => {
-    const storage = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY)
-    if (!storage) return
-    try {
-        const obj = JSON.parse(storage)
-        obj.accessToken = accessToken
-        obj.expiresTime = expiresTime
-        const str = JSON.stringify(obj)
-        localStorage.getItem(TOKEN_KEY) ? localStorage.setItem(TOKEN_KEY, str) : sessionStorage.setItem(TOKEN_KEY, str)
-    } catch { /* ignore */ }
+  useAccessStore().updateAccessToken(accessToken, expiresTime)
 }
 
-// 移除token
+/** 移除所有 token（登出 / 失效时调用） */
 export const REMOVE_TOKEN = () => {
-    localStorage.removeItem(TOKEN_KEY)
-    sessionStorage.removeItem(TOKEN_KEY)
+  useAccessStore().clear()
 }

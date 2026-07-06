@@ -3,19 +3,14 @@ import { shallowRef } from "vue";
 import { readWebsiteInfo } from "@/utils/file-reader";
 import { getWebsiteInfo } from "@/api/AppWebsiteInfoController";
 import { getArticleListByCreateTime } from "@/api/AppArticleController";
-import type { ApiResponse } from "@/types";
+import { useDemotion } from "@/composables/useDemotion";
 
 export const useWebsiteStore = defineStore("website", () => {
   const webInfo = shallowRef<API.AppWebsiteInfoRespVO>();
   const searchTitle = shallowRef<API.AppArticleRespVO[]>();
 
-  const getInfo = async (
-    requestOrRead: <T, Args extends any[]>(
-      requestFn: (...args: Args) => Promise<T>,
-      readFn: (...args: Args) => Promise<ApiResponse<T>>,
-      ...args: Args
-    ) => Promise<ApiResponse<T>>
-  ) => {
+  const getInfo = async () => {
+    const { requestOrRead } = useDemotion();
     const res = await requestOrRead(getWebsiteInfo, readWebsiteInfo);
     webInfo.value = (res?.data ?? undefined) as API.AppWebsiteInfoRespVO | undefined;
   };
