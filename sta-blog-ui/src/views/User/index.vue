@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { ArrowLeft } from "@element-plus/icons-vue";
 import { beforeLoginPath } from "@/router";
 
 const router = useRouter();
+const route = useRoute();
 const login_bg = import.meta.env.VITE_MINIO_SERVE + '/blog/@SYB1[VP3FD01[03P`HBGQ0.png';
 
 function goBack() {
-  router.push(beforeLoginPath.value || "/");
+  // 优先使用 query 参数指定的重定向地址（如密码修改后强制回首页）
+  const redirect = route.query.redirect as string;
+  router.push(redirect || beforeLoginPath.value || "/");
 }
 </script>
 

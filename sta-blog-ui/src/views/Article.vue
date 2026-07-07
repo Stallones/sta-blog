@@ -14,27 +14,31 @@
     />
   </div>
 
-  <!-- 正常模式：content + sidebar 并排 -->
-  <div v-if="!isReadingMode" class="article-flex">
-    <div class="article-main">
-      <div class="article-scroll"></div>
-      <MdEditor
-        :content="articleVO.content ?? ''"
-        :editorId="editorId"
-        :theme="mode"
-        @htmlChanged="mdHtml"
-      />
-      <ArticleFooter v-if="articleVO.id" :article="articleVO" />
+  <!-- 正常模式：content + sidebar 并排 + 评论区独立一行 -->
+  <div v-if="!isReadingMode" class="article-body">
+    <div class="article-flex">
+      <div class="article-content">
+        <div class="article-scroll"></div>
+        <MdEditor
+          :content="articleVO.content ?? ''"
+          :editorId="editorId"
+          :theme="mode"
+          @htmlChanged="mdHtml"
+          @getToc="setTocList"
+        />
+        <ArticleFooter v-if="articleVO.id" :article="articleVO" />
+      </div>
+      <div v-if="sidebarVisible" class="article-sidebar">
+        <ArticleSideBar :article="articleVO" />
+      </div>
+    </div>
+    <div v-if="showComment" class="article-comments">
       <SComment
-        v-if="showComment"
         :serverOn="isOnline"
         :authorId="0"
         :articleId="(articleVO.id as number)"
         :likeType="BlogType.COMMENT"
       />
-    </div>
-    <div v-if="sidebarVisible" class="article-sidebar">
-      <ArticleSideBar :article="articleVO" />
     </div>
   </div>
 
@@ -56,6 +60,7 @@
         :editorId="editorId"
         :theme="mode"
         @htmlChanged="mdHtml"
+        @getToc="setTocList"
       />
       
     </div>
@@ -94,12 +99,20 @@ const articleLoading = ref(false);
 const articleCover = computed(() => articleVO.value.coverPath ?? "");
 
 // ── Composables ──
-const { isReadingMode, setCatalogContext } = useArticleView(".progress");
+const { isReadingMode, setTocContext, setTocList, scrollPercentage } = useArticleView();
+
+// ── 本地：scrollPercentage → DOM 进度条写入 ──
+watch(scrollPercentage, (percent) => {
+  const el: HTMLElement | null = document.querySelector(".progress");
+  if (el) {
+    el.style.width = percent + "%";
+  }
+});
 const { sidebarVisible } = useFloatingMenu();
 
 onMounted(async () => {
   registerArticleItems();
-  setCatalogContext(editorId, scrollElement);
+  setTocContext(editorId, scrollElement);
   await getArticleDetailById();
 });
 
@@ -212,12 +225,11 @@ function mdHtml(htmlText: string) {
   }
 }
 
-// ── content + sidebar 74/26 分栏 ──
-.article-flex {
+// ── body 容器：包裹 content+sidebar 行 + 评论区行 ──
+.article-body {
   display: flex;
-  justify-content: center;
-  align-items: stretch;
-  gap: $gap-desktop;
+  flex-direction: column;
+  align-items: flex-start;
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
@@ -225,13 +237,27 @@ function mdHtml(htmlText: string) {
   box-sizing: border-box;
 
   @include tablet-down($breakpoint: $bp-tablet) {
-    flex-direction: column;
-    gap: $gap-tablet;
     max-width: none;
     padding: $pad-tablet;
   }
   @include mobile {
     padding: $pad-mobile;
+  }
+}
+
+// ── content + sidebar 74/26 分栏 ──
+.article-flex {
+  display: flex;
+  align-items: stretch;
+  gap: $gap-desktop;
+  width: 100%;
+  box-sizing: border-box;
+
+  @include tablet-down($breakpoint: $bp-tablet) {
+    flex-direction: column;
+    gap: $gap-tablet;
+  }
+  @include mobile {
     gap: $gap-mobile;
   }
 }
@@ -247,9 +273,8 @@ function mdHtml(htmlText: string) {
   z-index: 1032;
 }
 
-.article-main {
+.article-content {
   flex: 0 0 $content-ratio;
-  // max-width: $content-max-w;
   min-width: 0;
   box-sizing: border-box;
   display: flex;
@@ -279,6 +304,27 @@ function mdHtml(htmlText: string) {
     flex: none;
     width: 100%;
     max-width: 100%;
+  }
+}
+
+// ── 评论区：独立一行，宽度与内容区一致 ──
+.article-comments {
+  width: $content-ratio;
+  min-width: 0;
+  box-sizing: border-box;
+  background-color: var(--el-fill-color-blank);
+  box-shadow: var(--el-box-shadow-light);
+  border-radius: $border-radius;
+  padding: $padding-md;
+  margin-top: $gap-desktop;
+
+  @include tablet-down($breakpoint: $bp-tablet) {
+    width: 100%;
+    max-width: 100%;
+    margin-top: $gap-tablet;
+  }
+  @include mobile {
+    margin-top: $gap-mobile;
   }
 }
 

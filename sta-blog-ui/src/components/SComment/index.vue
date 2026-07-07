@@ -4,7 +4,7 @@ import { ArrowDown } from "@element-plus/icons-vue";
 import { createComment } from "@/api/AppCommentController";
 import { createMessage } from "@/api/AppMessageController";
 import { BlogType } from "@/const";
-import { useCommentReply } from "@/composables/useCommentReply";
+import { useReply } from "@/composables/useReply";
 import { useUserStore } from "@/store/useUserStore";
 import router from "@/router";
 import CommentCard from "./CommentCard.vue";
@@ -32,7 +32,13 @@ const props = withDefaults(
   }
 );
 
-const { isRootActive, onRefresh } = useCommentReply();
+const { onRefresh } = useReply();
+
+/** 判断某条 root 评论的回复框是否激活（本地计算） */
+function isRootActive(rootId: number): boolean {
+  const { activeRootId } = useReply();
+  return activeRootId.value === rootId;
+}
 
 // ── 状态 ──
 const items = ref<any[]>([]);

@@ -1,7 +1,13 @@
 <script setup lang="ts">
+import { computed, watch } from "vue";
 import { useWindowSize } from "@vueuse/core";
 import { useGalleryComponent } from "@/composables/useGalleryComponent";
 import type { GalleryLayoutMode } from "@/composables/useGalleryComponent";
+import { useDemotion } from "@/composables/useDemotion";
+import { useSearchStore } from "@/store/useSearchStore";
+import { getArticlePage } from "@/api/AppArticleController";
+import { readArticlePage } from "@/utils/file-reader";
+import { scrollToMainShell } from "@/utils/scroll";
 import type { AppArticleRespVO } from "@/types";
 
 // ── 外部数据（可选）──
@@ -9,12 +15,78 @@ const props = defineProps<{
   articles?: AppArticleRespVO[];
 }>();
 
-// ── 数据 ──
+// ── 共享变量 ──
 const { width } = useWindowSize();
-const { cardList: listFromHook, fetchArticles, showMoreResults, hasMore, articlePagination, mode: layoutMode } = useGalleryComponent();
+const {
+  cardList: listFromHook,
+  articlePagination,
+  mode: layoutMode,
+  searchDisplayLimit,
+  setCardList,
+  setArticleTotal,
+  setSearchDisplayLimit,
+} = useGalleryComponent();
+const { requestOrRead } = useDemotion();
+const searchStore = useSearchStore();
 
 const cardList = computed(() => props.articles ?? listFromHook.value);
 const isExternal = computed(() => props.articles !== undefined);
+
+// ── 本地：fetch 计算逻辑 ──
+async function fetchArticles() {
+  if (searchStore.searchResults) {
+    setCardList(searchStore.searchResults.list.slice(0, searchDisplayLimit.value));
+    setArticleTotal(searchStore.searchResults.total);
+    return;
+  }
+  const res: any = await requestOrRead(
+    getArticlePage,
+    readArticlePage,
+    { pageNo: articlePagination.current, pageSize: articlePagination.pageSize }
+  );
+  const pageResult = res.data || res;
+  if (pageResult?.list) {
+    setArticleTotal(pageResult.total);
+    setCardList(pageResult.list);
+  }
+}
+
+function showMoreResults() {
+  if (!searchStore.searchResults) return;
+  setSearchDisplayLimit(searchStore.searchResults.total);
+  setCardList(searchStore.searchResults.list.slice(0, searchStore.searchResults.total));
+}
+
+const hasMore = computed(() =>
+  searchStore.searchResults
+    ? searchStore.searchResults.total > searchDisplayLimit.value
+    : false
+);
+
+// ── 本地：watch 触发 fetch ──
+watch(
+  () => articlePagination.current,
+  async () => {
+    if (searchStore.searchResults) return;
+    await fetchArticles();
+    scrollToMainShell();
+  }
+);
+
+watch(
+  () => searchStore.searchResults,
+  (results) => {
+    if (results) {
+      setSearchDisplayLimit(10);
+      setCardList(results.list.slice(0, 10));
+      setArticleTotal(results.total);
+    } else {
+      setSearchDisplayLimit(10);
+      articlePagination.current = 1;
+      fetchArticles();
+    }
+  }
+);
 
 // ── 布局模式 ──
 const MOBILE_BREAKPOINT = 768;

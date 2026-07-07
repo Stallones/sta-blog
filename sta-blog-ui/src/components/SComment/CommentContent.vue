@@ -6,13 +6,15 @@
  * 支持 heo 表情、代码块、列表等 markdown 内容。
  *
  * Props:
- *   content  - 已解析的 HTML 内容（含 heo 表情 img 标签）
+ *   content  - 原始文本内容（含 [表情名] 语法）
  *   fontSize - 内容字号，默认 16px
  */
 import { MdPreview } from "md-editor-v3";
 import "md-editor-v3/lib/preview.css";
+import { computed } from "vue";
+import { parseHeoEmoji } from "@/utils/emoji-parser";
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     content: string;
     fontSize?: string;
@@ -21,10 +23,13 @@ withDefaults(
     fontSize: "16px",
   }
 );
+
+/** 渲染前解析 HEO 表情 */
+const renderedContent = computed(() => parseHeoEmoji(props.content));
 </script>
 
 <template>
-  <MdPreview class="comment-content" :modelValue="content" />
+  <MdPreview class="comment-content" :modelValue="renderedContent" />
 </template>
 
 <style scoped lang="scss">

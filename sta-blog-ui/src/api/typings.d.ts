@@ -312,6 +312,13 @@ declare namespace API {
     createTime?: string;
   };
 
+  type AppUserUpdatePasswordReqVO = {
+    /** 旧密码 */
+    oldPassword: string;
+    /** 新密码 */
+    newPassword: string;
+  };
+
   type AppUserUpdateReqVO = {
     /** 用户昵称 */
     nickname: string;
@@ -319,6 +326,8 @@ declare namespace API {
     avatar: string;
     /** 邮箱 */
     email?: string;
+    /** 验证码（修改邮箱时必填） */
+    code?: string;
     /** 性别 */
     sex: number;
   };

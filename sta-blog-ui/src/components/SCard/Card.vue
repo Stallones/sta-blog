@@ -10,7 +10,7 @@ const defaultProps = {
   isArrow: false,
   isRotate: false,
   title: "",
-  isCatalog: false,
+  isToc: false,
 };
 
 // ── Variant 预设 ──
@@ -57,7 +57,7 @@ const props = defineProps({
     default: undefined,
   },
   title: String,
-  isCatalog: {
+  isToc: {
     type: Boolean,
     default: undefined,
   },
@@ -86,9 +86,9 @@ function invoke() {
   <div
     v-slide-in
     :class="['card', name ? `${name}-card` : '']"
-    :style="merged.isCatalog ? 'position: relative;z-index: 9' : ''"
+    :style="merged.isToc ? 'position: relative;z-index: 9' : ''"
   >
-    <div class="title" :style="merged.isCatalog ? 'position: sticky;top: 0' : ''">
+    <div class="title" :style="merged.isToc ? 'position: sticky;top: 0' : ''">
       <div class="title_text">
         <SvgIcon
           :class="{ dithering: merged.isDithering, scale: merged.isScale }"

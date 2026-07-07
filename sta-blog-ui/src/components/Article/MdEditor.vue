@@ -4,13 +4,16 @@
     :theme="theme"
     :previewTheme="'default'"
     :modelValue="content"
+    :mdHeadingId="makeHeadingId"
     :onHtmlChanged="onHtmlChanged"
+    :onGetCatalog="onGetCatalogHandler"
   />
 </template>
 
 <script setup lang="ts">
 import { MdPreview } from "md-editor-v3";
 import "md-editor-v3/lib/preview.css";
+import { makeHeadingId, type TocHeading } from "@/composables/useArticleView";
 
 const props = withDefaults(
   defineProps<{
@@ -26,10 +29,20 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   htmlChanged: [htmlText: string];
+  getToc: [list: TocHeading[]];
 }>();
 
 function onHtmlChanged(htmlText: string) {
   emit("htmlChanged", htmlText);
+}
+
+function onGetCatalogHandler(list: { text: string; level: number }[]) {
+  const tocItems: TocHeading[] = list.map((item, index) => ({
+    text: item.text,
+    level: item.level,
+    index: index + 1,
+  }));
+  emit("getToc", tocItems);
 }
 </script>
 

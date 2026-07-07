@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import EmojiPicker from "./EmojiPicker.vue";
-import { useCommentReply } from "@/composables/useCommentReply";
+import { useReply } from "@/composables/useReply";
 
 const props = withDefaults(
   defineProps<{
@@ -13,7 +13,7 @@ const props = withDefaults(
   }
 );
 
-const { activeTarget, replyText, submitReply } = useCommentReply();
+const { activeTarget, replyText, submitReply } = useReply();
 const myInput = ref<HTMLTextAreaElement>();
 
 const placeholder = computed(() => {

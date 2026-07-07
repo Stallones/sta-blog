@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CommentContent from "./CommentContent.vue";
-import { useCommentReply } from "@/composables/useCommentReply";
+import { useReply } from "@/composables/useReply";
 import { dayjs } from "element-plus";
 
 const props = withDefaults(
@@ -19,7 +19,7 @@ const props = withDefaults(
   },
 );
 
-const { openReply, toggleItemLike } = useCommentReply();
+const { openReply, toggleItemLike } = useReply();
 
 /** 是否显示 @mention 前缀 */
 const showMention = computed(

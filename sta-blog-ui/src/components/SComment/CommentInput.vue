@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import EmojiPicker from "./EmojiPicker.vue";
 import CommentContent from "./CommentContent.vue";
-import { heo } from "@/utils/O.o/heo.ts";
+import { parseHeoEmoji } from "@/utils/emoji-parser";
 
 const props = withDefaults(
   defineProps<{
@@ -23,34 +23,7 @@ const preview = ref("");
 const isPreview = ref(false);
 
 function parsingCommentsFunc(value: string): string {
-  const codeBlockRegex = /```[\s\S]*?```/g;
-  const codeBlocks = value.match(codeBlockRegex);
-  let protectedValue = value;
-
-  if (codeBlocks) {
-    codeBlocks.forEach((block, index) => {
-      protectedValue = protectedValue.replace(block, `{{CODE_BLOCK_${index}}}`);
-    });
-  }
-
-  const matches = protectedValue.match(/\[[^\]]+\]/g);
-  if (matches) {
-    for (const match of matches) {
-      if (heo[match]) {
-        protectedValue = protectedValue.replace(
-          match,
-          `<span><img src="${heo[match]}" width="24" height="24" alt="emoji" /></span>`
-        );
-      }
-    }
-  }
-
-  if (codeBlocks) {
-    codeBlocks.forEach((block, index) => {
-      protectedValue = protectedValue.replace(`{{CODE_BLOCK_${index}}}`, block);
-    });
-  }
-  return protectedValue;
+  return parseHeoEmoji(value);
 }
 
 function handleEmojiSelect(emoji: string) {

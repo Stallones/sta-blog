@@ -65,31 +65,36 @@
       <template v-for="btn in alwaysButtons" :key="btn.id">
         <!-- 目录 Popover（仅文章页 ≤900px 显示） -->
         <el-popover
-          v-if="btn.id === 'catalogMob'"
+          v-if="btn.id === 'MobToc'"
           placement="left-start"
           :width="260"
-          :visible="catalogPopoverVisible"
-          :popper-class="'catalog-popper'"
+          :visible="MobTocVisible"
+          :popper-class="'toc-mob-popper'"
           :popper-options="{ strategy: 'fixed' }"
         >
           <template #reference>
             <button
               class="fm-btn fm-btn--mobile-only"
-              :class="{ 'fm-btn--active': catalogPopoverVisible }"
-              @click.stop="toggleCatalogPopover"
+              :class="{ 'fm-btn--active': MobTocVisible }"
+              @click.stop="toggleMobToc"
             >
               <el-icon><Memo /></el-icon>
             </button>
           </template>
 
-          <div class="catalog-picker">
-            <div class="catalog-picker__title">目录</div>
-            <div class="catalog-picker__list move_catalog">
-              <MdCatalog
-                v-if="catalogEditorId && catalogScrollElement"
-                :editorId="catalogEditorId"
-                :scrollElement="catalogScrollElement!"
-              />
+          <div class="toc-mob-picker">
+            <div class="toc-mob-picker__title">目录</div>
+            <div class="toc-mob-picker__list move_toc">
+              <template v-if="tocTree.length > 0">
+                <TocItem
+                  v-for="node in tocTree"
+                  :key="node.id"
+                  :node="node"
+                  activeId=""
+                  @click="handleMobTocClick"
+                />
+              </template>
+              <div v-else class="toc-empty">暂无目录</div>
             </div>
           </div>
         </el-popover>
@@ -136,7 +141,8 @@ import { useFloatingMenu } from "@/composables/useFloatingMenu";
 import { useArticleView } from "@/composables/useArticleView";
 import { useGalleryComponent } from "@/composables/useGalleryComponent";
 import { scrollToTop, scrollToBottom } from "@/utils/scroll";
-import { MdCatalog } from "md-editor-v3";
+import TocItem from "@/components/SCard/TocItem.vue";
+import { useTocTree } from "@/composables/useTocTree";
 import {
   Tools,
   Switch,
@@ -155,10 +161,8 @@ const {
 } = useFloatingMenu();
 
 const {
-  catalogPopoverVisible,
-  toggleCatalogPopover,
-  catalogEditorId,
-  catalogScrollElement,
+  MobTocVisible,
+  toggleMobToc,
 } = useArticleView();
 
 // ── 滚动隐藏：降级为本地 ref（仅 FloatingMenu 内部使用）──
@@ -171,7 +175,19 @@ const colorMode = useColorMode();
 const isDark = computed(() => colorMode.value === "dark");
 
 const { scrollPercentage: readingProgress, toggleReadingMode } = useArticleView();
+const { tree: tocTree } = useTocTree();
 const galleryMode = useGalleryComponent();
+
+// ── 移动端目录点击跳转 ──
+const HEADER_OFFSET = 80;
+function handleMobTocClick(id: string) {
+  const target = document.getElementById(id);
+  if (target) {
+    const y = target.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+    window.scrollTo({ top: y, behavior: "smooth" });
+    MobTocVisible.value = false; // 关闭 popover
+  }
+}
 
 
 // ── 布局浮层状态 ──
@@ -195,31 +211,31 @@ function onClickOutsideLayout(e: MouseEvent) {
   }
 }
 
-/** 点击外部关闭 catalog popover */
-function onClickOutsideCatalog(e: MouseEvent) {
-  if (!catalogPopoverVisible.value) return;
+/** 点击外部关闭 mob toc popover */
+function onClickOutsideMobToc(e: MouseEvent) {
+  if (!MobTocVisible.value) return;
   const target = e.target as HTMLElement;
-  if (!target.closest(".catalog-popper") && !target.closest(".fm-btn--active")) {
-    catalogPopoverVisible.value = false;
+  if (!target.closest(".toc-mob-popper") && !target.closest(".fm-btn--active")) {
+    MobTocVisible.value = false;
   }
 }
 
 /** 窗口宽度 >900px 时关闭 mob 目录 popover */
 const MOBILE_BREAKPOINT = 900;
 function checkMobileBreakpoint() {
-  if (window.innerWidth > MOBILE_BREAKPOINT && catalogPopoverVisible.value) {
-    catalogPopoverVisible.value = false;
+  if (window.innerWidth > MOBILE_BREAKPOINT && MobTocVisible.value) {
+    MobTocVisible.value = false;
   }
 }
 
 onMounted(() => {
   document.addEventListener("click", onClickOutsideLayout, true);
-  document.addEventListener("click", onClickOutsideCatalog, true);
+  document.addEventListener("click", onClickOutsideMobToc, true);
   window.addEventListener("resize", checkMobileBreakpoint);
 });
 onUnmounted(() => {
   document.removeEventListener("click", onClickOutsideLayout, true);
-  document.removeEventListener("click", onClickOutsideCatalog, true);
+  document.removeEventListener("click", onClickOutsideMobToc, true);
   window.removeEventListener("resize", checkMobileBreakpoint);
 });
 
@@ -244,7 +260,7 @@ function checkScrollHide() {
   // 触顶隐藏菜单时，关闭所有 popover
   if (shouldHide) {
     layoutPopoverVisible.value = false;
-    catalogPopoverVisible.value = false;
+    MobTocVisible.value = false;
   }
 }
 
@@ -486,7 +502,7 @@ function handleButtonClick(id: string) {
 }
 
 /* ═══════ 目录浮层 ═══════ */
-.catalog-picker {
+.toc-mob-picker {
   &__title {
     font-size: 0.85rem;
     font-weight: 600;
@@ -503,7 +519,16 @@ function handleButtonClick(id: string) {
   }
 }
 
-.move_catalog {
+.move_toc {
+  text-align: left;
+
+  .toc-empty {
+    text-align: center;
+    color: var(--el-text-color-placeholder);
+    padding: 16px 0;
+    font-size: 0.85rem;
+  }
+
   // 隐藏 h1 目录项文字：标题已在 ArticleHeader 展示
   :deep(.md-editor-catalog > .md-editor-catalog-link > span) {
     display: none;

@@ -9,7 +9,7 @@
     <BloggerInfoCard />
     <ClocksCard />
     <div class="sticky_layout">
-      <DirectoryCard />
+      <TocCard />
 
       <!-- <RandomCard
         :categoryId="article.categoryId.toString()"
@@ -28,7 +28,7 @@ import { ref, onMounted } from "vue";
 import { useDemotion } from "@/composables/useDemotion";
 import type { AppArticleRespVO } from "@/types";
 
-import DirectoryCard from "@/components/SCard/DirectoryCard.vue";
+import TocCard from "@/components/SCard/TocCard.vue";
 
 defineProps<{
   article: AppArticleRespVO;
@@ -55,6 +55,9 @@ onMounted(() => {
   top: 50px;
   position: sticky;
   transition: top 0.3s;
+  // max-height: calc(100vh - 50px);
+  // display: flex;
+  // flex-direction: column;
 }
 
 .sidebar-loading {

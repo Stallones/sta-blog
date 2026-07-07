@@ -1,6 +1,8 @@
+import { ref } from "vue";
 import { toggleLike } from "@/api/AppLikeController";
 import { createComment } from "@/api/AppCommentController";
 import { createMessage } from "@/api/AppMessageController";
+import { ElMessage } from "element-plus";
 
 // ── Types ──
 export interface ReplyTarget {
@@ -21,13 +23,7 @@ const replyText = ref("");
 type RefreshEntry = { cb: () => void; rootId?: number };
 const refreshCallbacks = ref<RefreshEntry[]>([]);
 
-export function useCommentReply() {
-  // ── UI state (readonly for consumers) ──
-
-  function isRootActive(rootId: number): boolean {
-    return activeRootId.value === rootId;
-  }
-
+export function useReply() {
   // ── Reply box control ──
 
   function openReply(rootId: number, target: ReplyTarget) {
@@ -124,7 +120,6 @@ export function useCommentReply() {
     activeRootId,
     activeTarget,
     replyText,
-    isRootActive,
     openReply,
     closeReply,
     toggleItemLike,

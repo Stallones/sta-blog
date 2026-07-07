@@ -43,7 +43,7 @@ export function registerArticleItems() {
   registerItem({ id: "readingMode", global: false, order: -20 });
   registerItem({ id: "toComment", global: false, order: -10 });
   // 目录抽屉按钮（always 列表，仅文章页注册，≤900px 时显示）
-  registerItem({ id: "catalogMob", global: true, order: 110 });
+  registerItem({ id: "MobToc", global: true, order: 110 });
 }
 
 /**
@@ -54,5 +54,5 @@ export function unregisterArticleItems() {
 
   unregisterItem("readingMode");
   unregisterItem("toComment");
-  unregisterItem("catalogMob");
+  unregisterItem("MobToc");
 }

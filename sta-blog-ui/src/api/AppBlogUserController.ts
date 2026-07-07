@@ -27,7 +27,7 @@ export async function updateUser(
 
 /** 修改密码 PUT /app-api/blog/user/update-password */
 export async function updatePassword(
-  body: { oldPassword: string; newPassword: string },
+  body: API.AppUserUpdatePasswordReqVO,
   options?: { [key: string]: any }
 ) {
   return request<boolean>("/app-api/blog/user/update-password", {

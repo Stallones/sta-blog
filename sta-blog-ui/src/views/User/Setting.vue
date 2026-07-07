@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElMessage, FormRules, UploadInstance } from "element-plus";
+import { ElMessage, ElMessageBox, FormRules, UploadInstance } from "element-plus";
 import {
   Plus,
   User,
@@ -255,6 +255,11 @@ async function handlePasswordChange() {
   passwordFormRef.value.validate(async (isValid: boolean) => {
     if (!isValid) return;
     try {
+      await ElMessageBox.confirm(
+        "修改密码后需要重新登录，确定要继续吗？",
+        "确认修改密码",
+        { confirmButtonText: "确定", cancelButtonText: "取消", type: "warning" }
+      );
       const resp = await updatePassword({
         oldPassword: passwordForm.oldPassword,
         newPassword: passwordForm.newPassword,
@@ -266,10 +271,13 @@ async function handlePasswordChange() {
         passwordForm.confirmPassword = "";
         userStore.clearUser();
         ElMessage.success("密码已修改，请重新登录");
-        router.push("/user/login");
+        router.push({ path: "/user/login", query: { redirect: "/" } });
       }
     } catch (e: any) {
-      ElMessage.error(e?.msg || "密码修改失败");
+      // ElMessageBox.confirm 取消时 catch，不做任何处理
+      if (e !== "cancel" && e !== "close") {
+        ElMessage.error(e?.msg || "密码修改失败");
+      }
     }
   });
 }

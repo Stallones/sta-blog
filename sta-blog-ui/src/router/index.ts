@@ -1,6 +1,7 @@
 // 使用 vue-router 配置路由
 import { createRouter, createWebHistory } from "vue-router";
 import { ref } from "vue";
+import { GET_TOKEN } from "@/utils/auth";
 import { constantRouter } from "@/router/routers.ts";
 
 /** 记录进入 /user/* 前的来源路径（用于返回按钮） */
@@ -16,6 +17,12 @@ router.beforeEach((to, from, next) => {
   // 进入 /user/* 页面时，记录来源路径（用于返回按钮）
   if (to.path.startsWith("/user/") && !from.path.startsWith("/user/")) {
     beforeLoginPath.value = from.fullPath;
+  }
+
+  // 需要登录的页面：未登录则重定向到首页
+  if (to.meta.requiresAuth && !GET_TOKEN()) {
+    next("/");
+    return;
   }
 
   const toName = String(to.name);

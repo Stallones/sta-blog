@@ -96,6 +96,7 @@ export const constantRouter = [
           subtitle: "Setting",
           sidebarType: "default",
           showFooter: true,
+          requiresAuth: true,
         },
       },
     ],
@@ -148,21 +149,21 @@ export const constantRouter = [
           },
         ],
       },
-      // ── 树洞 ──
+      // ── 树洞 空──
       {
         path: "tree-hole",
         component: () => import("@/views/TreeHole.vue"),
         name: "treeHole",
         meta: { title: "树洞", showNav: true },
       },
-      // ── 音乐 ──
+      // ── 音乐 空──
       {
         path: "music",
         component: () => import("@/views/Music/index.vue"),
         name: "music",
         meta: { title: "音乐" },
       },
-      // ── 相册 ──
+      // ── 相册 空──
       {
         path: "photo",
         component: () => import("@/views/Photo/index.vue"),

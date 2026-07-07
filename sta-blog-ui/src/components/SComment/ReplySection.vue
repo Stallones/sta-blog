@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ReplyItem from "./ReplyItem.vue";
-import { useCommentReply } from "@/composables/useCommentReply";
+import { useReply } from "@/composables/useReply";
 
 type ReplyItemType = API.AppCommentRespVO & API.AppMessageRespVO;
 
@@ -20,7 +20,7 @@ const props = withDefaults(
   }
 );
 
-const { onRefresh } = useCommentReply();
+const { onRefresh } = useReply();
 
 // ── 状态 ──
 const expanded = ref(false);
