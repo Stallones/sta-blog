@@ -62,7 +62,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
             preprocessorOptions: {
                 scss: {
                     javascriptEnabled: true,
-                    additionalData: '@use "src/styles/variable" as *;',
+                    additionalData: `@use "src/styles/variable" as *; @use "src/styles/glass" as *;`,
                     silenceDeprecations: ['legacy-js-api'],
                 },
             },

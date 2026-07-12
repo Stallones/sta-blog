@@ -34,12 +34,9 @@ defineProps<{ article: AppArticleRespVO }>();
 
 <style scoped lang="scss">
 .o-card {
+  @include glass-card;
   position: relative;
   height: 15rem;
-  overflow: hidden;
-  border-radius: $border-radius;
-  background-color: var(--el-fill-color-blank);
-  box-shadow: var(--el-box-shadow-light);
   cursor: pointer;
   margin-bottom: $margin-bottom;
 }
@@ -83,7 +80,7 @@ defineProps<{ article: AppArticleRespVO }>();
   line-height: 1.35;
   /* 文字阴影保证可读性 */
   text-shadow: 0 1px 4px rgba(0,0,0,.45);
-  color: var(--mao-overlay-text);
+  color: var(--mao-overlay-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -94,7 +91,7 @@ defineProps<{ article: AppArticleRespVO }>();
   align-items: center;
   gap: 0.35rem;
   font-size: 0.8rem;
-  color: var(--mao-overlay-text-placeholder);
+  color: var(--mao-overlay-text-secondary);
   flex-wrap: wrap;
 
   .g-divider {
@@ -107,7 +104,7 @@ defineProps<{ article: AppArticleRespVO }>();
 .g-desc {
   font-size: 0.84rem;
   line-height: 1.4;
-  color: var(--mao-overlay-text-secondary);
+  color: var(--mao-overlay-text-regular);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

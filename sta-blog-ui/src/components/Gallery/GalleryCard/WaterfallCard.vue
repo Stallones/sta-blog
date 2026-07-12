@@ -23,7 +23,9 @@ defineProps<{
           <div class="g-title w-o-title">{{ article.title }}</div>
           <div class="g-tags w-o-tags">
             <el-icon><Calendar /></el-icon>
-            <span> 发布于 {{  dayjs(article.createTime).format("YYYY-MM-DD") }} </span>
+            <span>
+              发布于 {{ dayjs(article.createTime).format("YYYY-MM-DD") }}
+            </span>
             <el-divider direction="vertical" class="g-divider" />
             <el-icon><Folder /></el-icon>
             <span> {{ article.categoryName }} </span>
@@ -57,28 +59,27 @@ defineProps<{
 <style scoped lang="scss">
 $bp: 768px;
 
+/* ═══════ 卡片容器 ═══════ */
 .w-card {
+  @include glass-card;
   break-inside: avoid;
-  overflow: hidden;
-  border-radius: $border-radius;
-  background-color: var(--el-fill-color-blank);
-  box-shadow: var(--el-box-shadow-light);
   cursor: pointer;
   margin-bottom: $margin-bottom;
   display: inline-block;
   width: 100%;
 
-  @media (max-width: $bp) { display: flex; flex-direction: column; }
+  @media (max-width: $bp) {
+    display: flex;
+    flex-direction: column;
+  }
 
   &:hover .g-img { transform: scale(1.04); }
 }
 
-/* ── 统一封面 ── */
+/* ═══════ 封面 ═══════ */
 .g-cover {
   position: relative;
   width: 100%;
-
-  .w-card--overlay & { aspect-ratio: 4/3; }
 }
 
 .g-img {
@@ -87,23 +88,25 @@ $bp: 768px;
   display: block;
   transition: transform 0.35s ease;
 
-  .w-card:not(.w-card--overlay) & { max-height: 170px; }
+  .w-card:not(.w-card--overlay) & {
+    max-height: 170px;
+  }
 }
 
-/* ── Overlay 遮罩 ── */
+/* ═══════ Overlay 遮罩 ═══════ */
 .w-overlay {
   position: absolute;
   inset: 0;
   z-index: 1;
   background: linear-gradient(
     to top,
-    rgba(0,0,0,.7) 0%,
-    rgba(0,0,0,.2) 50%,
-    rgba(0,0,0,.08) 100%
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.08) 100%
   );
 }
 
-/* ── Overlay 浮层（上下居中）── */
+/* ═══════ Overlay 浮层（信息压于封面上，居中） ═══════ */
 .w-overlay-body {
   position: absolute;
   z-index: 2;
@@ -111,54 +114,83 @@ $bp: 768px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0.9rem 1.1rem;
-  color: #fff;
+  padding: 3rem;
+  gap: 1rem;
+
+  /* 层叠卡（overlay）title/tags/desc — 固定白色系 */
+  .g-title {
+    color: var(--mao-overlay-text-primary);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  }
+
+  .g-tags {
+    color: var(--mao-overlay-text-secondary);
+    .g-divider {
+      margin: 0 5px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  .g-desc {
+    color: var(--mao-overlay-text-regular);
+  }
 }
 
-.w-o-title { text-shadow: 0 1px 3px rgba(0,0,0,.5); }
-
-.w-o-tags { color: rgba(255,255,255,.82);
-  .g-divider { margin: 0 5px; color: rgba(255,255,255,.5); }
+/* ═══════ 非 overlay 内容区（封面上 + 信息下） ═══════ */
+.g-body:not(.w-overlay-body) {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
-.w-o-desc { color: rgba(255,255,255,.76); }
 
-/* ── 非 overlay 内容区 ── */
-.g-body:not(.w-overlay-body) { padding: 0.7rem 1rem; display:flex; flex-direction:column; gap:0.2rem; }
+/* ═══════ 垂直卡（非 overlay）：title/tags/desc ═══════ */
+.w-card:not(.w-card--overlay) {
+  .g-title {
+    color: var(--el-text-color-primary);
+  }
 
-/* ═══════ 统一元素样式 ═══════ */
+  .g-tags {
+    color: var(--el-text-color-secondary);
+    .g-divider {
+      border-left: 1px var(--el-text-color-secondary) var(--el-border-style);
+    }
+  }
+
+  .g-desc {
+    color: var(--el-text-color-regular);
+  }
+}
+
+/* ═══════ title/tags/desc 通用样式（尺寸、布局等） ═══════ */
 .g-title {
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--el-text-color-primary);
   line-height: 1.35;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
-  &:hover { color: var(--mao-accent); }
+  &:hover {
+    color: var(--mao-accent);
+  }
 }
-
-.w-card--overlay .g-title { color: #fff; }
 
 .g-tags {
   display: flex;
   align-items: center;
   gap: 0.32rem;
   font-size: 0.76rem;
-  color: var(--el-text-color-secondary);
   flex-wrap: wrap;
 
   .g-divider {
     margin: 0 5px;
-    border-left: 1px var(--el-text-color-secondary) var(--el-border-style);
   }
-  .g-tag-item { white-space:nowrap; }
 }
 
 .g-desc {
   font-size: 0.8rem;
   line-height: 1.4;
-  color: var(--el-text-color-secondary);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

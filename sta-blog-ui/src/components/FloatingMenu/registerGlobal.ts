@@ -15,6 +15,9 @@ export function registerGlobalItems() {
   // 亮暗色切换
   registerItem({ id: "colorMode", global: true, order: 200 });
 
+  // 玻璃拟态开关
+  registerItem({ id: "glassMode", global: true, order: 210 });
+
   // 百分比 + ToTop 合并按钮 — 最底部
   registerItem({ id: "scrollPercentage", global: true, order: 300 });
 

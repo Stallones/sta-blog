@@ -9,8 +9,8 @@
         <!-- <GradientText :text=" useWebsite?.webInfo?.headerNotification || '公告'" :mode="'static'"/> -->
       </div>
       <!-- 搜索：上层，可展开覆盖公告 -->
-      <div class="hc-search">
-        <SearchByPagefind v-if="!isOnline" />
+      <div class="hc-search" v-if="!isOnline">
+        <SearchByPagefind  />
       </div>
       <!-- <RecommendArticle /> -->
     </div>
@@ -60,41 +60,29 @@ onUnmounted(() => {
 }
 
 .hc-notice {
+  @include glass-card;
+  border-radius: 50px; // 胶囊形覆盖 mixin 默认 12px
   display: flex;
   height: 50px;
   padding: 0 16px;
-  border-radius: 50px;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: var(--el-fill-color-blank);
-  // border: 1px solid var(--el-border-color-light);
   transition: all 0.3s ease;
-  box-shadow: var(--el-box-shadow-light);
-  // 底层：被搜索展开后遮挡
   width: 100%;
 }
 
 .hc-search {
+  @include glass-card;
+  border-radius: 50px;
   display: flex;
   height: 50px;
-  // padding: 0 16px;
-  border-radius: 50px;
   align-items: center;
-  // justify-content: center;
-  // gap: 8px;
-  // background: var(--el-fill-color-blank);
-  // border: 1px solid var(--el-border-color-light);
   transition: all 0.3s ease;
-  // box-shadow: var(--el-box-shadow-light);
-  // 底层：被搜索展开后遮挡
-  // width: 50px;
-
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 2; // 叠在公告之上
-  // padding: 0;
+  z-index: 2;
   width: 100%;
 }
 </style>

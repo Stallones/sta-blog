@@ -149,10 +149,8 @@ $year-dot-size: 8px;
 
 .archive-page {
   width: 100%;
-  box-shadow: var(--el-box-shadow-light);
+  @include glass-card;
   padding: $padding-lg $padding-lg $padding-sm;
-  border-radius: 8px;
-  background: var(--el-fill-color-blank);
 }
 
 // ===== 标题 =====

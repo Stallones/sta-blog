@@ -116,10 +116,16 @@
             ><tools
           /></el-icon>
 
-          <!-- 亮暗切换 -->
+          <!-- 亮/暗切换 -->
           <svg-icon
             v-else-if="btn.id === 'colorMode'"
             :name="isDark ? 'color_mode_moon' : 'color_mode_sun'"
+          />
+          <!-- 实体/玻璃切换 -->
+          <svg-icon
+            v-else-if="btn.id === 'glassMode'"
+            :name="glassEnabled ? 'windows_icon' : 'windows_icon'"
+            :style="{ opacity: glassEnabled ? 1 : 0.4 }"
           />
           <!-- 百分比 + ToTop 合并 -->
           <template v-else-if="btn.id === 'scrollPercentage'">
@@ -140,6 +146,7 @@ import { useColorMode } from "@vueuse/core";
 import { useFloatingMenu } from "@/composables/useFloatingMenu";
 import { useArticleView } from "@/composables/useArticleView";
 import { useGalleryComponent } from "@/composables/useGalleryComponent";
+import { useGlassMode } from "@/composables/useGlassMode";
 import { scrollToTop, scrollToBottom } from "@/utils/scroll";
 import TocItem from "@/components/SCard/TocItem.vue";
 import { useTocTree } from "@/composables/useTocTree";
@@ -173,6 +180,8 @@ function setHiddenByScroll(val: boolean) {
 
 const colorMode = useColorMode();
 const isDark = computed(() => colorMode.value === "dark");
+
+const { glassEnabled, toggleGlass } = useGlassMode();
 
 const { scrollPercentage: readingProgress, toggleReadingMode } = useArticleView();
 const { tree: tocTree } = useTocTree();
@@ -308,6 +317,9 @@ function handleButtonClick(id: string) {
       break;
     case "colorMode":
       toggleColorMode();
+      break;
+    case "glassMode":
+      toggleGlass();
       break;
     case "readingMode":
       toggleReadingMode();

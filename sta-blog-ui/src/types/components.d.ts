@@ -22,8 +22,6 @@ declare module 'vue' {
     CommentInput: typeof import('./../components/SComment/CommentInput.vue')['default']
     DailySoupCard: typeof import('./../components/SCard/DailySoupCard.vue')['default']
     DevToolsBlocker: typeof import('./../components/DevToolsBlocker.vue')['default']
-    DirectoryCard: typeof import('./../components/SCard/DirectoryCard.vue')['default']
-    DirectoryCardMob: typeof import('./../components/SCard/DirectoryCardMob.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
@@ -51,8 +49,6 @@ declare module 'vue' {
     ElRow: typeof import('element-plus/es')['ElRow']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSkeleton: typeof import('element-plus/es')['ElSkeleton']
-    ElStep: typeof import('element-plus/es')['ElStep']
-    ElSteps: typeof import('element-plus/es')['ElSteps']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElTag: typeof import('element-plus/es')['ElTag']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
@@ -61,6 +57,7 @@ declare module 'vue' {
     FloatingMenu: typeof import('./../components/FloatingMenu/index.vue')['default']
     Footer: typeof import('./../components/Footer/index.vue')['default']
     Gallery: typeof import('./../components/Gallery/index.vue')['default']
+    GlassBanner: typeof import('./../components/GlassBanner.vue')['default']
     GlitchText: typeof import('./../components/TextTech/GlitchText.vue')['default']
     GradientText: typeof import('./../components/TextTech/GradientText.vue')['default']
     Header: typeof import('./../components/Header/index.vue')['default']
@@ -99,8 +96,5 @@ declare module 'vue' {
     VerticalCard: typeof import('./../components/Gallery/GalleryCard/VerticalCard.vue')['default']
     WaterfallCard: typeof import('./../components/Gallery/GalleryCard/WaterfallCard.vue')['default']
     WebsiteCard: typeof import('./../components/SCard/WebsiteCard.vue')['default']
-  }
-  export interface ComponentCustomProperties {
-    vInfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']
   }
 }

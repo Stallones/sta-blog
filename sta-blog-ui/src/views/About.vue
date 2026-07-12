@@ -104,9 +104,13 @@ $bp-xl: 1280px;
   align-items: center;
   width: 40%;
   height: 100%;
+  @include glass-card;
+  padding: $padding-lg;
+  box-sizing: border-box;
 
   @media (max-width: $bp-lg) {
     width: 100%;
+    height: auto;
   }
 }
 
@@ -146,9 +150,17 @@ $bp-xl: 1280px;
   align-items: center;
   width: 60%;
   height: 100%;
+  @include glass-card;
+  padding: $padding-lg;
+  box-sizing: border-box;
 
   @media (min-width: $bp-xl) {
     width: 40%;
+  }
+
+  @media (max-width: $bp-lg) {
+    width: 100%;
+    height: auto;
   }
 }
 
@@ -235,9 +247,7 @@ $bp-xl: 1280px;
   align-items: center;
   width: 120px;
   height: 120px;
-  border-radius: 1rem;
-  background-color: var(--el-fill-color-blank);
-  filter: drop-shadow(0 10px 15px hsla(0, 0%, 0%, 0.1));
+  @include glass-card;
 }
 
 /* ── Glitch 文字效果 ── */

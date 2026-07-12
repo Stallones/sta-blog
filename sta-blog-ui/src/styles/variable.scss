@@ -9,6 +9,16 @@ $padding-sm: 15px;
 $padding-md: 20px;
 $padding-lg: 30px;
 
+// ── 玻璃拟态 SCSS 变量（供 mixin 使用，不输出 CSS）──
+$glass-blur: 16px;
+$glass-radius: 12px;       // 从 8px 加大到 12px，匹配设计图柔和圆角
+$glass-radius-sm: 10px;    // 输入框、次按钮
+$glass-radius-pill: 24px;  // 胶囊按钮
+$glass-transition: 0.3s ease;
+
 // 自定义主题颜色
+
+
+
 
 

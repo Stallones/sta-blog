@@ -69,13 +69,10 @@ defineProps<{
 $bp: 768px;
 
 .h-card {
+  @include glass-card;
   display: flex;
   flex-direction: column;
   height: 200px;
-  overflow: hidden;
-  border-radius: $border-radius;
-  background-color: var(--el-fill-color-blank);
-  box-shadow: var(--el-box-shadow-light);
   cursor: pointer;
   margin-bottom: $margin-bottom;
 
@@ -135,7 +132,7 @@ $bp: 768px;
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  padding: 0.65rem 1rem;
+  padding: 0.65rem 1rem;  
   gap: 1rem;
 
   @media (min-width: $bp) {
@@ -163,8 +160,8 @@ $bp: 768px;
   align-items: center;
   gap: 0.35rem;
   font-size: 0.78rem;
-  color: var(--el-text-color-secondary);
   flex-wrap: wrap;
+  color: var(--el-text-color-secondary);
 
   .g-divider {
     margin: 0 5px;
@@ -195,8 +192,8 @@ $bp: 768px;
 .g-desc {
   font-size: 0.82rem;
   line-height: 1.4;
-  color: var(--el-text-color-secondary);
   display: -webkit-box;
+  color: var(--el-text-color-regular);
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;

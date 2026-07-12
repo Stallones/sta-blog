@@ -73,14 +73,12 @@ onMounted(fetchData);
 }
 
 .common-header {
+  @include glass-card;
   margin-bottom: 20px;
   display: flex;
   align-items: baseline;
   gap: 1rem;
-  box-shadow: var(--el-box-shadow-light);
   padding: 15px;
-  border-radius: 8px;
-  background-color: var(--el-fill-color-blank);
 
   .common-title {
     font-size: 1.5rem;

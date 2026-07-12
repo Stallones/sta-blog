@@ -35,9 +35,7 @@ const { isOnline } = useDemotion();
 <style scoped lang="scss">
 .message-page {
   width: 100%;
-  background: var(--el-fill-color-blank);
-  border-radius: $border-radius;
-  box-shadow: var(--el-box-shadow-light);
+  @include glass-card;
   padding: 2.5rem;
 }
 

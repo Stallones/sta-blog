@@ -221,7 +221,9 @@ function mdHtml(htmlText: string) {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--mao-cover-shadow);
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 }
 
@@ -280,9 +282,7 @@ function mdHtml(htmlText: string) {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background-color: var(--el-fill-color-blank);
-  box-shadow: var(--el-box-shadow-light);
-  border-radius: $border-radius;
+  @include glass-card;
   padding: $padding-md;
 
   @include tablet-down($breakpoint: $bp-tablet) {
@@ -330,9 +330,7 @@ function mdHtml(htmlText: string) {
 
 // ── 阅读模式 ──
 .reading-mode {
-  background-color: var(--el-fill-color-blank);
-  border-radius: $border-radius;
-  box-shadow: var(--el-box-shadow-light);
+  @include solid-card;
   flex: 1;
   margin: 0 auto;
   max-width: $layout-max-w;

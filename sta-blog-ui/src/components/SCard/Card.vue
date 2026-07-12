@@ -130,13 +130,9 @@ function invoke() {
 
 <style scoped lang="scss">
 .card {
-  background-color: var(--el-fill-color-blank);
-  border-radius: $border-radius;
+  @include glass-card;
   margin-bottom: $margin-bottom;
   padding: $padding-md;
-  // 添加阴影
-  box-shadow: var(--el-box-shadow-light);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 15px;

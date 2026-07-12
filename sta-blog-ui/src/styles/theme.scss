@@ -27,9 +27,10 @@
   /* 橙色（亮色模式备用，如标签高亮） */
   
   /* ═══ [MAO-KEPT] 项目特有效果，el 无对应变量 ═══ */
-  --mao-overlay-text: hsl(0, 0%, 100%);
-  --mao-overlay-text-secondary: hsl(0, 0%, 85%);
-  --mao-overlay-text-placeholder: hsl(0, 0%, 80%);
+  --mao-overlay-text-primary: hsl(0, 0%, 100%);
+  --mao-overlay-text-regular: hsl(0, 0%, 90%);
+  --mao-overlay-text-secondary: hsl(0, 0%, 80%);
+  --mao-overlay-text-placeholder: hsl(0, 0%, 75%);
   
   /* [MAO-KEPT] Markdown 预览 */
   --mao-md-preview-quote-bg: hsl(210, 14%, 96%);
@@ -53,6 +54,11 @@
     hsl(260, 60%, 97%)
   );
   --mao-context-divider: hsl(270, 100%, 94%);
+
+  /* ═══ 纯色实体变量（非玻璃模式）═══ */
+  --solid-bg: #ffffff;
+  --solid-border: rgba(0,0,0,0.06);
+  --solid-shadow: 0 2px 8px rgba(0,0,0,0.05);
 
   /* ═══ 音乐播放器 — 保留旧变量名兼容 ═══ */
   --primary: var(--mao-accent);
@@ -113,6 +119,11 @@ html.dark {
   );
   --mao-context-divider: hsl(258, 27%, 25%);
 
+  /* ═══ 纯色实体变量（暗色非玻璃模式）═══ */
+  --solid-bg: hsl(0 0% 8%);;
+  --solid-border: rgba(255,255,255,0.06);
+  --solid-shadow: 0 2px 8px rgba(0,0,0,0.3);
+
   /* ═══ 音乐播放器 ═══ */
   --primary: hsl(210, 100%, 67%); /* #58a6ff */
   --router-color: hsl(215, 15%, 20%); /* #30363d */
@@ -127,6 +138,67 @@ html.dark {
   --comment-grey: hsl(210, 10%, 55%); /* #8b949e */
   --border-color: hsl(210, 100%, 67%); /* #58a6ff */
   --hr-border: hsl(215, 15%, 20%); /* #30363d */
+}
+
+/* ────────────────────────────────────────────
+   非玻璃模式：玻璃变量回退到纯色等效值
+   （让 glass-card mixin 在纯色模式下也能正常渲染）
+   ──────────────────────────────────────────── */
+html:not(.glass) {
+  --glass-bg: var(--solid-bg);
+  --glass-border: var(--solid-border);
+  --glass-shadow: var(--solid-shadow);
+  --glass-highlight: transparent;
+  --glass-inner-bg: var(--solid-bg);
+  --glass-blur-filter: none;
+  --accent-primary: var(--mao-accent);
+  --accent-gradient: var(--mao-accent-gradient);
+  --accent-glow: transparent;
+  --accent-hover: var(--mao-accent);
+  --text-primary: var(--el-text-color-primary);
+  --text-regular: var(--el-text-color-regular);
+  --text-secondary: var(--el-text-color-secondary);
+  --text-placeholder: var(--el-text-color-placeholder);
+}
+
+/* ────────────────────────────────────────────
+   玻璃模式 — 亮色
+   ──────────────────────────────────────────── */
+html.glass.light {
+  --glass-bg: rgba(255,255,255,0.7);
+  --glass-border: rgba(0,0,0,0.08);
+  --glass-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  --glass-highlight: rgba(255,255,255,0.5);
+  --glass-inner-bg: rgba(255,255,255,0.35);
+  --glass-blur-filter: blur(16px);
+  --accent-primary: #3b82f6;
+  --accent-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  --accent-glow: rgba(59,130,246,0.3);
+  --accent-hover: #2563eb;
+  --text-primary: rgba(0,0,0,0.9);
+  --text-regular: rgba(0,0,0,0.7);
+  --text-secondary: rgba(0,0,0,0.45);
+  --text-placeholder: rgba(0,0,0,0.3);
+}
+
+/* ────────────────────────────────────────────
+   玻璃模式 — 暗色（设计图基准）
+   ──────────────────────────────────────────── */
+html.glass.dark {
+  --glass-bg: rgba(15,15,30,0.65);
+  --glass-border: rgba(255,255,255,0.08);
+  --glass-shadow: 0 12px 48px rgba(0,0,0,0.5), 0 0 80px rgba(60,120,255,0.06);
+  --glass-highlight: rgba(255,255,255,0.12);
+  --glass-inner-bg: rgba(255,255,255,0.06);
+  --glass-blur-filter: blur(16px);
+  --accent-primary: #4facfe;
+  --accent-gradient: linear-gradient(135deg, #4facfe, #a78bfa);
+  --accent-glow: rgba(79,172,254,0.35);
+  --accent-hover: #6dd5fe;
+  --text-primary: rgba(255,255,255,1.0);
+  --text-regular: rgba(255,255,255,0.85);
+  --text-secondary: rgba(255,255,255,0.5);
+  --text-placeholder: rgba(255,255,255,0.3);
 }
 
 /* ── 全局字体 & 基础 ── */

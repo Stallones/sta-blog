@@ -39,12 +39,9 @@ defineProps<{ article: AppArticleRespVO }>();
 $bp: 768px;
 
 .v-card {
+  @include glass-card;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  border-radius: $border-radius;
-  background-color: var(--el-fill-color-blank);
-  box-shadow: var(--el-box-shadow-light);
   cursor: pointer;
   margin-bottom: $margin-bottom;
 
@@ -116,7 +113,7 @@ $bp: 768px;
 .g-desc {
   font-size: 0.82rem;
   line-height: 1.4;
-  color: var(--el-text-color-secondary);
+  color: var(--el-text-color-regular);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

@@ -62,9 +62,7 @@ onMounted(async () => {
 <style scoped lang="scss">
 .tags-page {
   width: 100%;
-  background: var(--el-fill-color-blank);
-  border-radius: $border-radius;
-  box-shadow: var(--el-box-shadow-light);
+  @include glass-card;
 }
 
 .tag-cloud {

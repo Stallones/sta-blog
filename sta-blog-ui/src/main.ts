@@ -20,7 +20,11 @@ import pinia from '@/store'
 import vSlideIn from '@/directives/vSlideIn.ts'
 import vLazy from '@/directives/vLazy.ts'
 import vViewRequest from '@/directives/vViewRequest.ts'
+// 玻璃拟态模式
+import { useGlassMode } from '@/composables/useGlassMode'
 
+// 页面加载时即初始化玻璃模式（在 app mount 前）
+useGlassMode().initGlassMode()
 
 // 获取应用实例对象
 const app = createApp(App)

@@ -1,7 +1,17 @@
 /* ═══════════════════════════════════
    Element Plus 暗色模式覆盖
    — 从 theme.scss 分离，独立管理 el 组件变量
+
+   玻璃模式追加：html.glass 时 el 填充色 → glass-bg
    ═══════════════════════════════════ */
+
+/* 玻璃模式下 Element Plus 组件重指向半透明背景 */
+html.glass {
+  --el-fill-color-blank: var(--glass-bg);
+  --el-bg-color-overlay: var(--glass-bg);
+  --el-dialog-bg-color: var(--glass-bg);
+  --el-box-shadow-light: var(--glass-shadow);
+}
 
 html.dark {
   // 边框

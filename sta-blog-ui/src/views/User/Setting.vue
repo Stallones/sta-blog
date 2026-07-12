@@ -515,11 +515,9 @@ $bp-md: 768px;
 }
 .panel {
   width: 100%;
+  @include glass-card;
   padding: 2rem;
   margin-bottom: 1rem;
-  border-radius: 10px;
-  background-color: var(--el-bg-color);
-  box-shadow: var(--el-box-shadow-light);
 }
 .panel--email {
   margin-bottom: 1rem;

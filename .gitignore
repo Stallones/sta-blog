@@ -22,3 +22,4 @@ sta-blog-ui/visualizer.html
 sta-blog-ui/visualizer.html
 sta-blog-ui/.env.development
 .gitignore
+*.log
