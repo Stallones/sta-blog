@@ -1,0 +1,92 @@
+/* ══════════════════════════════════════════════════════════════
+   Material 层 — 表面材质 Token
+
+   材质 Token 只随 html.glass 切换，实现实体/玻璃正交。
+   组件引用 --surface-* 即可自动获得当前材质的外观。
+
+   四种模式：
+   - :root            → 亮色 + 实体
+   - html.dark        → 暗色 + 实体
+   - html.glass.light → 亮色 + 玻璃
+   - html.glass.dark  → 暗色 + 玻璃
+   ══════════════════════════════════════════════════════════════ */
+
+/* ─────────── 实体模式 — 亮色（默认） ─────────── */
+:root {
+  --surface-bg:        var(--color-white);
+  --surface-border:    var(--color-black-a08);
+  --surface-shadow:    0 2px 8px var(--color-black-a05);
+  --surface-highlight: transparent;
+  --surface-inner-bg:  var(--color-white);
+  --surface-blur:      none;
+
+  /* ─── 向下兼容旧命名 ─── */
+  --glass-bg:           var(--surface-bg);
+  --glass-border:       var(--surface-border);
+  --glass-shadow:       var(--surface-shadow);
+  --glass-highlight:    var(--surface-highlight);
+  --glass-inner-bg:     var(--surface-inner-bg);
+  --glass-blur-filter:  var(--surface-blur);
+  --solid-bg:           var(--surface-bg);
+  --solid-border:       var(--surface-border);
+  --solid-shadow:       var(--surface-shadow);
+}
+
+/* ─────────── 实体模式 — 暗色 ─────────── */
+html.dark {
+  --surface-bg:        hsl(0, 0%, 12%);
+  --surface-border:    hsla(0, 0%, 100%, 0.06);
+  --surface-shadow:    0 2px 8px hsla(0, 0%, 0%, 0.3);
+  --surface-highlight: transparent;
+  --surface-inner-bg:  hsl(0, 0%, 10%);
+  --surface-blur:      none;
+
+  /* 兼容 */
+  --glass-bg:           var(--surface-bg);
+  --glass-border:       var(--surface-border);
+  --glass-shadow:       var(--surface-shadow);
+  --glass-highlight:    var(--surface-highlight);
+  --glass-inner-bg:     var(--surface-inner-bg);
+  --glass-blur-filter:  var(--surface-blur);
+  --solid-bg:           var(--surface-bg);
+  --solid-border:       var(--surface-border);
+  --solid-shadow:       var(--surface-shadow);
+}
+
+/* ─────────── 玻璃模式 — 亮色 ─────────── */
+html.glass.light {
+  --surface-bg:        hsla(0, 0%, 100%, 0.7);
+  --surface-border:    hsla(0, 0%, 0%, 0.08);
+  --surface-shadow:    0 8px 32px hsla(0, 0%, 0%, 0.08);
+  --surface-highlight: hsla(0, 0%, 100%, 0.5);
+  --surface-inner-bg:  hsla(0, 0%, 100%, 0.35);
+  --surface-blur:      blur(10px);
+
+  /* 兼容 */
+  --glass-bg:           var(--surface-bg);
+  --glass-border:       var(--surface-border);
+  --glass-shadow:       var(--surface-shadow);
+  --glass-highlight:    var(--surface-highlight);
+  --glass-inner-bg:     var(--surface-inner-bg);
+  --glass-blur-filter:  var(--surface-blur);
+}
+
+/* ─────────── 玻璃模式 — 暗色 ─────────── */
+html.glass.dark {
+//   --surface-bg:        hsla(240, 33%, 9%, 0.7);
+  --surface-bg:        hsla(0, 0%, 12%, 0.7);
+  --surface-border:    hsla(0, 0%, 100%, 0.08);
+  --surface-shadow:    0 12px 48px hsla(0, 0%, 0%, 0.5),
+                       0 0 80px hsla(222, 76%, 62%, 0.06);
+  --surface-highlight: hsla(0, 0%, 100%, 0.12);
+  --surface-inner-bg:  hsla(0, 0%, 100%, 0.06);
+  --surface-blur:      blur(10px);
+
+  /* 兼容 */
+  --glass-bg:           var(--surface-bg);
+  --glass-border:       var(--surface-border);
+  --glass-shadow:       var(--surface-shadow);
+  --glass-highlight:    var(--surface-highlight);
+  --glass-inner-bg:     var(--surface-inner-bg);
+  --glass-blur-filter:  var(--surface-blur);
+}

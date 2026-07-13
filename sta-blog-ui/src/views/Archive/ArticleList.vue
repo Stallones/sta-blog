@@ -64,7 +64,7 @@ function formatDate(dateStr: string): string {
     display: flex;
     gap: 1rem;
     padding: 1rem;
-    background: var(--el-fill-color-blank);
+    background: var(--surface-bg);
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.25s ease;
@@ -116,7 +116,7 @@ function formatDate(dateStr: string): string {
   .card-title {
     font-size: 1.05rem;
     font-weight: 600;
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
     margin: 0;
     line-height: 1.4;
     display: -webkit-box;
@@ -135,7 +135,7 @@ function formatDate(dateStr: string): string {
     align-items: center;
     gap: 1rem;
     font-size: 0.8rem;
-    color: var(--el-text-color-secondary);
+    color: var(--text-secondary);
 
     span {
       display: flex;
@@ -147,7 +147,7 @@ function formatDate(dateStr: string): string {
   .card-summary {
     margin: 0;
     font-size: 0.85rem;
-    color: var(--el-text-color-secondary);
+    color: var(--text-secondary);
     line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 2;

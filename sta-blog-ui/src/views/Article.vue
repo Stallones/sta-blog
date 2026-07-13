@@ -1,4 +1,5 @@
 <template>
+  <div class="article-page">
   <!-- article header：文章封面（阅读模式下隐藏） -->
   <div
     v-if="!isReadingMode"
@@ -19,14 +20,16 @@
     <div class="article-flex">
       <div class="article-content">
         <div class="article-scroll"></div>
-        <MdEditor
-          :content="articleVO.content ?? ''"
-          :editorId="editorId"
-          :theme="mode"
-          @htmlChanged="mdHtml"
-          @getToc="setTocList"
-        />
-        <ArticleFooter v-if="articleVO.id" :article="articleVO" />
+        <div class="article-surface">
+          <MdEditor
+            :content="articleVO.content ?? ''"
+            :editorId="editorId"
+            :theme="mode"
+            @htmlChanged="mdHtml"
+            @getToc="setTocList"
+          />
+          <ArticleFooter v-if="articleVO.id" :article="articleVO" />
+        </div>
       </div>
       <div v-if="sidebarVisible" class="article-sidebar">
         <ArticleSideBar :article="articleVO" />
@@ -65,6 +68,7 @@
       
     </div>
   </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -80,6 +84,7 @@ import {
   unregisterArticleItems,
 } from "@/components/FloatingMenu/registerGlobal";
 import { useFloatingMenu } from "@/composables/useFloatingMenu";
+import { useCanvasEffects } from "@/composables/useCanvasEffects";
 import { getArticle, addVisitCount } from "@/api/AppArticleController";
 import { readArticleDetail } from "@/utils/file-reader";
 import type { AppArticleRespVO } from "@/types";
@@ -109,15 +114,19 @@ watch(scrollPercentage, (percent) => {
   }
 });
 const { sidebarVisible } = useFloatingMenu();
+const { canvasHeaderH } = useCanvasEffects();
 
 onMounted(async () => {
   registerArticleItems();
   setTocContext(editorId, scrollElement);
+  // 画布视口偏移：article-cover 占 30vh，剩余 70vh 为画布可见区
+  canvasHeaderH.value = window.innerHeight * 0.7;
   await getArticleDetailById();
 });
 
 onUnmounted(() => {
   unregisterArticleItems();
+  canvasHeaderH.value = 0;
 });
 
 // ── 基础依赖 ──
@@ -202,6 +211,11 @@ function mdHtml(htmlText: string) {
 <style scoped lang="scss">
 @use "@/styles/_layout.scss" as *;
 
+// 单根容器（供 v-slide-in 指令使用）
+.article-page {
+  width: 100%;
+}
+
 // ── article 封面（原 h-article）──
 .article-cover {
   position: relative;
@@ -211,8 +225,8 @@ function mdHtml(htmlText: string) {
   justify-content: center;
   background-size: cover;
   background-position: center;
-  background-color: var(--el-bg-color);
-  transition: background-color 0.3s ease;
+  background-color: var(--bg-page);
+  // transition: background-color 0.3s ease;
 
   &::before {
     content: "";
@@ -221,9 +235,7 @@ function mdHtml(htmlText: string) {
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--glass-bg);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: var(--cover-shadow); /* 固定暗色遮罩，不随玻璃/实体切换 */
   }
 }
 
@@ -269,7 +281,7 @@ function mdHtml(htmlText: string) {
   top: 0;
   left: 0;
   height: 5px;
-  background: var(--mao-accent-gradient);
+  background: var(--accent-gradient);
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
   z-index: 1032;
@@ -282,13 +294,31 @@ function mdHtml(htmlText: string) {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  @include glass-card;
-  padding: $padding-md;
 
   @include tablet-down($breakpoint: $bp-tablet) {
     flex: none;
     width: 100%;
     max-width: 100%;
+  }
+}
+
+// 统一玻璃包裹层（含 editor + footer）
+.article-surface {
+  @include surface-card;
+  padding: $padding-md;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  // md-editor 不重复做玻璃
+  :deep(.md-editor),
+  :deep(.md-editor-dark) {
+    --md-bk-color: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 0;
   }
 }
 
@@ -309,12 +339,10 @@ function mdHtml(htmlText: string) {
 
 // ── 评论区：独立一行，宽度与内容区一致 ──
 .article-comments {
+  @include surface-card;
   width: $content-ratio;
   min-width: 0;
   box-sizing: border-box;
-  background-color: var(--el-fill-color-blank);
-  box-shadow: var(--el-box-shadow-light);
-  border-radius: $border-radius;
   padding: $padding-md;
   margin-top: $gap-desktop;
 
@@ -330,7 +358,7 @@ function mdHtml(htmlText: string) {
 
 // ── 阅读模式 ──
 .reading-mode {
-  @include solid-card;
+  @include surface-card;
   flex: 1;
   margin: 0 auto;
   max-width: $layout-max-w;
@@ -350,13 +378,13 @@ function mdHtml(htmlText: string) {
   width: 40px;
   height: 40px;
   border-radius: $border-radius;
-  background-color: var(--el-fill-color-blank);
-  box-shadow: var(--el-box-shadow-light);
+  background-color: var(--surface-bg);
+  box-shadow: var(--surface-shadow);
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
 
   &:hover {
-    background-color: var(--el-fill-color-light);
+    background-color: var(--fill-color-light);
   }
 
   @media (min-width: 1024px) {

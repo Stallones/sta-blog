@@ -130,7 +130,7 @@ function invoke() {
 
 <style scoped lang="scss">
 .card {
-  @include glass-card;
+  @include surface-card;
   margin-bottom: $margin-bottom;
   padding: $padding-md;
   display: flex;

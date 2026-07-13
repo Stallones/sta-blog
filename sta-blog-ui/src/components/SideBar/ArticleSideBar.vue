@@ -1,11 +1,5 @@
 ﻿<template>
-  <!-- loading 占位：数据未就绪时显示骨架屏 -->
-  <div v-if="!article.id" class="sidebar-loading">
-    <el-skeleton :rows="8" animated />
-  </div>
-
-  <!-- 数据就绪后渲染侧边栏内容 -->
-  <div v-else class="article-sidebar__content">
+  <div v-if="article.id" class="article-sidebar__content">
     <BloggerInfoCard />
     <ClocksCard />
     <div class="sticky_layout">
@@ -58,9 +52,5 @@ onMounted(() => {
   // max-height: calc(100vh - 50px);
   // display: flex;
   // flex-direction: column;
-}
-
-.sidebar-loading {
-  padding: 1rem;
 }
 </style>

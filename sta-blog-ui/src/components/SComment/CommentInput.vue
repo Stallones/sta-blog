@@ -106,21 +106,21 @@ watch(
   height: 7em;
   border-radius: 0.5em;
   line-height: 1.5em;
-  border: 1px solid var(--el-border-color);
+  border: 1px solid var(--border-color);
   font-size: 14px;
   font-family: inherit;
-  background-color: var(--el-fill-color-blank);
-  color: var(--el-text-color-primary);
+  background-color: var(--surface-bg);
+  color: var(--text-primary);
   transition: border-color 0.3s;
   box-sizing: border-box;
 
   &:focus {
     outline: none;
-    border-color: var(--el-color-primary);
+    border-color: var(--accent-primary);
   }
 
   &:disabled {
-    background-color: var(--el-fill-color-light);
+    background-color: var(--fill-color-light);
     cursor: not-allowed;
   }
 }
@@ -154,21 +154,21 @@ watch(
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: var(--el-fill-color-light);
+    background-color: var(--fill-color-light);
   }
 
   .emoji-icon {
     font-size: 1.25em;
-    color: var(--el-text-color-regular);
+    color: var(--text-regular);
   }
 }
 
 .s-comment__preview {
   margin-top: 0.8rem;
   padding: 0.8rem;
-  border: 1px solid var(--el-border-color-lighter);
+  border: 1px solid var(--border-lighter);
   border-radius: 0.5em;
-  background-color: var(--el-fill-color-lighter);
+  background-color: var(--fill-color-lighter);
   min-height: 3em;
 }
 </style>

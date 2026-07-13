@@ -39,7 +39,7 @@ defineProps<{ article: AppArticleRespVO }>();
 $bp: 768px;
 
 .v-card {
-  @include glass-card;
+  @include surface-card;
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -86,13 +86,13 @@ $bp: 768px;
 .g-title {
   font-size: 1.15rem;
   font-weight: 700;
-  color: var(--el-text-color-primary);
+  color: var(--text-primary);
   line-height: 1.35;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
-  &:hover { color: var(--mao-accent); }
+  &:hover { color: var(--accent-primary); }
 }
 
 .g-tags {
@@ -100,12 +100,12 @@ $bp: 768px;
   align-items: center;
   gap: 0.35rem;
   font-size: 0.78rem;
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
   flex-wrap: wrap;
 
   .g-divider {
     margin: 0 5px;
-    border-left: 1px var(--el-text-color-secondary) var(--el-border-style);
+    border-left: 1px solid var(--text-secondary);
   }
   .g-tag-item { white-space: nowrap; }
 }
@@ -113,7 +113,7 @@ $bp: 768px;
 .g-desc {
   font-size: 0.82rem;
   line-height: 1.4;
-  color: var(--el-text-color-regular);
+  color: var(--text-regular);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

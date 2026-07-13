@@ -154,14 +154,14 @@ function navigateTo(path: string) {
   width: 80px;
   justify-content: center;
   position: relative;
-  color: var(--el-text-color-primary);
+  color: var(--text-primary);
 
   &::before {
     content: "";
     position: absolute;
     bottom: 0;
     height: 2px;
-    background-color: var(--el-color-primary);
+    background-color: var(--accent-primary);
     transition: width 0.3s;
   }
 
@@ -170,7 +170,7 @@ function navigateTo(path: string) {
 
     span .arrow {
       transform: rotate(180deg);
-      color: var(--el-color-primary);
+      color: var(--accent-primary);
     }
 
     .menus_item_child {
@@ -198,7 +198,7 @@ function navigateTo(path: string) {
     margin-left: 1px;
     transition: all 0.5s;
     transform: rotate(0deg);
-    color: var(--el-color-primary);
+    color: var(--accent-primary);
   }
 }
 
@@ -219,10 +219,10 @@ function navigateTo(path: string) {
   width: 100px;
   transform: translateX(-50%);
   white-space: nowrap;
-  background: var(--el-fill-color-blank);
+  background: var(--surface-bg);
 
   border-radius: 5px;
-  border: 1px solid var(--el-border-color);
+  border: 1px solid var(--border-color);
   animation: slide-down 0.3s ease-out;
 
   /* 防止鼠标移出时菜单消失 */
@@ -243,11 +243,11 @@ function navigateTo(path: string) {
 
     &:hover {
       cursor: pointer;
-      background: var(--el-color-primary);
+      background: var(--accent-primary);
       color: white;
     }
     html.dark &:hover {
-      background: var(--el-color-primary);
+      background: var(--accent-primary);
     }
   }
 

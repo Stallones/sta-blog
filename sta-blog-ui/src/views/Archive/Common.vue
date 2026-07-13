@@ -55,11 +55,7 @@ onMounted(fetchData);
       </div>
     </div>
 
-    <div v-if="loading" class="common-skeleton">
-      <el-skeleton :rows="6" animated />
-    </div>
-
-    <div v-else-if="articles.length === 0" class="common-empty">
+    <div v-if="articles.length === 0 && !loading" class="common-empty">
       <el-empty description="暂无文章" />
     </div>
 
@@ -73,7 +69,7 @@ onMounted(fetchData);
 }
 
 .common-header {
-  @include glass-card;
+  @include surface-card;
   margin-bottom: 20px;
   display: flex;
   align-items: baseline;
@@ -83,18 +79,14 @@ onMounted(fetchData);
   .common-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
     margin: 0;
   }
 
   .common-count {
     font-size: 0.9rem;
-    color: var(--el-text-color-secondary);
+    color: var(--text-secondary);
   }
-}
-
-.common-skeleton {
-  padding: 1rem 0;
 }
 
 .common-empty {

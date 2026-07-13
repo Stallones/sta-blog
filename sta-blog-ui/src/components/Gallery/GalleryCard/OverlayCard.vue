@@ -34,7 +34,7 @@ defineProps<{ article: AppArticleRespVO }>();
 
 <style scoped lang="scss">
 .o-card {
-  @include glass-card;
+  @include surface-card;
   position: relative;
   height: 15rem;
   cursor: pointer;
@@ -59,7 +59,7 @@ defineProps<{ article: AppArticleRespVO }>();
 .o-overlay {
   position: absolute;
   inset: 0;
-  background: var(--mao-cover-shadow);
+  background: var(--cover-shadow);
 }
 
 /* ── 浮动内容（上下居中、左对齐）── */
@@ -79,8 +79,8 @@ defineProps<{ article: AppArticleRespVO }>();
   font-weight: 700;
   line-height: 1.35;
   /* 文字阴影保证可读性 */
-  text-shadow: 0 1px 4px rgba(0,0,0,.45);
-  color: var(--mao-overlay-text-primary);
+  text-shadow: 0 1px 4px hsla(0, 0%, 0%, 0.45);
+  color: var(--text-on-dark-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -91,12 +91,12 @@ defineProps<{ article: AppArticleRespVO }>();
   align-items: center;
   gap: 0.35rem;
   font-size: 0.8rem;
-  color: var(--mao-overlay-text-secondary);
+  color: var(--text-on-dark-secondary);
   flex-wrap: wrap;
 
   .g-divider {
     margin: 0 5px;
-    border-left: 1px hsl(0, 0%, 85%) var(--el-border-style);
+    border-left: 1px solid hsl(0, 0%, 85%);
   }
   .g-tag-item { white-space: nowrap; }
 }
@@ -104,7 +104,7 @@ defineProps<{ article: AppArticleRespVO }>();
 .g-desc {
   font-size: 0.84rem;
   line-height: 1.4;
-  color: var(--mao-overlay-text-regular);
+  color: var(--text-on-dark-regular);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

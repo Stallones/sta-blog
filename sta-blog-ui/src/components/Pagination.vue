@@ -5,7 +5,7 @@ const { articlePagination } = useGalleryComponent();
 </script>
 
 <template>
-  <div class="pag">
+  <div v-slide-in class="pagination">
     <el-pagination
       background
       layout="prev, pager, next"
@@ -18,11 +18,56 @@ const { articlePagination } = useGalleryComponent();
 </template>
 
 <style scoped lang="scss">
-.pag {
+.pagination {
   width: 100%;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: 50px;
+
+  // === 翻页器按钮：与卡片同色，按需高亮 ===
+
+  :deep(.btn-prev),
+  :deep(.btn-next),
+  :deep(.el-pager li) {
+    @include surface-card;
+    width: 35px;
+    height: 35px;
+    min-width: 35px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 15px;
+    background-color: var(--surface-bg);
+    // color: var(--text-secondary);
+    color: var(--color-gray-300);
+    transition: color 0.2s, background-color 0.2s;
+  }
+
+  :deep(.btn-prev:hover),
+  :deep(.btn-next:hover) {
+    color: var(--color-white);
+    background-color: var(--mao-orange);
+  }
+
+  :deep(.el-pager li:hover) {
+    color: var(--color-white);
+    background-color: var(--mao-orange);
+  }
+
+  // 当前页码：绿松石色背景 + 白字
+  :deep(.el-pager li.is-active) {
+    background-color: var(--color-success);
+    color: var(--color-white);
+  }
+
+  // 禁用态不展示
+  :deep(.btn-prev:disabled),
+  :deep(.btn-next:disabled),
+  :deep(.btn-prev[disabled]),
+  :deep(.btn-next[disabled]),
+  :deep(button[disabled]) {
+    display: none !important;
+  }
 }
 </style>

@@ -93,7 +93,7 @@ const gradientStyle = computed(() => {
   /* 呼吸灯：纯色跟随主题 */
   &.mode-breathing {
     -webkit-text-fill-color: unset;
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
     animation: breathe var(--duration, 2s) ease-in-out infinite;
   }
 }

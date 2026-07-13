@@ -1,5 +1,5 @@
 <template>
-  <!-- 底层：视口引擎（彩带/光源共享） -->
+  <!-- 底层：视口引擎（彩带） -->
   <canvas ref="bgRef" class="canvas-layer canvas-bg"></canvas>
   <!-- 中层：粒子效果 -->
   <canvas v-if="particlesEnabled" ref="particlesRef" class="canvas-layer canvas-particles"></canvas>
@@ -9,8 +9,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from "vue";
-import { createParallax, ribbonDrawFn } from "./layers/BackgroundParallax";
-import { lightDrawFn } from "./layers/BackgroundLightSources";
+import { createParallax, modeDrawFn } from "./layers/BackgroundParallax";
 import { createMouseTrail } from "./layers/MouseTrail";
 import { createParticlesEffect } from "./layers/Particles";
 import { useCanvasEffects } from "./index";
@@ -51,7 +50,7 @@ onMounted(() => {
 
   if (bgRef.value) {
     parallax = createParallax();
-    parallax.init(bgRef.value, ribbonDrawFn, lightDrawFn);
+    parallax.init(bgRef.value, modeDrawFn, modeDrawFn);
   }
   if (trailRef.value && mouseTrailEnabled.value) {
     trail = createMouseTrail();

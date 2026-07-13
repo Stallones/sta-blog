@@ -3,8 +3,7 @@
  * 与 useColorMode (light/dark) 独立，通过 html.glass 类控制
  * 组合出 4 种模式：纯色白 / 纯色黑 / 玻璃白 / 玻璃黑
  */
-import { ref, watch } from 'vue'
-import { usePreferredDark } from '@vueuse/core'
+import { ref } from 'vue'
 
 const GLASS_STORAGE_KEY = 'sta-blog-glass-mode'
 

@@ -185,7 +185,7 @@ const pageButtons = computed(() => {
   cursor: pointer;
   user-select: none;
   font-size: 13px;
-  border-left: 2px solid var(--el-border-color-lighter);
+  border-left: 2px solid var(--border-lighter);
   transition: color 0.2s;
 
   /* "共N条回复" 灰色 */
@@ -196,7 +196,7 @@ const pageButtons = computed(() => {
 
   /* "点击查看" 蓝色 */
   .s-reply-section__toggle-text {
-    color: var(--el-color-primary);
+    color: var(--accent-primary);
   }
 
 
@@ -230,7 +230,7 @@ const pageButtons = computed(() => {
 
 .s-reply-section__loading {
   text-align: center;
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
   padding: 1rem;
   font-size: 13px;
 }
@@ -272,11 +272,11 @@ const pageButtons = computed(() => {
   border-radius: 2px;
 
   &:hover:not(:disabled) {
-    color: var(--el-color-primary);
+    color: var(--accent-primary);
   }
 
   &.is-active {
-    color: var(--el-color-primary);
+    color: var(--accent-primary);
     font-weight: 600;
   }
 
@@ -300,7 +300,7 @@ const pageButtons = computed(() => {
   transition: all 0.2s;
 
   &:hover:not(:disabled) {
-    color: var(--el-color-primary);
+    color: var(--accent-primary);
   }
 
   &:disabled {
@@ -310,7 +310,7 @@ const pageButtons = computed(() => {
 }
 
 .s-reply-section__dots {
-  color: var(--el-text-color-placeholder);
+  color: var(--text-placeholder);
   padding: 0 2px;
 }
 
@@ -324,7 +324,7 @@ const pageButtons = computed(() => {
   transition: color 0.2s;
 
   &:hover {
-    color: var(--el-color-primary);
+    color: var(--accent-primary);
   }
 }
 </style>

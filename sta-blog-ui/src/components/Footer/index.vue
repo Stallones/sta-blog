@@ -129,7 +129,7 @@ $footer-max-width: 1200px;
     .col-title {
       font-size: 1.5rem;
       font-weight: 700;
-      color: hsla(0, 0%, 100%, 0.9);
+      color: var(--text-on-dark-primary);
       margin-bottom: 0.8rem;
       letter-spacing: 0.05em;
     }
@@ -140,14 +140,14 @@ $footer-max-width: 1200px;
       margin: 0;
 
       li {
-        color: hsla(0, 0%, 100%, 0.6);
+        color: var(--text-on-dark-secondary);
         font-size: 1rem;
         padding: 3px 0;
         cursor: pointer;
         transition: color 0.2s ease;
 
         &:hover {
-          color: var(--mao-accent);
+          color: var(--accent-primary);
         }
       }
     }
@@ -158,18 +158,18 @@ $footer-max-width: 1200px;
 .footer-others {
   margin: 0 auto;
   text-align: center;
-  color: hsla(0, 0%, 100%, 0.7);
+  color: var(--text-on-dark-regular);
   font-size: 1em;
-  border-top: 1px solid hsla(0, 0%, 100%, 0.1);
+  border-top: 1px solid var(--color-white-a10);
   padding: 15px 0px;
 
   a {
-    color: hsla(0, 0%, 100%, 0.7);
+    color: var(--text-on-dark-regular);
     text-decoration: none;
     transition: color 0.2s ease;
 
     &:hover {
-      color: var(--mao-accent);
+      color: var(--accent-primary);
     }
   }
 }

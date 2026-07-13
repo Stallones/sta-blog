@@ -1,8 +1,12 @@
 @use './reset' as *;
-@use './theme' as *;
-@use './el_override' as *;
+/* ─── Token 体系（primitive → semantic → material → bridge）─── */
+@use './primitive' as *;
+@use './semantic' as *;
+@use './material' as *;
+@use './bridge' as *;
 @use './mixin' as *;
 @use './cursor.scss';
 @use './scrollBar.scss';
+
 
 

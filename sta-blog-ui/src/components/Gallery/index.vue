@@ -39,11 +39,30 @@ async function fetchArticles() {
     setArticleTotal(searchStore.searchResults.total);
     return;
   }
-  const res: any = await requestOrRead(
-    getArticlePage,
-    readArticlePage,
-    { pageNo: articlePagination.current, pageSize: articlePagination.pageSize }
-  );
+
+  const params = { pageNo: articlePagination.current, pageSize: articlePagination.pageSize };
+
+  // 瀑布流模式：双 fetch 不同摘要长度，奇偶交错制造高度差
+  if ([6, 7].includes(effectiveMode.value) && !isMobile.value) {
+    const [shortRes, longRes] = await Promise.all([
+      requestOrRead(getArticlePage, readArticlePage, { ...params, summaryLength: 100 }),
+      requestOrRead(getArticlePage, readArticlePage, { ...params, summaryLength: 1000 }),
+    ]);
+    const shortPage = shortRes.data || shortRes;
+    const longPage = longRes.data || longRes;
+    if (shortPage?.list && longPage?.list) {
+      setArticleTotal(shortPage.total);
+      const merged = shortPage.list.map((item: any, i: number) => ({
+        ...item,
+        summary: i % 2 === 0 ? shortPage.list[i].summary : longPage.list[i].summary,
+      }));
+      setCardList(merged);
+    }
+    return;
+  }
+
+  // 非瀑布流：默认 fetch
+  const res: any = await requestOrRead(getArticlePage, readArticlePage, params);
   const pageResult = res.data || res;
   if (pageResult?.list) {
     setArticleTotal(pageResult.total);
@@ -139,6 +158,7 @@ function resolveOverlay(mode: GalleryLayoutMode): boolean {
   <div v-if="!isExternal" v-view-request="{ callback: fetchArticles }">
     <!-- 卡片列表：带 fade 过渡 -->
     <TransitionGroup name="gallery-fade" tag="div"
+      :key="effectiveMode"
       :class="gridClass"
     >
       <template v-for="(article, index) in cardList" :key="article.id">
@@ -167,7 +187,7 @@ function resolveOverlay(mode: GalleryLayoutMode): boolean {
   </div>
 
   <!-- 外部数据直接渲染（无 fetch/骨架/更多） -->
-  <div v-else :class="gridClass">
+  <div v-else :key="effectiveMode" :class="gridClass">
     <template v-for="(article, index) in cardList" :key="article.id">
       <component
         :is="resolveComponent(effectiveMode)"

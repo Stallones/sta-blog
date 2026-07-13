@@ -69,7 +69,7 @@ defineProps<{
 $bp: 768px;
 
 .h-card {
-  @include glass-card;
+  @include surface-card;
   display: flex;
   flex-direction: column;
   height: 200px;
@@ -144,14 +144,14 @@ $bp: 768px;
 .g-title {
   font-size: 1.15rem;
   font-weight: 700;
-  color: var(--el-text-color-primary);
+  color: var(--text-primary);
   line-height: 1.35;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
   &:hover {
-    color: var(--mao-accent);
+    color: var(--accent-primary);
   }
 }
 
@@ -161,11 +161,11 @@ $bp: 768px;
   gap: 0.35rem;
   font-size: 0.78rem;
   flex-wrap: wrap;
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
 
   .g-divider {
     margin: 0 5px;
-    border-left: 1px var(--el-text-color-secondary) var(--el-border-style);
+    border-left: 1px solid var(--text-secondary);
   }
   // .g-tag-cat::after { content: "|"; margin-left: 0.35rem; opacity: 0.5; }
   .g-tag-item {
@@ -193,7 +193,7 @@ $bp: 768px;
   font-size: 0.82rem;
   line-height: 1.4;
   display: -webkit-box;
-  color: var(--el-text-color-regular);
+  color: var(--text-regular);
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -202,6 +202,6 @@ $bp: 768px;
 
 .g-time {
   font-size: 0.72rem;
-  color: var(--el-text-color-placeholder);
+  color: var(--text-placeholder);
 }
 </style>

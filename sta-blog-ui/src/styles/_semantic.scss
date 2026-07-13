@@ -1,0 +1,204 @@
+/* ══════════════════════════════════════════════════════════════
+   Semantic 层 — 语义 Token
+
+   语义 Token 只随 html.dark 切换，不随玻璃/实体切换。
+   组件应引用此层变量，而非直接引用 --el-* 或 primitive。
+   ══════════════════════════════════════════════════════════════ */
+
+/* ─────────── 亮色（默认）─────────── */
+:root {
+  /* ═══ 文字 ═══ */
+  --text-primary:    var(--color-gray-900);
+  --text-regular:    var(--color-gray-700);
+  --text-secondary:  var(--color-gray-500);
+  --text-placeholder: var(--color-gray-300);
+  --text-disabled:   var(--color-gray-200);
+
+  /* Overlay 文字（在深色底上的浅色文字） */
+  --text-on-dark-primary:   var(--color-white);
+  --text-on-dark-regular:   hsl(0, 0%, 90%);
+  --text-on-dark-secondary: hsl(0, 0%, 80%);
+  --text-on-dark-placeholder: hsl(0, 0%, 75%);
+
+  /* ═══ 背景 ═══ */
+  --bg-page:    var(--color-white);
+  --bg-card:    var(--color-white);
+  --bg-overlay: var(--color-white);
+  --bg-hover:   var(--color-gray-50);
+  --bg-active:  var(--color-gray-100);
+
+  /* Fill（Element 填充色桥接用） */
+  --fill-color:         var(--color-gray-100);
+  --fill-color-light:   var(--color-gray-50);
+  --fill-color-lighter: var(--color-gray-50);
+
+  /* ═══ 边框 ═══ */
+  --border-color:        var(--color-gray-100);
+  --border-light:        var(--color-gray-50);
+  --border-lighter:      var(--color-gray-50);
+
+  /* ═══ 强调色 ═══ */
+  --accent-primary:  var(--color-blue-500);
+  --accent-primary-rgb: 59, 130, 246;
+  --accent-hover:    var(--color-blue-600);
+  --accent-gradient: linear-gradient(135deg, hsl(217, 91%, 60%), hsl(258, 64%, 61%));
+  --accent-glow:     hsla(217, 91%, 60%, 0.30);
+
+  /* ═══ 状态色 ═══ */
+  --status-success: var(--color-success);
+  --status-warning: var(--color-warning);
+  --status-danger:  var(--color-danger);
+  --status-hot:     var(--color-hot);
+
+  /* ═══ [MAO-KEPT] Markdown 预览 ═══ */
+  --md-quote-bg:  hsl(210, 14%, 96%);
+  --md-code-bg:   hsl(210, 17%, 98%);
+
+  /* ═══ 导航栏 ═══ */
+  --nav-bg:    var(--surface-bg);
+  --nav-blur:  var(--surface-blur);
+  --nav-border: var(--surface-border);
+  --nav-shadow: var(--surface-shadow);
+  --nav-border-transparent: hsla(0, 0%, 100%, 0.33);  /* 触顶透明专用 */
+
+  /* ═══ Header 覆盖文字（首页 hero）═══ */
+  --header-text-color: var(--text-on-dark-primary);  /* 白色 */
+
+  /* ═══ 浮动菜单 ═══ */
+  --fm-btn-color:    var(--accent-primary);
+  --fm-layout-hover: var(--color-black-a05);
+
+  /* ═══ 封面/阴影 ═══ */
+  --cover-shadow: hsla(0, 0%, 0%, 0.35);
+
+  /* ═══ 右键菜单 ═══ */
+  --context-header-bg: linear-gradient(to right, hsl(270, 100%, 97%), hsl(260, 60%, 97%));
+  --context-divider:   hsl(270, 100%, 94%);
+
+  /* ═══ 通用 ═══ */
+  --hr-border: hsl(210, 14%, 90%);
+
+  /* ─── 向下兼容旧变量名（同名覆盖旧 theme.scss）─── */
+  --mao-blue:   var(--color-blue-500);
+  --mao-orange: var(--color-orange-500);
+  --mao-accent:          var(--color-blue-500);
+  --mao-accent-gradient: linear-gradient(135deg, hsl(217, 91%, 60%), hsl(258, 64%, 61%));
+  --mao-overlay-text-primary:     var(--color-white);
+  --mao-overlay-text-regular:     hsl(0, 0%, 90%);
+  --mao-overlay-text-secondary:   hsl(0, 0%, 80%);
+  --mao-overlay-text-placeholder: hsl(0, 0%, 75%);
+  --mao-md-preview-quote-bg: hsl(210, 14%, 96%);
+  --mao-md-preview-code-bg:  hsl(210, 17%, 98%);
+  --mao-nav-bg:              var(--nav-bg);
+  --mao-nav-border-transparent: var(--nav-border-transparent);
+  --mao-fm-btn-color:    var(--color-blue-500);
+  --mao-fm-layout-hover: var(--color-black-a05);
+  --mao-cover-shadow:    hsla(0, 0%, 0%, 0.35);
+  --mao-context-header-bg: linear-gradient(to right, hsl(270, 100%, 97%), hsl(260, 60%, 97%));
+  --mao-context-divider:   hsl(270, 100%, 94%);
+
+  /* ═══ 音乐播放器兼容变量 ═══ */
+  --primary:          var(--accent-primary);
+  --router-color:     var(--color-gray-200);
+  --font-color:       var(--color-gray-600);
+  --dark-font-color:  var(--color-gray-500);
+  --second-font-color: var(--color-gray-200);
+  --hot-color:        var(--status-hot);
+  --md-active:        var(--accent-primary);
+  --global-white:     var(--color-gray-50);    /* 旧 W1 */
+  --global-black:     var(--color-gray-700);   /* 旧 B1 */
+  --global-shadow-white: var(--color-gray-100); /* 旧 W2 */
+  --header-bg-color:  var(--color-gray-100);
+  --meta-color:       var(--color-gray-500);
+  --comment-grey:     var(--color-gray-500);
+  --border-color-old: var(--accent-primary);   /* old usage: border-color=accent */
+  --hr-border-old:    var(--hr-border);
+  --top:              hsl(4, 80%, 66%);
+  --error:            var(--status-danger);
+  --music-main-active: hsl(160, 84%, 39%);
+  --music-main-bg:    var(--color-gray-700);
+  --global-font-size: 14px;
+}
+
+/* ─────────── 暗色模式 ─────────── */
+html.dark {
+  /* ═══ 文字 ═══ */
+  --text-primary:     hsl(210, 18%, 87%);
+  --text-regular:     hsl(210, 14%, 79%);
+  --text-secondary:   hsl(210, 10%, 55%);
+  --text-placeholder: hsl(215, 9%, 32%);
+  --text-disabled:    hsl(215, 9%, 25%);
+
+  /* ═══ 背景 ═══ */
+  --bg-page:    hsl(0, 0%, 8%);
+  --bg-card:    var(--color-gray-900);
+  --bg-overlay: var(--color-gray-800);
+  --bg-hover:   var(--color-gray-800);
+  --bg-active:  var(--color-gray-700);
+
+  /* Fill */
+  --fill-color:         var(--color-gray-700);
+  --fill-color-light:   var(--color-gray-800);
+  --fill-color-lighter: var(--color-gray-900);
+
+  /* ═══ 边框 ═══ */
+  --border-color:   hsl(215, 15%, 20%);
+  --border-light:   hsl(215, 14%, 17%);
+  --border-lighter: hsl(215, 14%, 17%);
+
+  /* ═══ 强调色 (暗色切橙) ═══ */
+  --accent-primary:  var(--color-orange-500);
+  --accent-primary-rgb: 249, 115, 22;
+  --accent-hover:    var(--color-orange-600);
+  --accent-gradient: linear-gradient(135deg, hsl(215, 79%, 51%), hsl(270, 51%, 44%));
+  --accent-glow:     hsla(25, 95%, 53%, 0.35);
+
+  /* ═══ Markdown 暗色 ═══ */
+  --md-quote-bg:  hsl(0, 0%, 15%);
+  --md-code-bg:   hsl(0, 0%, 0%);
+
+  /* ═══ 导航栏 ═══ */
+  --nav-bg:    var(--surface-bg);
+  --nav-blur:  var(--surface-blur);
+  --nav-border: var(--surface-border);
+  --nav-shadow: var(--surface-shadow);
+  --nav-border-transparent: hsla(0, 0%, 100%, 0.33);  /* 触顶透明专用 */
+
+  /* ═══ 浮动菜单 ═══ */
+  --fm-btn-color:    var(--fill-color-light);
+  --fm-layout-hover: var(--color-white-a10);
+
+  /* ═══ 右键菜单 ═══ */
+  --context-header-bg: linear-gradient(to right, hsl(263, 30%, 21%), hsl(258, 25%, 21%));
+  --context-divider:   hsl(258, 27%, 25%);
+
+  /* ═══ 通用 ═══ */
+  --hr-border: hsl(215, 15%, 20%);
+
+  /* ─── 向下兼容 ─── */
+  --mao-accent:          var(--color-orange-500);
+  --mao-accent-gradient: linear-gradient(135deg, hsl(215, 79%, 51%), hsl(270, 51%, 44%));
+  --mao-md-preview-quote-bg: hsl(0, 0%, 15%);
+  --mao-md-preview-code-bg:  hsl(0, 0%, 0%);
+  --mao-nav-bg:              var(--nav-bg);
+  --mao-nav-border-transparent: var(--nav-border-transparent);
+  --mao-fm-btn-color:    var(--color-gray-800);
+  --mao-fm-layout-hover: var(--color-white-a10);
+  --mao-context-header-bg: linear-gradient(to right, hsl(263, 30%, 21%), hsl(258, 25%, 21%));
+  --mao-context-divider:   hsl(258, 27%, 25%);
+
+  /* ═══ 音乐播放器兼容 ═══ */
+  --primary:          hsl(210, 100%, 67%);
+  --router-color:     hsl(215, 15%, 20%);
+  --font-color:       hsl(210, 10%, 55%);
+  --dark-font-color:  hsl(215, 8%, 40%);
+  --second-font-color: hsl(215, 8%, 40%);
+  --md-active:        hsl(210, 100%, 67%);
+  --global-white:     var(--color-gray-800);    /* 旧暗色 B2 */
+  --global-shadow-white: var(--color-gray-900); /* 旧暗色 B1 */
+  --header-bg-color:  var(--color-gray-800);
+  --meta-color:       hsl(210, 10%, 55%);
+  --comment-grey:     hsl(210, 10%, 55%);
+  --border-color-old: hsl(210, 100%, 67%);
+  --hr-border-old:    hsl(215, 15%, 20%);
+}

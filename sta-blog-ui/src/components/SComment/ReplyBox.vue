@@ -93,20 +93,20 @@ async function handleSubmit() {
   width: 100%;
   padding: 8px 10px;
   resize: none;
-  border: 1px solid var(--el-border-color);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 14px;
   line-height: 1.5;
-  background: var(--el-fill-color-light);
-  color: var(--el-text-color-primary);
+  background: var(--fill-color-light);
+  color: var(--text-primary);
   outline: none;
   &::placeholder {
-    color: var(--el-text-color-placeholder);
+    color: var(--text-placeholder);
     font-weight: normal;
   }
   &:focus {
-    border-color: var(--el-color-primary);
-    background: #fff;
+    border-color: var(--accent-primary);
+    background: var(--color-white);
   }
 }
 .s-reply-box__actions {
@@ -124,11 +124,11 @@ async function handleSubmit() {
   height: 30px;
   border-radius: 4px;
   &:hover {
-    background-color: var(--el-fill-color-light);
+    background-color: var(--fill-color-light);
   }
   .emoji-icon {
     font-size: 18px;
-    color: var(--el-text-color-regular);
+    color: var(--text-regular);
   }
 }
 </style>

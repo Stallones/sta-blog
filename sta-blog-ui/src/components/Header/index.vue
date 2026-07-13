@@ -11,18 +11,12 @@
       <Brand />
     </div>
 
-    <!-- 通用 banner -->
-    <div
+    <!-- 通用 banner（玻璃卡片） -->
+    <GlassBanner
       v-if="headerType === 'page'"
-      class="h-banner"
       :title="title"
       :subtitle="subtitle"
-    >
-      <h2 class="title">{{ title }}</h2>
-      <h3 class="subtitle">
-        <span>{{ subtitle }}</span>
-      </h3>
-    </div>
+    />
 
   </header>
 </template>
@@ -30,6 +24,7 @@
 <script setup lang="ts">
 import { computed, watch } from "vue";
 import Nav from "@/components/Nav/index.vue";
+import GlassBanner from "@/components/GlassBanner.vue";
 import { useCanvasEffects } from "@/composables/useCanvasEffects";
 import Images from "@/components/Header/Images.vue";
 import Brand from "@/components/Header/Brand.vue";
@@ -53,14 +48,8 @@ const header = computed<HeaderConfig>(() => {
     case "home":
       return { cls: "home-header", height: windowH };
 
-    case "article":
-      return { cls: "article-header", height: windowH * 0.2 };
-
     case "page":
       return { cls: "page-header", height: windowH * 0.4 };
-
-    case "none":
-      return { cls: "none-header", height: windowH * 0 };
 
     default:
       return { cls: "null-header", height: 0 };
@@ -83,16 +72,26 @@ watch(
 .home-header {
   height: 100vh;
 }
+.h-full {
+  height: 100%;
+}
 .article-header {
   display: flex;
   justify-content: center;
   transition: background-color 0.3s ease;
 
-  background-color: var(--el-bg-color);
+  background-color: var(--bg-page);
   height: 20vh;
 }
 .page-header {
   height: 40vh;
+  background-image: url("@/assets/images/forest.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .h-article {
@@ -115,7 +114,7 @@ watch(
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--mao-cover-shadow);
+    background-color: var(--cover-shadow);
   }
 }
 

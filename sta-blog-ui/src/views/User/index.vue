@@ -45,13 +45,13 @@ function goBack() {
 <style scoped>
 .left-card{
   flex: 1;
-  background-color: var(--el-bg-color)
+  background-color: var(--bg-page)
 }
 
 .right-card {
   width: 400px;
   z-index: 1;
-  background-color: var(--el-bg-color);
+  background-color: var(--bg-page);
   padding: 20px;
   position: relative;
 }

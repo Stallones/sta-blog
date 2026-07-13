@@ -67,12 +67,12 @@ function handleItemClick(id: string) {
     padding: 6px 4px;
 
     &:hover {
-      color: var(--el-color-primary);
+      color: var(--accent-primary);
     }
 
     &--active {
-      background-color: var(--el-color-primary-light-9);
-      color: var(--el-color-primary);
+      background-color: var(--color-blue-50);
+      color: var(--accent-primary);
       font-weight: bold;
     }
   }
@@ -83,7 +83,7 @@ function handleItemClick(id: string) {
 
   .toc-empty {
     text-align: center;
-    color: var(--el-text-color-placeholder);
+    color: var(--text-placeholder);
     padding: 20px 0;
     font-size: 0.9rem;
   }

@@ -91,15 +91,10 @@ onUnmounted(() => {
   z-index: 10;
   width: 100%; // 用 100% 而非 100vw，避免包含滚动条宽度导致溢出
   box-sizing: border-box;
-  background-color: var(--mao-nav-bg);
-  backdrop-filter: blur(6px);
+  background-color: var(--nav-bg);
+  backdrop-filter: var(--nav-blur);
+  border-bottom: 1px solid var(--nav-border);
   transition: top 0.3s ease-in-out;
-  // border-bottom: 1px solid var(--mao-nav-border);
-
-  html.dark & {
-    background-color: var(--mao-nav-bg);
-    // border-bottom-color: var(--mao-nav-border);
-  }
 
   &.hidden {
     top: -45px;
@@ -129,7 +124,7 @@ onUnmounted(() => {
   align-items: center;
   cursor: pointer;
   font-size: 25px;
-  color: var(--el-text-color-primary);
+  color: var(--text-primary);
 }
 
 .search-trigger {
@@ -138,7 +133,7 @@ onUnmounted(() => {
   justify-content: center;
   cursor: pointer;
   font-size: 25px;
-  color: var(--el-text-color-primary);
+  color: var(--text-primary);
   transition: transform 0.2s;
 
   &:hover {

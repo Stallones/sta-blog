@@ -39,7 +39,7 @@ onMounted(async () => {
   .soup-text {
     font-size: 15px;
     line-height: 1.6;
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
     text-align: center;
     font-style: italic;
     margin: 0;
@@ -51,7 +51,7 @@ onMounted(async () => {
   .soup-quote-right {
     position: absolute;
     font-size: 32px;
-    color: var(--el-color-primary-light-7);
+    color: var(--color-blue-100);
     font-family: "Times New Roman", serif;
     opacity: 0.6;
   }

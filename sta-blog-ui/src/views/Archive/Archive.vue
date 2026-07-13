@@ -7,20 +7,7 @@
       </h1>
     </div>
 
-    <div v-if="loading" class="archive-skeleton">
-      <div v-for="i in 3" :key="i" class="skeleton-year">
-        <div class="skeleton-year-label" />
-        <div v-for="j in 3" :key="j" class="skeleton-item">
-          <div class="skeleton-thumb" />
-          <div class="skeleton-body">
-            <div class="skeleton-line short" />
-            <div class="skeleton-line long" />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div v-else-if="articles.length === 0" class="archive-empty">
+    <div v-if="articles.length === 0 && !loading" class="archive-empty">
       <el-empty description="暂无文章" />
     </div>
 
@@ -149,7 +136,7 @@ $year-dot-size: 8px;
 
 .archive-page {
   width: 100%;
-  @include glass-card;
+  @include surface-card;
   padding: $padding-lg $padding-lg $padding-sm;
 }
 
@@ -198,7 +185,7 @@ $year-dot-size: 8px;
   padding-left: 1.0 rem;
   font-size: 22px;
   font-weight: 700;
-  color: var(--el-text-color-primary);
+  color: var(--text-primary);
   padding-left: 10px;  // 圆点位置 + 文字间距
   margin-bottom: $margin-bottom;
 
@@ -211,7 +198,7 @@ $year-dot-size: 8px;
     height: 20px;
     border-radius: 50%;
     border: 5px solid var(--mao-blue);
-    background: var(--el-fill-color-blank);
+    background: var(--surface-bg);
     box-sizing: border-box;
     z-index: 1;
     
@@ -232,7 +219,7 @@ $year-dot-size: 8px;
   padding: $padding-sm;
   font-size: 18px;
   font-weight: 700;
-  color: var(--el-text-color-primary);
+  color: var(--text-primary);
 
   display: flex;
   align-items: center;
@@ -267,7 +254,7 @@ $year-dot-size: 8px;
     height: $dot-size;
     border-radius: 50%;
     border: 2px solid var(--mao-blue);
-    background: var(--el-fill-color-blank);
+    background: var(--surface-bg);
     box-sizing: border-box;
     z-index: 1;
     transition: all 0.3s ease;
@@ -325,7 +312,7 @@ $year-dot-size: 8px;
   .tl-date {
     font-size: 15px;
     font-weight: bold;
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 4px;
@@ -333,7 +320,7 @@ $year-dot-size: 8px;
 
   .tl-title {
     font-size: 15px;
-    color: var(--el-text-color-secondary);
+    color: var(--text-secondary);
     margin: 0;
     line-height: 1.4;
     display: -webkit-box;
@@ -349,46 +336,6 @@ $year-dot-size: 8px;
 }
 
 
-// ===== 骨架屏 =====
-.archive-skeleton {
-  .skeleton-year { margin-bottom: 1rem; }
-  .skeleton-year-label {
-    width: 60px;
-    height: 1.4rem;
-    background: #eee;
-    border-radius: 4px;
-    margin-bottom: 0.5rem;
-  }
-  .skeleton-item {
-    display: flex;
-    gap: 1rem;
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-    background: #fafafa;
-    border-radius: 10px;
-  }
-  .skeleton-thumb {
-    width: 100px;
-    height: 66px;
-    background: #eee;
-    border-radius: 8px;
-    flex-shrink: 0;
-  }
-  .skeleton-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    justify-content: center;
-  }
-  .skeleton-line {
-    height: 0.85rem;
-    background: #eee;
-    border-radius: 4px;
-    &.short { width: 40%; }
-    &.long { width: 75%; }
-  }
-}
 
 // ===== 移动端 =====
 @media screen and (max-width: 768px) {

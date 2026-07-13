@@ -35,7 +35,7 @@ const { isOnline } = useDemotion();
 <style scoped lang="scss">
 .message-page {
   width: 100%;
-  @include glass-card;
+  @include surface-card;
   padding: 2.5rem;
 }
 
@@ -51,8 +51,8 @@ const { isOnline } = useDemotion();
 
 .message-page__desc {
   font-size: 0.85rem;
-  color: #999;
-  background: var(--mao-bg-message);
+  color: var(--text-secondary);
+  background: var(--bg-card);
   padding: 0.8rem 1rem;
   border-radius: 8px;
   line-height: 1.6;

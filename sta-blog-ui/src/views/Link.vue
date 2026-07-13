@@ -202,7 +202,7 @@ function applyLinkFunc() {
 <style scoped lang="scss">
 .link-page {
   width: 100%;
-  @include glass-card;
+  @include surface-card;
   padding: 2.5rem;
 }
 
@@ -228,9 +228,9 @@ function applyLinkFunc() {
     margin: 0.5rem;
     width: calc(100% / 3 - 1rem);
     height: 13rem;
-    border: #0072ff 1px solid;
+    border: 1px solid var(--accent-primary);
     border-radius: $border-radius;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--surface-shadow);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -249,13 +249,13 @@ function applyLinkFunc() {
     &:hover {
       .content_link {
         height: 50%;
-        background: #0072ff;
+        background: var(--accent-primary);
 
         .name {
-          color: #fdeeee;
+          color: var(--text-on-dark-primary);
         }
         .description {
-          color: #fdeeee;
+          color: var(--text-on-dark-primary);
         }
       }
       .bg {
@@ -303,7 +303,7 @@ function applyLinkFunc() {
         font-size: 0.85rem;
         margin-left: 0.5rem;
         margin-top: 0.5rem;
-        color: #7c7c7c;
+        color: var(--text-secondary);
       }
     }
   }
@@ -312,10 +312,9 @@ function applyLinkFunc() {
 .title_content {
   font-weight: bold;
   font-size: 0.8rem;
-  color: #999;
+  color: var(--text-regular);
   display: flex;
   flex-direction: column;
-  background: var(--mao-bg-message);
   padding: 0.5rem;
   border-radius: $border-radius;
   margin-bottom: 1rem;

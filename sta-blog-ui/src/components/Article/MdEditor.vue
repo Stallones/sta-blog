@@ -53,7 +53,8 @@ function onGetCatalogHandler(list: { text: string; level: number }[]) {
 -->
 <style lang="scss">
 .md-editor {
-  --md-bk-color: var(--el-fill-color-blank);
+  padding: $padding-md;
+  --md-bk-color: var(--surface-bg);
   border-radius: $border-radius;
 
   // 隐藏 h1：标题已在 ArticleHeader 展示
@@ -63,15 +64,15 @@ function onGetCatalogHandler(list: { text: string; level: number }[]) {
 }
 
 .md-editor-dark {
-   --md-bk-color: var(--el-fill-color-blank);
+   --md-bk-color: var(--surface-bg);
   .md-editor-preview {
     blockquote {
-      background-color: var(--mao-md-preview-quote-bg);
+      background-color: var(--md-quote-bg);
     }
     .md-editor-code {
       .md-editor-code-head,
       code {
-        background-color: var(--mao-md-preview-code-bg);
+        background-color: var(--md-code-bg);
       }
     }
   }

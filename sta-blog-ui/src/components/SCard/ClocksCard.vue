@@ -66,12 +66,9 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .clock {
     font-family: "Share Tech Mono", monospace;
-    color: #ffffff;
+    color: var(--text-secondary);
     text-align: center;
-    // 夜间模式
-    //color: #daf6ff;
-    //text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0);
-    color: grey;
+    text-shadow: 0 0 20px hsla(0, 0%, 0%, 0.2), 0 0 20px hsla(0, 0%, 0%, 0);
     text-shadow: 0 0 20px hsla(0, 0%, 0%, 0.2), 0 0 20px hsla(0, 0%, 0%, 0);
 
     .time {

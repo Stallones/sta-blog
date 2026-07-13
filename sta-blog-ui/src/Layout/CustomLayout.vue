@@ -6,7 +6,7 @@
     <!-- 裸露内容区：路由页面完全自主管理 -->
     <div class="custom-content">
       <router-view v-slot="{ Component, route: r }">
-        <component :is="Component" :key="r.fullPath" />
+        <component v-slide-in :is="Component" :key="r.fullPath" />
       </router-view>
     </div>
 
@@ -52,5 +52,6 @@ onMounted(() => {
   flex: 1;
   display: flex;
   flex-direction: column;
+  // padding-top: 50px; // 为固定定位 Nav 留出空间
 }
 </style>

@@ -153,7 +153,7 @@ onMounted(() => {
 
       margin-left: 1rem;
       font-size: 1em;
-      color: var(--el-text-color-regular);
+      color: var(--text-regular);
     }
 
     :last-child {

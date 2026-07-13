@@ -116,11 +116,12 @@ const { cardData, isSettingUser } = useUserCard();
   margin-bottom: $margin-bottom;
   border-radius: $border-radius;
   text-align: center;
-  background: var(--el-fill-color-blank);
+  background: var(--surface-bg);
   position: relative;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: var(--el-box-shadow-light);
+  box-shadow: var(--surface-shadow);
+  backdrop-filter: var(--surface-blur);
   display: flex;
   flex-direction: column;
 
@@ -143,7 +144,7 @@ const { cardData, isSettingUser } = useUserCard();
     height: 90px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid var(--el-color-white);
+    border: 3px solid var(--color-white);
     box-shadow: 0 0 20px hsla(0, 0%, 0%, 0.1);
     transition: all 0.6s ease;
     display: inline-block;
@@ -166,7 +167,7 @@ const { cardData, isSettingUser } = useUserCard();
     font-size: 1.4rem;
     font-weight: 600;
     margin: 15px 0 10px;
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
     padding: 0 20px;
 
     .title-decorator {
@@ -178,7 +179,7 @@ const { cardData, isSettingUser } = useUserCard();
       .line {
         height: 1px;
         width: 15px;
-        background: var(--el-border-color);
+        background: var(--border-color);
         transition: all 0.3s ease;
       }
 
@@ -186,7 +187,7 @@ const { cardData, isSettingUser } = useUserCard();
         width: 4px;
         height: 4px;
         border-radius: 50%;
-        background: var(--el-color-primary);
+        background: var(--accent-primary);
         margin: 0 4px;
       }
     }
@@ -194,13 +195,13 @@ const { cardData, isSettingUser } = useUserCard();
     &:hover .title-decorator {
       .line {
         width: 40px;
-        background: var(--el-color-primary);
+        background: var(--accent-primary);
       }
     }
   }
 
   .blogger-copy {
-    color: var(--el-text-color-secondary);
+    color: var(--text-secondary);
     font-size: 0.95rem;
     line-height: 1.6;
     padding: 0 25px;
@@ -212,7 +213,7 @@ const { cardData, isSettingUser } = useUserCard();
       content: '"';
       position: absolute;
       font-size: 1.2em;
-      color: var(--el-color-primary-light-5);
+      color: var(--color-blue-200);
       opacity: 0.6;
     }
 
@@ -234,7 +235,7 @@ const { cardData, isSettingUser } = useUserCard();
       font-style: italic;
 
       &:hover {
-        color: var(--el-text-color-primary);
+        color: var(--text-primary);
         transition: color 0.3s ease;
       }
     }
@@ -259,13 +260,13 @@ const { cardData, isSettingUser } = useUserCard();
       .number {
         font-size: 1.2rem;
         font-weight: 600;
-        color: var(--el-text-color-primary);
+        color: var(--text-primary);
         margin-bottom: 5px;
       }
 
       .label {
         font-size: 0.9rem;
-        color: var(--el-text-color-secondary);
+        color: var(--text-secondary);
         white-space: nowrap;
       }
     }
@@ -280,16 +281,16 @@ const { cardData, isSettingUser } = useUserCard();
     .icon-wrapper {
       padding: 8px;
       border-radius: 50%;
-      background: var(--el-fill-color-light);
+      background: var(--fill-color-light);
       transition: all 0.3s ease;
 
       &:hover {
-        background: var(--el-fill-color);
+        background: var(--fill-color);
         transform: translateY(-2px);
       }
 
       :deep(svg) {
-        fill: var(--el-text-color-primary);
+        fill: var(--text-primary);
       }
     }
   }
@@ -311,7 +312,7 @@ const { cardData, isSettingUser } = useUserCard();
     height: 80px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid var(--el-color-white);
+    border: 3px solid var(--color-white);
     box-shadow: 0 2px 12px hsla(0, 0%, 0%, 0.1);
     display: inline-block;
 
@@ -328,13 +329,13 @@ const { cardData, isSettingUser } = useUserCard();
   .user-name {
     font-size: 1.2rem;
     font-weight: 600;
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
     margin-bottom: 6px;
   }
 
   .user-description {
     font-size: 0.85rem;
-    color: var(--el-text-color-secondary);
+    color: var(--text-secondary);
   }
 
   .user-stats {
@@ -350,11 +351,11 @@ const { cardData, isSettingUser } = useUserCard();
     font-size: 0.9rem;
 
     .stat-label {
-      color: var(--el-text-color-secondary);
+      color: var(--text-secondary);
     }
 
     .stat-value {
-      color: var(--el-text-color-primary);
+      color: var(--text-primary);
       font-weight: 500;
     }
   }

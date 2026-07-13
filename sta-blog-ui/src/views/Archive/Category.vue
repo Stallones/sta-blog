@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { getCategoryList } from "@/api/AppCategoryController";
+import { useCanvasEffects } from "@/composables/useCanvasEffects";
 
 const categorys = ref<any[]>([]);
+const { canvasHeaderH } = useCanvasEffects();
 
 onMounted(async () => {
   const res: any = await getCategoryList();
   categorys.value = Array.isArray(res) ? res : [];
+  canvasHeaderH.value = window.innerHeight * 0.6;
 });
 </script>
 
@@ -30,12 +33,12 @@ onMounted(async () => {
 <style scoped lang="scss">
 .cat-page {
   width: 100%;
-  @include glass-card;
+  @include surface-card;
 
   .cat-page-title {
     font-size: 1.7rem;
     font-weight: 700;
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
     margin: 0 0 1rem 0;
   }
 }
@@ -57,7 +60,7 @@ onMounted(async () => {
   transition: all 0.2s ease;
 
   &:hover {
-    background: var(--el-fill-color-light);
+    background: var(--fill-color-light);
 
     .cat-dot {
       transform: scale(1.3);
@@ -82,13 +85,13 @@ onMounted(async () => {
 .cat-name {
   font-size: 1.05rem;
   font-weight: 500;
-  color: var(--el-text-color-primary);
+  color: var(--text-primary);
   transition: color 0.2s;
 }
 
 .cat-count {
   font-size: 0.85rem;
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
   margin-left: auto;
 }
 </style>

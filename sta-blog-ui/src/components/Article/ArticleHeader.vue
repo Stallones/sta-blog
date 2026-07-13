@@ -116,7 +116,7 @@ defineProps<{
 
     .h-a-title,
     .h-a-meta {
-      color: var(--mao-overlay-text-secondary);
+      color: var(--text-on-dark-secondary);
     }
   }
 
@@ -125,11 +125,11 @@ defineProps<{
     position: relative;
 
     .h-a-title {
-      color: var(--el-text-color-primary);
+      color: var(--text-primary);
     }
 
     .h-a-meta {
-      color: var(--el-text-color-regular);
+      color: var(--text-regular);
     }
   }
 }

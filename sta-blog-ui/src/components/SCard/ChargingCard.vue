@@ -114,12 +114,12 @@ const chargingList = ref([
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--glass-inner-bg);
+    background-color: var(--surface-inner-bg);
     border-radius: $border-radius;
   }
 
   .popover-text {
-    color: var(--el-text-color-secondary);
+    color: var(--text-secondary);
     font-size: 13px;
   }
 
@@ -131,7 +131,7 @@ const chargingList = ref([
   }
 
   .charging-hint {
-    color: var(--el-text-color-secondary);
+    color: var(--text-secondary);
   }
 
   .qr-wrap {

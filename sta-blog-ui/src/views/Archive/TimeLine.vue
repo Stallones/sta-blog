@@ -92,7 +92,7 @@ onMounted(async () => {
 @use './TimeLine' as *;
 
 .year {
-  background-color: var(--el-fill-color-blank);
+  background-color: var(--surface-bg);
   position: sticky;
   top: 5rem;
   text-align: center;

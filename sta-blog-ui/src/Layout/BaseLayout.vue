@@ -5,18 +5,12 @@
       :title="meta.title || ''"
       :subtitle="meta.subtitle || ''"
     />
-    <!-- 玻璃横幅（page 类型页面） -->
-    <GlassBanner
-      v-if="meta.headerType === 'page'"
-      :title="meta.title"
-      :subtitle="meta.subtitle"
-    />
     <!-- 主内容区 -->
     <main class="main-shell">
       <div class="main-wrapper">
         <div class="main-content">
           <router-view v-slot="{ Component, route: r }">
-            <component :is="Component" :key="r.fullPath" />
+            <component v-slide-in :is="Component" :key="r.fullPath" />
           </router-view>
         </div>
 
@@ -44,7 +38,6 @@
 import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import Header from "@/components/Header/index.vue";
-import GlassBanner from "@/components/GlassBanner.vue";
 import SideBar from "@/components/SideBar/index.vue";
 import FloatingMenu from "@/components/FloatingMenu/index.vue";
 import { registerGlobalItems } from "@/components/FloatingMenu/registerGlobal";
@@ -70,6 +63,7 @@ const sidebarKey = computed(
 // 注册全局功能项
 onMounted(() => {
   registerGlobalItems();
+  
 });
 </script>
 

@@ -107,16 +107,16 @@ function handleLike() {
 .s-comment__nickname {
   font-size: 14px;
   font-weight: bold;
-  color: var(--el-text-color-primary);
+  color: var(--text-primary);
 }
 
 .s-comment__tag {
   font-size: 12px;
-  color: var(--el-text-color-placeholder);
+  color: var(--text-secondary);
   padding: 1px 6px;
-  border: 1px solid var(--el-border-color-lighter);
+  border: 1px solid var(--border-lighter);
   border-radius: 3px;
-  background-color: var(--el-fill-color-lighter);
+  background-color: var(--fill-color-lighter);
   white-space: nowrap;
 }
 
@@ -136,7 +136,7 @@ function handleLike() {
 
 .s-comment__time {
   font-size: 12px;
-  color: var(--el-text-color-placeholder);
+  color: var(--text-secondary);
 }
 
 .s-comment__action {
@@ -144,17 +144,17 @@ function handleLike() {
   align-items: center;
   gap: 4px;
   font-size: 13px;
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: color 0.2s;
   user-select: none;
 
   &:hover {
-    color: var(--el-color-primary);
+    color: var(--accent-primary);
   }
 }
 
 .s-comment__action--liked {
-  color: var(--el-color-danger);
+  color: var(--status-danger);
 }
 </style>

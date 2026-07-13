@@ -178,7 +178,7 @@ onMounted(() => {
     .loading-text {
       margin-top: 10px;
       font-size: 14px;
-      color: var(--el-text-color-secondary);
+      color: var(--text-secondary);
       letter-spacing: 2px;
     }
   }
@@ -385,9 +385,9 @@ onMounted(() => {
       
       .tag-deco { transform: scale(1.05) rotate(3deg); opacity: 0.7; }
       .tag-content {
-        color: var(--el-color-primary);
+        color: var(--accent-primary);
         .tag-symbol { animation: bounce 0.6s ease infinite; }
-        .tag-count { background-color: rgba(var(--el-color-primary-rgb), 0.15); transform: scale(1.05); }
+        .tag-count { background-color: rgba(var(--accent-primary-rgb), 0.15); transform: scale(1.05); }
       }
       
       &::before { opacity: 0.4; }
@@ -413,12 +413,12 @@ onMounted(() => {
       display: flex;
       align-items: center;
       font-size: 0.83rem;
-      color: var(--el-text-color-regular);
+      color: var(--text-regular);
       transition: color 0.3s ease;
       
       .tag-symbol {
         margin-right: 2px;
-        color: var(--el-color-primary-light-3);
+        color: var(--color-blue-300);
         font-weight: bold;
         transition: transform 0.2s ease;
       }
@@ -432,11 +432,11 @@ onMounted(() => {
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: rgba(var(--el-color-primary-rgb), 0.08);
+        background-color: rgba(var(--accent-primary-rgb), 0.08);
         border-radius: 9px;
         padding: 0px 5px;
         font-size: 0.65rem;
-        color: var(--el-color-primary);
+        color: var(--accent-primary);
         font-weight: 500;
         min-width: 16px;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) inset;
@@ -451,7 +451,7 @@ onMounted(() => {
       transform: translate(-50%, -50%);
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at center, rgba(var(--el-color-primary-rgb), 0.08) 0%, transparent 70%);
+      background: radial-gradient(circle at center, rgba(var(--accent-primary-rgb), 0.08) 0%, transparent 70%);
       opacity: 0.25;
       transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       z-index: 1;
@@ -464,7 +464,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: var(--el-text-color-secondary);
+    color: var(--text-secondary);
     font-size: 14px;
     justify-content: center;
     width: 100%;

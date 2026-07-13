@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { getTagList } from "@/api/AppTagController";
 import { getHslCircleColors, getHslColors } from "@/utils/colorHsl";
+import { useCanvasEffects } from "@/composables/useCanvasEffects";
 
+const { canvasHeaderH } = useCanvasEffects();
 const tags = ref<any[]>([]);
 
 // 字体大小池（根据文章数量分级）
@@ -37,6 +39,7 @@ function getTagStyle(index: number, articleCount: number) {
 onMounted(async () => {
   const res: any = await getTagList();
   tags.value = Array.isArray(res) ? res : [];
+  canvasHeaderH.value = window.innerHeight*0.6;
 });
 </script>
 
@@ -62,7 +65,7 @@ onMounted(async () => {
 <style scoped lang="scss">
 .tags-page {
   width: 100%;
-  @include glass-card;
+  @include surface-card;
 }
 
 .tag-cloud {

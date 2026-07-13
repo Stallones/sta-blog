@@ -60,7 +60,7 @@ onUnmounted(() => {
 }
 
 .hc-notice {
-  @include glass-card;
+  @include surface-card;
   border-radius: 50px; // 胶囊形覆盖 mixin 默认 12px
   display: flex;
   height: 50px;
@@ -73,7 +73,7 @@ onUnmounted(() => {
 }
 
 .hc-search {
-  @include glass-card;
+  @include surface-card;
   border-radius: 50px;
   display: flex;
   height: 50px;

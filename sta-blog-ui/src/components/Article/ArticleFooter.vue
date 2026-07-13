@@ -62,6 +62,6 @@ async function handleFavorite() {
 <style scoped>
 .article-footer { display: flex; gap: 20px; padding: 16px 0; }
 .action-btn { cursor: pointer; padding: 8px 16px; border-radius: 8px; transition: all 0.2s; }
-.action-btn:hover { background: var(--el-color-primary-light-9); }
-.action-btn.active { color: var(--el-color-primary); font-weight: bold; }
+.action-btn:hover { background: var(--color-blue-50); }
+.action-btn.active { color: var(--accent-primary); font-weight: bold; }
 </style>

@@ -23,9 +23,7 @@ defineProps<{
           <div class="g-title w-o-title">{{ article.title }}</div>
           <div class="g-tags w-o-tags">
             <el-icon><Calendar /></el-icon>
-            <span>
-              发布于 {{ dayjs(article.createTime).format("YYYY-MM-DD") }}
-            </span>
+            <span>发布于 {{ dayjs(article.createTime).format("YYYY-MM-DD") }}</span>
             <el-divider direction="vertical" class="g-divider" />
             <el-icon><Folder /></el-icon>
             <span> {{ article.categoryName }} </span>
@@ -43,7 +41,7 @@ defineProps<{
       <div class="g-title">{{ article.title }}</div>
       <div class="g-tags">
         <el-icon><Calendar /></el-icon>
-        <span> 发布于 {{ article.createTime }} </span>
+        <span>发布于 {{ dayjs(article.createTime).format("YYYY-MM-DD") }}</span>
         <el-divider direction="vertical" class="g-divider" />
         <el-icon><Folder /></el-icon>
         <span> {{ article.categoryName }} </span>
@@ -61,7 +59,7 @@ $bp: 768px;
 
 /* ═══════ 卡片容器 ═══════ */
 .w-card {
-  @include glass-card;
+  @include surface-card;
   break-inside: avoid;
   cursor: pointer;
   margin-bottom: $margin-bottom;
@@ -119,20 +117,20 @@ $bp: 768px;
 
   /* 层叠卡（overlay）title/tags/desc — 固定白色系 */
   .g-title {
-    color: var(--mao-overlay-text-primary);
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    color: var(--text-on-dark-primary);
+    text-shadow: 0 1px 3px hsla(0, 0%, 0%, 0.5);
   }
 
   .g-tags {
-    color: var(--mao-overlay-text-secondary);
+    color: var(--text-on-dark-secondary);
     .g-divider {
       margin: 0 5px;
-      color: rgba(255, 255, 255, 0.5);
+      color: hsla(0, 0%, 100%, 0.5);
     }
   }
 
   .g-desc {
-    color: var(--mao-overlay-text-regular);
+    color: var(--text-on-dark-regular);
   }
 }
 
@@ -147,18 +145,18 @@ $bp: 768px;
 /* ═══════ 垂直卡（非 overlay）：title/tags/desc ═══════ */
 .w-card:not(.w-card--overlay) {
   .g-title {
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
   }
 
   .g-tags {
-    color: var(--el-text-color-secondary);
+    color: var(--text-secondary);
     .g-divider {
-      border-left: 1px var(--el-text-color-secondary) var(--el-border-style);
+      border-left: 1px solid var(--text-secondary);
     }
   }
 
   .g-desc {
-    color: var(--el-text-color-regular);
+    color: var(--text-regular);
   }
 }
 
@@ -191,10 +189,7 @@ $bp: 768px;
 .g-desc {
   font-size: 0.8rem;
   line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
   margin: 0;
+  /* 不限行数，让不同长度 summary 自然撑出瀑布流高度差 */
 }
 </style>

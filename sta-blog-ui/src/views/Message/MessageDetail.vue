@@ -23,7 +23,7 @@ onMounted(() => {
 .message-detail-redirect {
   text-align: center;
   padding: 40px;
-  color: var(--el-text-color-placeholder);
+  color: var(--text-placeholder);
   font-size: 14px;
 }
 </style>

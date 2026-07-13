@@ -153,7 +153,7 @@ onUnmounted(() => {
 
 .toc-empty {
   text-align: center;
-  color: var(--el-text-color-placeholder);
+  color: var(--text-placeholder);
   padding: 20px 0;
 }
 </style>

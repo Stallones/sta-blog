@@ -27,7 +27,7 @@ const { isLoading } = useLoading();
   width: 100%;
   height: 100%;
   position: fixed;
-  background: var(--el-bg-color);
+  background: var(--bg-page);
   top: 0;
   left: 0;
   display: flex;
@@ -114,7 +114,7 @@ const { isLoading } = useLoading();
 .loading-text {
   font-size: 1.1rem;
   font-weight: bold;
-  color: var(--el-text-color-primary);
+  color: var(--text-primary);
   letter-spacing: 2px;
 }
 

@@ -13,6 +13,14 @@ let router = createRouter({
   routes: constantRouter,
 });
 
+// 全局：进入文章详情页/留言详情页后回到顶部（注册一次，幂等）
+router.afterEach((to) => {
+  const toName = String(to.name);
+  if (toName === "article" || toName === "messageDetail") {
+    window.scrollTo(0, 0);
+  }
+});
+
 router.beforeEach((to, from, next) => {
   // 进入 /user/* 页面时，记录来源路径（用于返回按钮）
   if (to.path.startsWith("/user/") && !from.path.startsWith("/user/")) {
@@ -27,13 +35,7 @@ router.beforeEach((to, from, next) => {
 
   const toName = String(to.name);
 
-  // 查看文章详情页，滚动条回到顶部
-  if (toName === "article" || toName === "messageDetail") {
-    router.afterEach(() => {
-      window.scrollTo(0, 0);
-    });
-  }
-
+  // 查看文章详情页，滚动条回到顶部（幂等：由顶层 afterEach 统一处理）
   window.document.title = to.meta.title as string;
   next();
 });

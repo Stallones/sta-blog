@@ -2,12 +2,18 @@
  * BackgroundParallax — 视口滚动引擎
  *
  * 职责：管理 offscreen 画布 + 滚动 blit。
- * 内容由外部 DrawFn 注入：纯色模式传 ribbonDrawFn，玻璃模式传 lightDrawFn。
+ * 内容由外部 DrawFn 注入：默认使用 ribbonDrawFn（飘带）。
  */
 
+import { watch } from "vue";
+import { useDark } from "@vueuse/core";
 import { useCanvasEffects } from "@/composables/useCanvasEffects";
+import { useGlassMode } from "@/composables/useGlassMode";
+import canvBgUrl from "@/assets/images/canv-bg.png";
 
 const { canvasHeaderH, canvasImageUrl } = useCanvasEffects();
+const { glassEnabled } = useGlassMode();
+const isDark = useDark();
 
 export type DrawFn = (
   ctx: CanvasRenderingContext2D,
@@ -31,7 +37,8 @@ let offscreen: HTMLCanvasElement | null = null;
 let offCtx: CanvasRenderingContext2D | null = null;
 let loadedImage: HTMLImageElement | null = null;
 let contentH = 0;
-let classObserver: MutationObserver | null = null;
+let stopGlassWatcher: (() => void) | null = null;
+let stopDarkWatcher: (() => void) | null = null;
 let isGlass = false;
 let phase = 0;
 
@@ -41,7 +48,7 @@ let glassDraw: DrawFn | null = null;
 let activeDraw: DrawFn | null = null;
 
 function detectGlass() {
-  isGlass = document.documentElement.classList.contains("glass");
+  isGlass = glassEnabled.value;
   activeDraw = isGlass ? glassDraw : solidDraw;
 }
 
@@ -130,57 +137,131 @@ function blit() {
 function getCanvasBg(): string {
   return (
     getComputedStyle(document.documentElement)
-      .getPropertyValue("--el-bg-color")
+      .getPropertyValue("--bg-page")
       .trim() || "hsl(210, 17%, 98%)"
   );
 }
 
-export function ribbonDrawFn(ctx: CanvasRenderingContext2D, w: number, h: number, p: number) {
+/**
+ * 飘带绘制 — 基于 hustcc/ribbon.js 三角形链算法
+ * 连续三角形共享边，锐角转折处自然产生折叠重叠效果
+ * 路径仅在 resize 时重新生成
+ */
+
+/** 缓存的飘带点序列 */
+let ribbonPoints: { x: number; y: number }[] | null = null;
+/** 飘带尺寸因子 */
+const RIBBON_SIZE = 120;
+/**
+ * 生成飘带点序列（三角形链）
+ * 从左侧中下段出发，向右上方向延伸，终点在中上段
+ */
+function generateRibbonPoints(w: number, h: number): { x: number; y: number }[] {
+  const f = RIBBON_SIZE;
+  const pts: { x: number; y: number }[] = [];
+
+  // 起点：左侧中下段（Y: 60%~80%）
+  const startY = h * 0.6 + Math.random() * h * 0.2;
+  pts.push({ x: 0, y: startY - f * 0.5 });
+  pts.push({ x: 0, y: startY + f * 0.5 });
+
+  let cx = 0;
+  let cy = startY + f * 0.5;
+
+  while (cx < w + f) {
+    const nx = cx + (Math.random() * 2 - 0.25) * f;
+    // Y 偏移偏向上（最终到达中上段 20%~40%）
+    let ny = cy + (Math.random() * 2 - 1.3) * f;
+    let attempts = 0;
+    while ((ny > h + f || ny < -f) && attempts < 20) {
+      ny = cy + (Math.random() * 2 - 1.3) * f;
+      attempts++;
+    }
+    pts.push({ x: nx, y: ny });
+    cx = nx;
+    cy = ny;
+  }
+
+  return pts;
+}
+
+export function ribbonDrawFn(ctx: CanvasRenderingContext2D, w: number, h: number, _p: number) {
   // 纯色底
   ctx.fillStyle = getCanvasBg();
   ctx.fillRect(0, 0, w, h);
 
-  const ribbons = [
-    { color: "hsla(330, 80%, 70%, 0.35)", offset: 0 },
-    { color: "hsla(300, 70%, 68%, 0.30)", offset: 40 },
-    { color: "hsla(270, 65%, 72%, 0.25)", offset: 80 },
-  ];
+  // 路径缓存：仅在首次或尺寸变化时生成
+  if (!ribbonPoints) {
+    ribbonPoints = generateRibbonPoints(w, h);
+  }
 
-  const ribbonW = 120;
-  const startX = -w * 0.15;
-  const startY = h * 0.95;
-  const endX = w * 1.15;
-  const endY = h * 0.15;
-  const midX = w * 0.5;
-  const midY = h * 0.55;
+  const pts = ribbonPoints;
 
-  ribbons.forEach((r) => {
-    ctx.save();
+  ctx.save();
+  ctx.globalAlpha = 0.55;
+
+  // 三角形链绘制（同 ribbon.js 算法）
+  for (let i = 0; i < pts.length - 2; i++) {
+    const a = pts[i];
+    const b = pts[i + 1];
+    const c = pts[i + 2];
+
     ctx.beginPath();
-    const wo = Math.sin(p + r.offset * 0.02) * 20;
-
-    ctx.moveTo(startX, startY - ribbonW + wo);
-    ctx.quadraticCurveTo(midX - w * 0.18, midY - ribbonW * 1.5 + wo, endX, endY - ribbonW + wo);
-    ctx.lineTo(endX, endY + ribbonW + wo);
-    ctx.quadraticCurveTo(midX + w * 0.18, midY + ribbonW * 1.5 + wo, startX, startY + ribbonW + wo);
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.lineTo(c.x, c.y);
     ctx.closePath();
-    ctx.fillStyle = r.color;
+
+    // 颜色：粉红(340) → 蓝(200) 宽域渐变
+    const t = i / Math.max(1, pts.length - 3);
+    const hue = 360 - t * 240;
+    ctx.fillStyle = `hsl(${hue}, 70%, 55%)`;
     ctx.fill();
+  }
 
-    ctx.beginPath();
-    ctx.moveTo(startX, startY - ribbonW + 10 + wo);
-    ctx.quadraticCurveTo(midX - w * 0.18, midY - ribbonW * 1.5 + 10 + wo, endX, endY - ribbonW + 10 + wo);
-    ctx.strokeStyle = "hsla(0,0%,100%,0.2)";
-    ctx.lineWidth = 1;
-    ctx.stroke();
-    ctx.restore();
-  });
+  ctx.restore();
+}
 
-  const bg = ctx.createLinearGradient(0, h * 0.7, 0, h);
-  bg.addColorStop(0, "hsla(330,60%,70%,0)");
-  bg.addColorStop(1, "hsla(330,60%,70%,0.08)");
-  ctx.fillStyle = bg;
-  ctx.fillRect(0, h * 0.7, w, h * 0.3);
+// ══════════════════════════════════════
+// 暗色模式背景图
+// ══════════════════════════════════════
+
+let darkBgImage: HTMLImageElement | null = null;
+let darkBgLoaded = false;
+
+function ensureDarkBgImage() {
+  if (darkBgImage) return;
+  darkBgImage = new Image();
+  darkBgImage.onload = () => { darkBgLoaded = true; };
+  darkBgImage.src = canvBgUrl;
+}
+
+/** 暗色模式：极光图 cover fit 绘制 */
+function darkBgDrawFn(ctx: CanvasRenderingContext2D, w: number, h: number, _p: number) {
+  ensureDarkBgImage();
+
+  if (darkBgLoaded && darkBgImage) {
+    const imgW = darkBgImage.naturalWidth;
+    const imgH = darkBgImage.naturalHeight;
+    const scale = Math.max(w / imgW, h / imgH);
+    const sw = w / scale;
+    const sh = h / scale;
+    const sx = (imgW - sw) / 2;
+    const sy = (imgH - sh) / 2;
+    ctx.drawImage(darkBgImage, sx, sy, sw, sh, 0, 0, w, h);
+  } else {
+    ctx.fillStyle = "hsl(240, 25%, 6%)";
+    ctx.fillRect(0, 0, w, h);
+  }
+}
+
+/** 模式感知绘制：暗色用图，亮色用飘带 */
+export function modeDrawFn(ctx: CanvasRenderingContext2D, w: number, h: number, p: number) {
+  if (isDark.value && glassEnabled.value) {
+    darkBgDrawFn(ctx, w, h, p);
+  } else {
+    ribbonDrawFn(ctx, w, h, p);
+  }
 }
 
 // ══════════════════════════════════════
@@ -199,21 +280,26 @@ export function createParallax(): ParallaxInstance {
       glassDraw = _glass;
       detectGlass();
 
-      classObserver = new MutationObserver(() => {
+      // 玻璃模式切换 → 重绘
+      stopGlassWatcher = watch(glassEnabled, () => {
         detectGlass();
         if (offscreen && offCtx) {
           fillOffscreen(offscreen.width, offscreen.height);
           blit();
         }
       });
-      classObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ["class"],
+
+      // 亮/暗模式切换 → 重绘
+      stopDarkWatcher = watch(isDark, () => {
+        if (offscreen && offCtx) {
+          fillOffscreen(offscreen.width, offscreen.height);
+          blit();
+        }
       });
 
       if (canvasImageUrl.value) {
         loadImage(canvasImageUrl.value).then(() => {
-          if (mainCanvas) resize(mainCanvas.width, mainCanvas.height);
+          if (mainCanvas) this.resize(mainCanvas.width, mainCanvas.height);
         });
       }
     },
@@ -238,13 +324,18 @@ export function createParallax(): ParallaxInstance {
     },
 
     destroy() {
-      classObserver?.disconnect();
-      classObserver = null;
+      stopGlassWatcher?.();
+      stopGlassWatcher = null;
+      stopDarkWatcher?.();
+      stopDarkWatcher = null;
       mainCanvas = null;
       mCtx = null;
       offscreen = null;
       offCtx = null;
       loadedImage = null;
+      darkBgImage = null;
+      darkBgLoaded = false;
+      ribbonPoints = null;
       solidDraw = null;
       glassDraw = null;
       activeDraw = null;

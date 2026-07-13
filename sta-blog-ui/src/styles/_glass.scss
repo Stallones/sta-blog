@@ -1,20 +1,23 @@
 // ══════════════════════════════════════════════════════════════
-//  玻璃拟态 Mixin 库
+//  表面材质 Mixin 库
 //  通过 Vite additionalData 全局注入，所有 .vue 文件可直接 @include
 //  此文件只含 @mixin，不含任何会输出 CSS 的规则
+//
+//  新体系：统一使用 --surface-* 材质 Token，自动响应玻璃/实体切换
+//  组件引用 surface-card / surface-inner 即可，无需关心当前材质
 // ══════════════════════════════════════════════════════════════
 
 @use "src/styles/variable" as *;
 
-// ═══ 玻璃卡片 Mixin ═══
-// 使用方式：@include glass-card;
-@mixin glass-card {
-  background: var(--glass-bg);
+// ═══ [NEW] 表面卡片 Mixin（替代 glass-card + solid-card）═══
+// 使用方式：@include surface-card;
+@mixin surface-card {
+  background: var(--surface-bg);
   border-radius: $glass-radius;
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: var(--glass-blur-filter);
-  -webkit-backdrop-filter: var(--glass-blur-filter);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--surface-shadow);
+  backdrop-filter: var(--surface-blur);
+  -webkit-backdrop-filter: var(--surface-blur);
   overflow: hidden;
   transition: background $glass-transition, box-shadow $glass-transition;
   position: relative;
@@ -27,24 +30,25 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: var(--glass-highlight);
+    background: var(--surface-highlight);
     pointer-events: none;
   }
 }
 
-// 玻璃内部分区（纯色半透明，无 backdrop-filter）
-@mixin glass-inner {
-  background: var(--glass-inner-bg);
+// ═══ [NEW] 表面内部分区（无 backdrop-filter）═══
+@mixin surface-inner {
+  background: var(--surface-inner-bg);
   border-radius: $glass-radius;
 }
 
-// 实体容器（阅读模式、系统弹窗等 — 纯色不透明）
-@mixin solid-card {
-  background: var(--solid-bg);
-  border: 1px solid var(--solid-border);
-  border-radius: $glass-radius;
-  box-shadow: var(--solid-shadow);
-}
+// ═══ [DEPRECATED] 玻璃卡片 — 过渡 alias，指向 surface-card ═══
+@mixin glass-card { @include surface-card; }
+
+// ═══ [DEPRECATED] 玻璃内部分区 — 过渡 alias，指向 surface-inner ═══
+@mixin glass-inner { @include surface-inner; }
+
+// ═══ [DEPRECATED] 实体容器 — 过渡 alias，指向 surface-card ═══
+@mixin solid-card { @include surface-card; }
 
 // ═══ 主按钮 Mixin（蓝紫渐变胶囊）═══
 @mixin primary-button {
@@ -52,7 +56,7 @@
   border: none;
   border-radius: $glass-radius-pill;
   height: 48px;
-  color: #fff;
+  color: var(--color-white);
   font-weight: 600;
   letter-spacing: 2px;
   cursor: pointer;
@@ -70,8 +74,8 @@
 
 // ═══ 次按钮 Mixin（描边/透明底）═══
 @mixin secondary-button {
-  background: var(--glass-inner-bg);
-  border: 1px solid var(--glass-border);
+  background: var(--surface-inner-bg);
+  border: 1px solid var(--surface-border);
   border-radius: $glass-radius-sm;
   height: 44px;
   color: var(--text-regular);
@@ -79,15 +83,15 @@
   transition: background 0.2s ease, border-color 0.2s ease;
 
   &:hover {
-    background: rgba(255,255,255,0.1);
-    border-color: rgba(255,255,255,0.15);
+    background: var(--color-white-a10);
+    border-color: var(--color-white-a15);
   }
 }
 
-// ═══ 输入框 Mixin ══
+// ═══ 输入框 Mixin ═══
 @mixin glass-input {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--color-white-a10);
+  border: 1px solid var(--surface-border);
   border-radius: $glass-radius-sm;
   height: 46px;
   padding: 0 14px 0 42px;
@@ -100,7 +104,7 @@
     color: var(--text-placeholder);
   }
   &:focus {
-    border-color: rgba(79,172,254,0.5);
-    box-shadow: 0 0 0 3px rgba(79,172,254,0.1);
+    border-color: hsla(217, 91%, 60%, 0.5);
+    box-shadow: 0 0 0 3px hsla(217, 91%, 60%, 0.1);
   }
 }

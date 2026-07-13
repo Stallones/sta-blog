@@ -58,12 +58,12 @@ function handleClick() {
   align-items: center;
 
   &:hover {
-    color: var(--mao-accent);
-    background-color: var(--el-fill-color-light);
+    color: var(--accent-primary);
+    background-color: var(--fill-color-light);
   }
 
   &--active {
-    background-color: var(--mao-accent) !important;
+    background-color: var(--accent-primary) !important;
     color: #fff !important;
 
     .toc-item__text {
@@ -80,7 +80,7 @@ function handleClick() {
 }
 
 .toc-children {
-  border-left: 1px solid var(--el-border-color-light);
+  border-left: 1px solid var(--border-light);
   margin-left: 8px;
 }
 </style>

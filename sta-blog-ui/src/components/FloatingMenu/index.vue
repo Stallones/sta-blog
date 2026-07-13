@@ -124,8 +124,8 @@
           <!-- 实体/玻璃切换 -->
           <svg-icon
             v-else-if="btn.id === 'glassMode'"
-            :name="glassEnabled ? 'windows_icon' : 'windows_icon'"
-            :style="{ opacity: glassEnabled ? 1 : 0.4 }"
+            :name="'glass_mode'"
+            :style="{ opacity: glassEnabled ? 0.5: 1 }"
           />
           <!-- 百分比 + ToTop 合并 -->
           <template v-else-if="btn.id === 'scrollPercentage'">
@@ -248,7 +248,7 @@ onUnmounted(() => {
   window.removeEventListener("resize", checkMobileBreakpoint);
 });
 
-/** 7 种布局选项 */
+/** 6 种布局选项 */
 const layoutOptions = [
   { value: 1, label: "水平卡片 · 左" },
   { value: 2, label: "水平卡片 · 右" },
@@ -256,7 +256,7 @@ const layoutOptions = [
   { value: 4, label: "垂直卡片" },
   { value: 5, label: "层叠卡片" },
   { value: 6, label: "瀑布流 · 垂直卡片" },
-  { value: 7, label: "瀑布流 · 层叠卡片" },
+  // { value: 7, label: "瀑布流 · 层叠卡片" },
 ];
 
 // ── 滚动隐藏逻辑：scrollTop ≈ 0 时整组菜单右滑隐藏 ──
@@ -456,7 +456,7 @@ function handleButtonClick(id: string) {
   &__title {
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
     margin-bottom: 6px;
     padding-bottom: 6px;
     // border-bottom: 1px solid var(--el-border-color-light);
@@ -470,7 +470,7 @@ function handleButtonClick(id: string) {
     border-radius: 6px;
     cursor: pointer;
     font-size: 0.82rem;
-    color: var(--el-text-color-secondary);
+    color: var(--text-secondary);
     transition: background 0.15s, color 0.15s;
 
     &:hover {
@@ -479,7 +479,7 @@ function handleButtonClick(id: string) {
     }
 
     &--active {
-      background: var(--el-color-primary-light-9, rgba(64, 158, 255, 0.12));
+      background: var(--color-blue-50);
       color: var(--mao-accent);
     }
   }
@@ -518,10 +518,10 @@ function handleButtonClick(id: string) {
   &__title {
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
     margin-bottom: 6px;
     padding-bottom: 6px;
-    border-bottom: 1px solid var(--el-border-color-light);
+    border-bottom: 1px solid var(--border-light);
   }
 
   &__list {
@@ -536,7 +536,7 @@ function handleButtonClick(id: string) {
 
   .toc-empty {
     text-align: center;
-    color: var(--el-text-color-placeholder);
+    color: var(--text-placeholder);
     padding: 16px 0;
     font-size: 0.85rem;
   }
@@ -548,8 +548,8 @@ function handleButtonClick(id: string) {
 
   :deep(.md-editor-catalog-active) {
     & > span {
-      background-color: var(--el-color-primary-light-9);
-      color: var(--el-color-primary-light-4);
+      background-color: var(--color-blue-50);
+      color: var(--color-blue-300);
       border-radius: $border-radius;
       font-weight: bold;
       padding: 0.5rem 0 0.5rem 0.5rem;
@@ -558,7 +558,7 @@ function handleButtonClick(id: string) {
 
   :deep(.md-editor-catalog) {
     span:hover {
-      color: var(--el-color-primary-light-5);
+      color: var(--color-blue-200);
     }
   }
 

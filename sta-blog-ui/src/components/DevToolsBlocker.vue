@@ -367,15 +367,15 @@ onUnmounted(() => {
 }
 
 .warning-container {
-  background: var(--el-bg-color);
-  color: var(--el-text-color-secondary);
+  background: var(--bg-page);
+  color: var(--text-secondary);
   padding: 16px 24px;
   margin: 0 auto;
   width: 100%;
   max-width: 500px;
   border-radius: 0 0 12px 12px;
-  box-shadow: var(--el-box-shadow-light);
-  border: 1px solid var(--el-border-color);
+  box-shadow: var(--surface-shadow);
+  border: 1px solid var(--border-color);
   border-top: none;
   display: flex;
   justify-content: space-between;
@@ -461,7 +461,7 @@ onUnmounted(() => {
 }
 
 .close-button:hover {
-  background: var(--el-fill-color-light);
+  background: var(--fill-color-light);
   transform: scale(1.1);
 }
 

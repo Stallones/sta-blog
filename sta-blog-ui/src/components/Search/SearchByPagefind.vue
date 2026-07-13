@@ -129,7 +129,7 @@ function clearQuery() {
   padding: 0 16px;
   border-radius: 50px;
   align-items: center;
-  background: var(--el-fill-color-light);
+  background: var(--fill-color-light);
   // border: 1px solid hsla(0, 0%, 100%, 0.1);
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: text;
@@ -161,13 +161,13 @@ function clearQuery() {
     font-size: 18px;
     margin-right: 10px;
     flex-shrink: 0;
-    color: var(--el-text-color-secondary);
+    color: var(--text-secondary);
     transition: color 0.25s ease;
   }
 
   &.focused .search-icon,
   &:hover .search-icon {
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
   }
 
   input {
@@ -177,17 +177,17 @@ function clearQuery() {
     background: transparent;
     border: none;
     outline: none;
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
     font-size: 14px;
     transition: opacity 0.25s ease;
 
     &::placeholder {
-      color: var(--el-text-color-placeholder);
+      color: var(--text-placeholder);
     }
   }
 
   .clear-icon {
-    color: var(--el-text-color-secondary);
+    color: var(--text-secondary);
     font-size: 16px;
     margin-left: 8px;
     cursor: pointer;
@@ -195,7 +195,7 @@ function clearQuery() {
     transition: color 0.2s;
 
     &:hover {
-      color: var(--el-text-color-primary);
+      color: var(--text-primary);
     }
   }
 

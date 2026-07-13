@@ -55,7 +55,7 @@ function getDifferenceInDays() {
 .statistics {
     display: flex;
     flex-direction: column;
-    color: var(--mao-accent);
+    color: var(--accent-primary);
 
     div {
       margin: 5px 20px;

@@ -318,9 +318,9 @@ onUnmounted(() => {
   /* ── 统一搜索容器 ── */
   .search-dialog {
     width: min(680px, 90vw);
-    background-color: var(--el-bg-color);
+    background-color: var(--bg-page);
     border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 30px hsla(0, 0%, 0%, 0.15);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -332,11 +332,11 @@ onUnmounted(() => {
       height: 52px;
       padding: 0 18px;
       gap: 10px;
-      border-bottom: 1px solid var(--el-border-color-lighter);
+      border-bottom: 1px solid var(--border-lighter);
 
       &__icon {
         font-size: 20px;
-        color: var(--el-text-color-secondary);
+        color: var(--text-secondary);
         flex-shrink: 0;
       }
 
@@ -346,36 +346,36 @@ onUnmounted(() => {
         border: none;
         outline: none;
         background: transparent;
-        color: var(--el-text-color-primary);
+        color: var(--text-primary);
         font-size: 16px;
 
         &::placeholder {
-          color: var(--el-text-color-placeholder);
+          color: var(--text-placeholder);
         }
       }
 
       &__clear {
         font-size: 17px;
-        color: var(--el-text-color-secondary);
+        color: var(--text-secondary);
         cursor: pointer;
         flex-shrink: 0;
         transition: color 0.2s;
 
         &:hover {
-          color: var(--el-text-color-primary);
+          color: var(--text-primary);
         }
       }
 
       &__close {
         font-size: 16px;
-        color: var(--el-text-color-placeholder);
+        color: var(--text-placeholder);
         cursor: pointer;
         flex-shrink: 0;
         margin-left: 4px;
         transition: color 0.2s;
 
         &:hover {
-          color: var(--el-text-color-primary);
+          color: var(--text-primary);
         }
       }
     }
@@ -397,7 +397,7 @@ onUnmounted(() => {
           transition: background-color 0.2s;
 
           &:hover {
-            background-color: var(--el-fill-color-light);
+            background-color: var(--fill-color-light);
           }
 
           &__main {
@@ -408,7 +408,7 @@ onUnmounted(() => {
           &__title {
             font-size: 0.95rem;
             font-weight: 500;
-            color: var(--el-text-color-primary);
+            color: var(--text-primary);
             line-height: 1.4;
             white-space: nowrap;
             overflow: hidden;
@@ -424,7 +424,7 @@ onUnmounted(() => {
 
           &__content {
             font-size: 0.78rem;
-            color: var(--el-text-color-secondary);
+            color: var(--text-secondary);
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -437,7 +437,7 @@ onUnmounted(() => {
             align-items: center;
             gap: 4px;
             font-size: 0.75rem;
-            color: var(--el-text-color-secondary);
+            color: var(--text-secondary);
             flex-shrink: 0;
             margin-left: 12px;
           }
@@ -455,7 +455,7 @@ onUnmounted(() => {
           margin-bottom: 10px;
           font-size: 0.85rem;
           font-weight: 600;
-          color: var(--el-text-color-primary);
+          color: var(--text-primary);
         }
 
         &__clear {
@@ -464,11 +464,11 @@ onUnmounted(() => {
           gap: 4px;
           font-size: 0.78rem;
           font-weight: 400;
-          color: var(--el-text-color-secondary);
+          color: var(--text-secondary);
           cursor: pointer;
 
           &:hover {
-            color: var(--el-color-danger);
+            color: var(--status-danger);
           }
         }
 
@@ -486,7 +486,7 @@ onUnmounted(() => {
         gap: 8px;
         padding: 48px 20px;
         font-size: 0.85rem;
-        color: var(--el-text-color-placeholder);
+        color: var(--text-placeholder);
       }
     }
   }
@@ -494,7 +494,7 @@ onUnmounted(() => {
 
 /* ── 高亮 ── */
 :deep(.search-hl) {
-  background-color: var(--el-color-warning-light-7);
+  background-color: var(--color-warning-light);
   border-radius: 2px;
   padding: 0 2px;
 }

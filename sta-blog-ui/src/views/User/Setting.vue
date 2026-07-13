@@ -513,9 +513,9 @@ $bp-md: 768px;
 }
 .setting-main {
 }
-.panel {
+  .panel {
   width: 100%;
-  @include glass-card;
+  @include surface-card;
   padding: 2rem;
   margin-bottom: 1rem;
 }
@@ -532,7 +532,7 @@ $bp-md: 768px;
   font-weight: bold;
 }
 .panel-desc {
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
   font-size: 0.8rem;
 }
 .panel-body {
@@ -581,14 +581,14 @@ $bp-md: 768px;
   text-align: center;
 }
 .avatar-uploader :hover {
-  border-color: var(--el-color-primary);
+  border-color: var(--accent-primary);
 }
 .avatar-uploader-icon {
-  border: 1px dashed var(--el-border-color);
+  border: 1px dashed var(--border-color);
   border-radius: 6px;
   cursor: pointer;
   overflow: hidden;
-  transition: var(--el-transition-duration-fast);
+  transition: 0.2s;
 }
 :deep(.el-dialog__body) {
   padding-top: 0;

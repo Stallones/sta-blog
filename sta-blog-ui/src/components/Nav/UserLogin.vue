@@ -104,7 +104,7 @@ const logoutSub = () => {
   width: 80px;
   justify-content: center;
   position: relative;
-  color: var(--el-text-color-primary);
+  color: var(--text-primary);
   cursor: pointer;
 
   &::before {
@@ -112,7 +112,7 @@ const logoutSub = () => {
     position: absolute;
     bottom: 0;
     height: 2px;
-    background-color: var(--el-color-primary);
+    background-color: var(--accent-primary);
     transition: width 0.3s;
   }
 
@@ -156,7 +156,7 @@ const logoutSub = () => {
   transition: border-color 0.2s;
 
   &:hover {
-    border-color: var(--el-color-primary);
+    border-color: var(--accent-primary);
   }
 }
 
@@ -200,13 +200,13 @@ const logoutSub = () => {
 .dropdown-name {
   font-size: 15px;
   font-weight: 600;
-  color: var(--el-text-color-primary);
+  color: var(--text-primary);
   margin-bottom: 4px;
 }
 
 .dropdown-email {
   font-size: 12px;
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
 }
 
 :deep(.el-dropdown-menu__item) {

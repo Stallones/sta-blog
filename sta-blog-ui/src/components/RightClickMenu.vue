@@ -350,13 +350,13 @@ html.dark .context-menu {
 }
 
 .menu-container {
-  background-color: var(--el-bg-color-overlay);
+  background-color: var(--bg-overlay);
   border-radius: 12px;
   box-shadow: 0 4px 20px hsla(258, 64%, 61%, 0.15);
   // border: 1px solid var(--el-border-color-light);
   min-width: 240px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
   position: relative;
   transition: all 0.2s ease;
   animation: slideIn 0.2s ease;
@@ -364,7 +364,7 @@ html.dark .context-menu {
 }
 
 html.dark .menu-container {
-  color: var(--el-text-color-primary);
+  color: var(--text-primary);
   box-shadow: 0 4px 20px hsla(0, 0%, 0%, 0.3);
 }
 
@@ -501,7 +501,7 @@ html.dark .menu-container {
   position: absolute;
   top: 0;
   left: 100%;
-  background-color: var(--el-bg-color-overlay);
+  background-color: var(--bg-overlay);
   border-radius: 12px;
   box-shadow: 0 4px 16px hsla(258, 64%, 61%, 0.12);
   border: 1px solid var(--menu-submenu-border);

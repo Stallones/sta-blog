@@ -138,7 +138,7 @@ function handleLike() {
   align-items: center;
   gap: 6px;
   flex-wrap: wrap;
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
   font-weight: bold;
 
   .s-reply-item__nickname {
@@ -153,11 +153,11 @@ function handleLike() {
 
 .s-reply-item__tag {
   font-size: 11px;
-  color: var(--el-text-color-placeholder);
+  color: var(--text-placeholder);
   padding: 0 4px;
-  border: 1px solid var(--el-border-color-lighter);
+  border: 1px solid var(--border-lighter);
   border-radius: 2px;
-  background-color: var(--el-fill-color-lighter);
+  background-color: var(--fill-color-lighter);
   white-space: nowrap;
 }
 
@@ -173,12 +173,12 @@ function handleLike() {
   color: #555;
 
   .s-reply-item__reply-text {
-    color: var(--el-text-color-regular);
+    color: var(--text-regular);
     white-space: nowrap;
   }
 
   .s-reply-item__mention {
-    color: var(--el-color-primary);
+    color: var(--accent-primary);
     white-space: nowrap;
   }
 }
@@ -195,7 +195,7 @@ function handleLike() {
 
 .s-reply-item__time {
   font-size: 12px;
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
 }
 
 .s-reply-item__actions {
@@ -210,17 +210,17 @@ function handleLike() {
   align-items: center;
   gap: 3px;
   font-size: 12px;
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: color 0.2s;
   user-select: none;
 
   &:hover {
-    color: var(--el-color-primary);
+    color: var(--accent-primary);
   }
 }
 
 .s-reply-item__action--liked {
-  color: var(--el-color-danger);
+  color: var(--status-danger);
 }
 </style>

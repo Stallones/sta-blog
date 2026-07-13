@@ -87,7 +87,7 @@ const renderedContent = computed(() => parseHeoEmoji(props.content));
     margin: 0 !important;
     font-size: v-bind(fontSize);
     line-height: 1.6;
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
   }
 
   // 标题

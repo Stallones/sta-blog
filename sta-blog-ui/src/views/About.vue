@@ -104,7 +104,7 @@ $bp-xl: 1280px;
   align-items: center;
   width: 40%;
   height: 100%;
-  @include glass-card;
+  @include surface-card;
   padding: $padding-lg;
   box-sizing: border-box;
 
@@ -135,10 +135,10 @@ $bp-xl: 1280px;
   width: 100%;
   font-weight: bold;
   text-align: center;
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
 
   html.dark & {
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
   }
 }
 
@@ -150,7 +150,7 @@ $bp-xl: 1280px;
   align-items: center;
   width: 60%;
   height: 100%;
-  @include glass-card;
+  @include surface-card;
   padding: $padding-lg;
   box-sizing: border-box;
 
@@ -177,10 +177,10 @@ $bp-xl: 1280px;
   width: 100%;
   font-size: 3rem;
   text-align: center;
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
 
   html.dark & {
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
   }
 
   @media (max-width: $bp-lg) {
@@ -192,10 +192,10 @@ $bp-xl: 1280px;
 .intro-body {
   margin-top: 1rem;
   text-align: center;
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
 
   html.dark & {
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
   }
 
   @media (max-width: $bp-lg) {
@@ -219,10 +219,10 @@ $bp-xl: 1280px;
 }
 
 .nav-divider {
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
 
   html.dark & {
-    color: var(--el-text-color-primary);
+    color: var(--text-primary);
   }
 }
 
@@ -247,7 +247,7 @@ $bp-xl: 1280px;
   align-items: center;
   width: 120px;
   height: 120px;
-  @include glass-card;
+  @include surface-card;
 }
 
 /* ── Glitch 文字效果 ── */

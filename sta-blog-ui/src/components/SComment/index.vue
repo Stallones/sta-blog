@@ -313,7 +313,7 @@ watch(
 
 .s-comment__sort-label {
   font-size: 14px;
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
 }
 
 .s-comment__sort-trigger {
@@ -321,7 +321,7 @@ watch(
   align-items: center;
   cursor: pointer;
   font-size: 14px;
-  color: var(--el-color-primary);
+  color: var(--accent-primary);
   user-select: none;
 }
 
@@ -334,27 +334,27 @@ watch(
 
 .s-comment__item {
   padding: 1rem 0 1rem;
-  border-top: 1px solid var(--el-border-color-lighter);
+  border-top: 1px solid var(--border-lighter);
 }
 
 .s-comment__loading {
   text-align: center;
   padding: 1rem;
-  color: var(--el-text-color-secondary);
+  color: var(--text-secondary);
   font-size: 13px;
 }
 
 .s-comment__no-more {
   text-align: center;
   padding: 1rem;
-  color: var(--el-text-color-placeholder);
+  color: var(--text-placeholder);
   font-size: 13px;
 }
 
 .s-comment__empty {
   text-align: center;
   padding: 2rem;
-  color: var(--el-text-color-placeholder);
+  color: var(--text-placeholder);
   font-size: 14px;
 }
 

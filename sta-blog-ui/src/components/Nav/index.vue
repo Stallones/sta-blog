@@ -85,10 +85,11 @@ nav {
   height: 50px;
   width: 100%;
   z-index: 10;
-  background-color: var(--mao-nav-bg);
-  backdrop-filter: blur(6px);
+  background-color: var(--nav-bg);
+  backdrop-filter: var(--nav-blur);
+  border-bottom: 1px solid var(--nav-border);
+  box-shadow: var(--nav-shadow);
   transition: top 0.3s ease-in-out, background-color 0.3s ease-in-out;
-  // border-bottom: 1px solid var(--mao-nav-border);
   padding: 0 1.5rem;
   box-sizing: border-box;
 
@@ -97,28 +98,26 @@ nav {
   }
 
   &.nav-transparent {
-    // height: 60px;
-    // border-bottom: 1px solid var(--el-bg-color);
     background-color: transparent;
     backdrop-filter: none;
-    border-bottom: 1px solid var(--mao-nav-border-transparent);
+    border-bottom: 1px solid var(--nav-border-transparent);
     box-shadow: none;
-    color: hsl(0, 0%, 100%);
+    color: var(--text-on-dark-primary);
 
     :deep(*) {
-      color: hsl(0, 0%, 100%) !important;
+      color: var(--text-on-dark-primary) !important;
     }
 
     /* 子菜单下拉恢复正常文字颜色（亮色背景上不能用白字） */
     :deep(.menus_item_child),
     :deep(.menus_item_child *) {
-      color: var(--el-text-color-primary) !important;
+      color: var(--text-primary) !important;
     }
 
     /* dark 模式下子菜单也正常 */
     html.dark & :deep(.menus_item_child),
     html.dark & :deep(.menus_item_child *) {
-      color: var(--el-text-color-primary) !important;
+      color: var(--text-primary) !important;
     }
   }
 
