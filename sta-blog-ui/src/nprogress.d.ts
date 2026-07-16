@@ -1,3 +1,1 @@
-declare module 'nprogress' {
-    export default nprogress;
-}
+declare module 'nprogress';

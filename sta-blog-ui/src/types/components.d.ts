@@ -16,7 +16,6 @@ declare module 'vue' {
     Card: typeof import('./../components/SCard/Card.vue')['default']
     ChargingCard: typeof import('./../components/SCard/ChargingCard.vue')['default']
     ClocksCard: typeof import('./../components/SCard/ClocksCard.vue')['default']
-    ColorModeToggle: typeof import('./../components/ColorModeToggle/index.vue')['default']
     CommentCard: typeof import('./../components/SComment/CommentCard.vue')['default']
     CommentContent: typeof import('./../components/SComment/CommentContent.vue')['default']
     CommentInput: typeof import('./../components/SComment/CommentInput.vue')['default']
