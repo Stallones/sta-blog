@@ -1,7 +1,7 @@
 <template>
   <header
     :class="header.cls"
-    style="position: relative; width: 100%; overflow: hidden"
+    style="position: relative; width: 100%"
   >
     <Nav />
 

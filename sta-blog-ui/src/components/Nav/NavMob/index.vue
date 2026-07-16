@@ -88,6 +88,7 @@ onUnmounted(() => {
   padding: 0 1rem;
   position: fixed;
   top: 0;
+  left: 0;
   z-index: 10;
   width: 100%; // 用 100% 而非 100vw，避免包含滚动条宽度导致溢出
   box-sizing: border-box;

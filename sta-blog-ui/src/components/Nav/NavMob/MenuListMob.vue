@@ -13,8 +13,11 @@ import {
   Fries,
   Postcard,
   InfoFilled,
+  UserFilled,
 } from "@element-plus/icons-vue";
 import router from "@/router";
+import { useDemotion } from "@/composables/useDemotion";
+import { useUserStore } from "@/store/useUserStore";
 
 const emit = defineEmits("update:closeDrawer");
 
@@ -24,6 +27,8 @@ function isClose() {
 
 // 是否显示音乐模块
 const env = import.meta.env;
+const { isOnline } = useDemotion();
+const userStore = useUserStore();
 </script>
 
 <template>
@@ -80,6 +85,12 @@ const env = import.meta.env;
           </el-icon>
           友链
         </el-menu-item>
+        <el-menu-item index="/tree-hole" @click="isClose">
+          <el-icon>
+            <Fries />
+          </el-icon>
+          树洞
+        </el-menu-item>
         <el-menu-item v-if="env.VITE_MUSIC_FRONTEND_URL" index="/music" @click="isClose">
           <el-icon>
             <Headset />
@@ -94,32 +105,25 @@ const env = import.meta.env;
         </el-menu-item>
       </el-sub-menu>
 
-      <el-sub-menu index="message">
-        <template #title>
-          <el-icon>
-            <Promotion />
-          </el-icon>
-          留言
-        </template>
-        <el-menu-item index="/tree-hole" @click="isClose">
-          <el-icon>
-            <Fries />
-          </el-icon>
-          树洞
-        </el-menu-item>
-        <el-menu-item index="/message" @click="isClose">
-          <el-icon>
-            <Postcard />
-          </el-icon>
-          留言板
-        </el-menu-item>
-      </el-sub-menu>
+      <el-menu-item index="/message" @click="isClose">
+        <el-icon>
+          <Promotion />
+        </el-icon>
+        留言
+      </el-menu-item>
 
       <el-menu-item index="/about" @click="isClose">
         <el-icon>
           <InfoFilled />
         </el-icon>
         关于
+      </el-menu-item>
+
+      <el-menu-item v-if="isOnline && !userStore.isLoggedIn" index="/user/login" @click="isClose">
+        <el-icon>
+          <UserFilled />
+        </el-icon>
+        登录
       </el-menu-item>
     </el-menu>
   </div>

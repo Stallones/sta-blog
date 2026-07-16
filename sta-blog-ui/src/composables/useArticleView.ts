@@ -10,7 +10,6 @@ import { useFloatingMenu } from "./useFloatingMenu";
  * 用法:
  *   const { isReadingMode, setTocContext, setTocList } = useArticleView()   // Article.vue
  *   const { toggleReadingMode, scrollPercentage, MobTocVisible, ... } = useArticleView()  // FloatingMenu
- *   const { MobTocVisible, toggleMobToc } = useArticleView()  // MobTocCard
  */
 
 export interface TocHeading {
@@ -31,7 +30,7 @@ watch(isReadingMode, (val) => {
 const scrollPercentage = ref(0);
 
 // ── 移动端目录状态（全局单例）──
-const MobTocVisible = ref(true);
+const MobTocVisible = ref(false);
 const MobTocEditorId = ref("");
 const MobTocScrollElement = ref<HTMLElement | null>(null);
 const tocList = ref<TocHeading[]>([]);

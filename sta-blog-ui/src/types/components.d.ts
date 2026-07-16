@@ -67,7 +67,6 @@ declare module 'vue' {
     MdEditor: typeof import('./../components/Article/MdEditor.vue')['default']
     MenuList: typeof import('./../components/Nav/MenuList.vue')['default']
     MenuListMob: typeof import('./../components/Nav/NavMob/MenuListMob.vue')['default']
-    MobTocCard: typeof import('./../components/SCard/MobTocCard.vue')['default']
     Music: typeof import('./../components/Music/index.vue')['default']
     Nav: typeof import('./../components/Nav/index.vue')['default']
     NavMob: typeof import('./../components/Nav/NavMob/index.vue')['default']
