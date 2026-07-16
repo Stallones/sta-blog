@@ -66,21 +66,18 @@ const submitUploadAndUpdate = () => {
   } else updateUser();
 };
 
-// 上传头像：使用 yudao 文件上传
-const uploadAvatarUrl = "/api/app-api/infra/file/upload";
+// 上传头像：使用博客专用上传接口，文件存储到 MinIO /blog/avatar 并在 blog_image 记录
+const uploadAvatarUrl = "/api/app-api/blog/image/upload";
 
 const handleAvatarSuccess: UploadProps["onSuccess"] = (response: any) => {
-  // 后端返回 CommonResult<String>，data 就是 URL 字符串
+  // 后端返回 CommonResult<AppImageUploadRespVO>，response.data.url 为图片地址
   const data = response?.data || response;
-  if (typeof data === "string") {
-    accountForm.value.avatar = data;
+  const url = typeof data === "string" ? data : data?.url || data?.path;
+  if (url) {
+    accountForm.value.avatar = url;
     updateUser();
-  } else if (data?.url) {
-    accountForm.value.avatar = data.url;
-    updateUser();
-  } else if (data?.path) {
-    accountForm.value.avatar = data.path;
-    updateUser();
+  } else {
+    ElMessage.error("头像上传失败，请稍后重试");
   }
   firstImg.value = avatarImg.value;
 };
@@ -323,6 +320,7 @@ const uploadHeaders = computed<Record<string, string>>(() => ({
                 <el-upload
                   class="avatar-uploader"
                   :action="uploadAvatarUrl"
+                  :data="{ type: 54 }"
                   :show-file-list="false"
                   :on-success="handleAvatarSuccess"
                   :before-upload="beforeAvatarUpload"
