@@ -1,7 +1,7 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { dayjs } from "element-plus";
-import { useWebsiteStore } from "@/store/useWebsiteStore";
+import { useSiteStore } from "@/store/useSiteStore";
 import { useUserStore } from "@/store/useUserStore";
 
 /**
@@ -27,12 +27,12 @@ export interface UserCardData {
  *
  * 根据当前路由与登录状态，自动切换数据源：
  * - `/setting` 且已登录 → 返回登录用户信息（从 useUserStore）
- * - 其他情况 → 返回博主信息（从 useWebsiteStore）
+ * - 其他情况 → 返回博主信息（从 useSiteStore）
  */
 export function useUserCard() {
   const route = useRoute();
   const userStore = useUserStore();
-  const websiteStore = useWebsiteStore();
+  const websiteStore = useSiteStore();
 
   const isSettingUser = computed(
     () => route.path === "/setting" && userStore.isLoggedIn

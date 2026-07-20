@@ -12,7 +12,6 @@ import * as AppCommentController from "./AppCommentController";
 import * as AppBlogAuthController from "./AppBlogAuthController";
 import * as AppWebsiteInfoController from "./AppWebsiteInfoController";
 import * as AppTagController from "./AppTagController";
-import * as AppOtherController from "./AppOtherController";
 import * as AppCategoryController from "./AppCategoryController";
 import * as AppArticleController from "./AppArticleController";
 export default {
@@ -26,7 +25,6 @@ export default {
   AppBlogAuthController,
   AppWebsiteInfoController,
   AppTagController,
-  AppOtherController,
   AppCategoryController,
   AppArticleController,
 };

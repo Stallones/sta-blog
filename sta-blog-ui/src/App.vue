@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from "vue";
 import { useDark } from "@vueuse/core";
-import { useWebsiteStore } from "@/store/useWebsiteStore";
+import { useSiteStore } from "@/store/useSiteStore";
 import { useUserStore } from "@/store/useUserStore";
 import DevToolsBlocker from "@/components/DevToolsBlocker.vue";
 import RightClickMenu from "@/components/RightClickMenu.vue";
@@ -27,7 +27,7 @@ import CanvasLayer from "@/components/CanvasLayer/index.vue";
 const { isReady, setReady, checkService, checkYiyuan, checkImage } = useDemotion();
 const { show: showLoading, hide: hideLoading } = useLoading();
 const { scrollPercentage } = useArticleView();
-const useWebsite = useWebsiteStore();
+const useWebsite = useSiteStore();
 const useUser = useUserStore();
 
 // ── 全局 scroll 监听（写入共享变量 scrollPercentage）──

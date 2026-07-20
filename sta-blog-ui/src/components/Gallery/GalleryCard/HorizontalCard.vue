@@ -17,7 +17,13 @@ defineProps<{
     <div class="g-cover">
       <div class="g-cover-inner">
         <div class="g-img-wrap">
-          <img v-if="imageOnline" class="g-img" v-lazy="true" :data-src="article.coverPath" alt="" />
+          <img
+            v-if="imageOnline"
+            class="g-img"
+            v-lazy="true"
+            :data-src="article.coverPath"
+            alt=""
+          />
           <div v-else class="img-placeholder">
             <!-- <span class="img-placeholder__text">图片</span> -->
           </div>
@@ -33,7 +39,9 @@ defineProps<{
       <!-- 第2行：分类 | #tag #tag | time-->
       <div class="g-tags">
         <el-icon><Calendar /></el-icon>
-        <span> 发布于 {{  dayjs(article.createTime).format("YYYY-MM-DD") }} </span>
+        <span>
+          发布于 {{ dayjs(article.createTime).format("YYYY-MM-DD") }}
+        </span>
         <el-divider direction="vertical" class="g-divider" />
 
         <el-icon><Folder /></el-icon>
@@ -75,14 +83,23 @@ $bp: 768px;
   height: 200px;
   cursor: pointer;
   margin-bottom: $margin-bottom;
+  // 扩展 surface-card 过渡：补充悬浮位移与边框色
+  transition:
+    transform $glass-transition,
+    border-color $glass-transition,
+    background $glass-transition,
+    box-shadow $glass-transition;
 
   @media (min-width: $bp) {
     flex-direction: row;
     height: 14rem;
   }
 
+  // 悬浮：整卡上浮 + 强调色光效（语义层 --accent-shadow-hover，随主题自动切换）
   &:hover {
-    border: 1px solid black;
+    transform: translateY(-4px);
+    border-color: var(--accent-border);
+    box-shadow: var(--accent-shadow-hover);
   }
 
   &:hover .g-img {
@@ -140,7 +157,7 @@ $bp: 768px;
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  padding: 0.65rem 1rem;  
+  padding: 0.65rem 1rem;
   gap: 1rem;
 
   @media (min-width: $bp) {

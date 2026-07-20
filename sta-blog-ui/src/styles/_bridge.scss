@@ -34,7 +34,8 @@
 
   /* ═══ 强调色（primary 色系） ═══ */
   --el-color-primary:         var(--accent-primary);
-  --el-color-primary-rgb:     var(--accent-primary-rgb);
+  /* EP 内部以 rgba(var(--el-color-primary-rgb), α) 消费，必须为 RGB 三元组 */
+  --el-color-primary-rgb:     59, 130, 246;  /* hsl(217, 91%, 60%) */
   --el-color-primary-light-3: var(--color-blue-300);
   --el-color-primary-light-5: var(--color-blue-200);
   --el-color-primary-light-7: var(--color-blue-100);
@@ -89,4 +90,9 @@
   --el-disabled-text-color: var(--text-disabled);
   --el-disabled-border-color: var(--border-lighter);
   --el-mask-color: hsla(0, 0%, 0%, 0.4);
+}
+
+/* EP 桥接 — 暗色覆盖 */
+html.dark {
+  --el-color-primary-rgb: 249, 115, 22;  /* hsl(25, 95%, 53%) */
 }

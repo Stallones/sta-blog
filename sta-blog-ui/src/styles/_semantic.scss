@@ -39,10 +39,19 @@
 
   /* ═══ 强调色 ═══ */
   --accent-primary:  var(--color-blue-500);
-  --accent-primary-rgb: 59, 130, 246;
   --accent-hover:    var(--color-blue-600);
   --accent-gradient: linear-gradient(135deg, hsl(217, 91%, 60%), hsl(258, 64%, 61%));
-  --accent-glow:     hsla(217, 91%, 60%, 0.30);
+  /* 强调色透明系列（按角色复用，组件禁止自行拼通道） */
+  --accent-border:   hsla(217, 91%, 60%, 0.45);  /* 悬浮强调边框 */
+  --accent-glow:     hsla(217, 91%, 60%, 0.30);  /* 辉光 / 氛围光 */
+  --accent-tint:     hsla(217, 91%, 60%, 0.15);  /* 浅染背景 */
+  --accent-halo:     hsla(217, 91%, 60%, 0.08);  /* 光环 / 极淡底 */
+  /* 卡片悬浮光效叠层（组合上方角色 token，暗色自动切橙，无需单独覆盖） */
+  --accent-shadow-hover:
+    0 0 0 1px var(--accent-halo),
+    0 4px 14px var(--accent-tint),
+    0 14px 36px var(--accent-glow),
+    0 24px 60px -16px hsla(0, 0%, 0%, 0.28);
 
   /* ═══ 状态色 ═══ */
   --status-success: var(--color-success);
@@ -148,10 +157,13 @@ html.dark {
 
   /* ═══ 强调色 (暗色切橙) ═══ */
   --accent-primary:  var(--color-orange-500);
-  --accent-primary-rgb: 249, 115, 22;
   --accent-hover:    var(--color-orange-600);
   --accent-gradient: linear-gradient(135deg, hsl(215, 79%, 51%), hsl(270, 51%, 44%));
+  /* 强调色透明系列（暗色底衰减快，透明度略提） */
+  --accent-border:   hsla(25, 95%, 53%, 0.55);
   --accent-glow:     hsla(25, 95%, 53%, 0.35);
+  --accent-tint:     hsla(25, 95%, 53%, 0.18);
+  --accent-halo:     hsla(25, 95%, 53%, 0.10);
 
   /* ═══ Markdown 暗色 ═══ */
   --md-quote-bg:  hsl(0, 0%, 15%);

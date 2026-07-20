@@ -18,12 +18,12 @@
 </template>
 
 <script setup lang="ts">
-import { useWebsiteStore } from "@/store/useWebsiteStore";
+import { useSiteStore } from "@/store/useSiteStore";
 import { onMounted, onUnmounted } from "vue";
 import { GlitchText, GradientText, useTypewriter } from "@/components/TextTech";
 import { useDemotion } from "@/composables/useDemotion";
 
-const useWebsite = useWebsiteStore();
+const useWebsite = useSiteStore();
 const { yiyuanOnline } = useDemotion();
 
 // 打字机 — URL 模式自动获取一言（一言离线时不启动）

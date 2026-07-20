@@ -390,7 +390,7 @@ onMounted(() => {
       .tag-content {
         color: var(--accent-primary);
         .tag-symbol { animation: bounce 0.6s ease infinite; }
-        .tag-count { background-color: rgba(var(--accent-primary-rgb), 0.15); transform: scale(1.05); }
+        .tag-count { background-color: var(--accent-tint); transform: scale(1.05); }
       }
       
       &::before { opacity: 0.4; }
@@ -435,7 +435,7 @@ onMounted(() => {
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: rgba(var(--accent-primary-rgb), 0.08);
+        background-color: var(--accent-halo);
         border-radius: 9px;
         padding: 0px 5px;
         font-size: 0.65rem;
@@ -454,7 +454,7 @@ onMounted(() => {
       transform: translate(-50%, -50%);
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at center, rgba(var(--accent-primary-rgb), 0.08) 0%, transparent 70%);
+      background: radial-gradient(circle at center, var(--accent-halo) 0%, transparent 70%);
       opacity: 0.25;
       transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       z-index: 1;

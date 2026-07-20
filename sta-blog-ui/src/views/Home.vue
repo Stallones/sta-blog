@@ -25,14 +25,14 @@
 </template>
 
 <script setup lang="ts">
-import { useWebsiteStore } from "@/store/useWebsiteStore";
+import { useSiteStore } from "@/store/useSiteStore";
 import { useDemotion } from "@/composables/useDemotion";
 import {
   registerHomeItems,
   unregisterHomeItems,
 } from "@/components/FloatingMenu/registerGlobal";
 
-const useWebsite = useWebsiteStore();
+const useWebsite = useSiteStore();
 const { isOnline } = useDemotion();
 onMounted(() => {
   registerHomeItems();

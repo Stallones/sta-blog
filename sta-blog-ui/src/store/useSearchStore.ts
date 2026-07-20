@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, shallowRef } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 import type { AppArticleRespVO, Page } from '@/types'
+import { getArticleListByCreateTime } from '@/api/AppArticleController'
 
 export const useSearchStore = defineStore('search', () => {
   // ── Dialog 可见性（全局通信）──
@@ -52,6 +53,14 @@ export const useSearchStore = defineStore('search', () => {
     historyList.value = []
   }
 
+  // ── 文章标题列表（搜索联想用）──
+  const searchTitle = shallowRef<AppArticleRespVO[]>()
+
+  const getArticleTitleList = async () => {
+    const res = await getArticleListByCreateTime()
+    searchTitle.value = res as AppArticleRespVO[]
+  }
+
   return {
     dialogVisible,
     openDialog,
@@ -63,5 +72,7 @@ export const useSearchStore = defineStore('search', () => {
     addHistory,
     removeHistory,
     clearHistory,
+    searchTitle,
+    getArticleTitleList,
   }
 })

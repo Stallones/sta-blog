@@ -1,9 +1,9 @@
 ﻿<script setup lang="ts">
 import { useCanvasEffects } from "@/composables/useCanvasEffects";
-import { useWebsiteStore } from "@/store/useWebsiteStore";
+import { useSiteStore } from "@/store/useSiteStore";
 import canvBgUrl from "@/assets/images/canv-bg.png";
 
-const websiteStore = useWebsiteStore();
+const websiteStore = useSiteStore();
 const { canvasHeaderH,setImageUrl } = useCanvasEffects();
 
 onMounted(async () => {
@@ -261,7 +261,7 @@ $bp-mobile: 480px;
 
 /* ── 页面容器 ── */
 .about-page {
-  max-width: 1100px;
+  max-width: $layout-max-w;
   margin: 0 auto;
   padding: 80px 24px 60px;
   display: flex;

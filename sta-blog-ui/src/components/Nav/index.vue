@@ -21,9 +21,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
-import { useWebsiteStore } from "@/store/useWebsiteStore";
+import { useSiteStore } from "@/store/useSiteStore";
 
-const useWebsite = useWebsiteStore();
+const useWebsite = useSiteStore();
 const route = useRoute();
 
 const isHidden = ref(false);
@@ -72,8 +72,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
-@use "../../styles/_layout" as *;
-
 // ── 桌面导航 ──
 
 nav {

@@ -1,8 +1,8 @@
 ﻿<script setup lang="ts">
-import { useWebsiteStore } from "@/store/useWebsiteStore";
+import { useSiteStore } from "@/store/useSiteStore";
 import { computed } from "vue";
 
-const useWebsite = useWebsiteStore();
+const useWebsite = useSiteStore();
 
 const differenceInDays = computed(() => {
   const start = useWebsite.webInfo?.startTime;

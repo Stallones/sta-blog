@@ -1,9 +1,9 @@
 ﻿<script setup lang="ts">
-import { useWebsiteStore } from "@/store/useWebsiteStore";
+import { useSiteStore } from "@/store/useSiteStore";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const useWebsite = useWebsiteStore();
+const useWebsite = useSiteStore();
 
 // ── footer-flex 导航数据 ──
 interface FooterColumn {
@@ -84,8 +84,6 @@ function navigate(item: FooterColumn["items"][0]) {
 </template>
 
 <style lang="scss" scoped>
-@use "../../styles/_layout" as *;
-
 $footer-max-width: 1200px;
 
 .footer {

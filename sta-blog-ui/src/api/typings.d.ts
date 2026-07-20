@@ -353,46 +353,24 @@ declare namespace API {
   };
 
   type AppWebsiteInfoRespVO = {
-    /** 网站信息编号 */
-    id: number;
-    /** 站长头像 */
-    webmasterAvatar?: string;
-    /** 站长名称 */
-    webmasterName?: string;
-    /** 站长文案 */
-    webmasterCopy?: string;
-    /** 站长资料卡背景图 */
-    webmasterProfileBackground?: string;
-    /** Gitee链接 */
-    giteeLink?: string;
-    /** GitHub链接 */
-    githubLink?: string;
-    /** 网站名称 */
-    websiteName?: string;
-    /** 头部通知 */
-    headerNotification?: string;
-    /** 侧面公告 */
-    sidebarAnnouncement?: string;
-    /** 备案信息 */
-    recordInfo?: string;
-    /** 开始运行时间 */
-    startTime?: string;
-    /** 创建时间 */
-    createTime?: string;
-    /** 更新时间 */
-    updateTime?: string;
     /** 文章数量 */
     articleCount?: number;
-    /** 分类数量 */
-    categoryCount?: number;
     /** 评论数量 */
     commentCount?: number;
+    /** 留言数量 */
+    messageCount?: number;
+    /** 点赞数量（全站） */
+    likeCount?: number;
+    /** 收藏数量（全站） */
+    favoriteCount?: number;
+    /** 分类数量 */
+    categoryCount?: number;
+    /** 标签数量 */
+    tagCount?: number;
     /** 总访问量 */
     visitCount?: number;
     /** 最后更新时间 */
     lastUpdateTime?: string;
-    /** 标签数量 */
-    tagCount?: number;
   };
 
   type CommonResultAppArticleRespVO = {
@@ -641,13 +619,12 @@ declare namespace API {
   };
 
   type getSnapshotArticleParams = {
-    /** 文章ID */
+    /** 文章编号 */
     id: number;
     key: string;
   };
 
   type getSnapshotParams = {
-    /** 快照密钥 */
     key: string;
   };
 

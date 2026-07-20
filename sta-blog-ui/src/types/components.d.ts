@@ -58,7 +58,6 @@ declare module 'vue' {
     GradientText: typeof import('./../components/TextTech/GradientText.vue')['default']
     Header: typeof import('./../components/Header/index.vue')['default']
     HorizontalCard: typeof import('./../components/Gallery/GalleryCard/HorizontalCard.vue')['default']
-    ImagePlaceholder: typeof import('./../components/ImagePlaceholder.vue')['default']
     Images: typeof import('./../components/Header/Images.vue')['default']
     Loading: typeof import('./../components/Loading.vue')['default']
     MdEditor: typeof import('./../components/Article/MdEditor.vue')['default']

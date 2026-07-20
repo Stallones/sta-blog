@@ -44,10 +44,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { Close, Search,Menu } from "@element-plus/icons-vue";
-import { useWebsiteStore } from "@/store/useWebsiteStore";
+import { useSiteStore } from "@/store/useSiteStore";
 import { useSearchStore } from "@/store/useSearchStore";
 
-const useWebsite = useWebsiteStore();
+const useWebsite = useSiteStore();
 const searchStore = useSearchStore();
 const drawer = ref(false);
 
@@ -78,8 +78,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
-@use "@/styles/_layout" as *;
-
 .nav-mob {
   display: flex;
   justify-content: space-between;

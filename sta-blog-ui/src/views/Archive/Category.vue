@@ -83,7 +83,7 @@ onMounted(async () => {
   transition: all 0.2s ease;
 
   &:hover {
-    background: var(--fill-color-light);
+    background: var(--surface-inner-bg);
 
     .cat-dot {
       transform: scale(1.3);

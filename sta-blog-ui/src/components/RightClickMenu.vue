@@ -186,9 +186,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
-import { useWebsiteStore } from "@/store/useWebsiteStore";
+import { useSiteStore } from "@/store/useSiteStore";
 
-const useWebsite = useWebsiteStore()
+const useWebsite = useSiteStore()
 
 const router = useRouter();
 const isVisible = ref(false);

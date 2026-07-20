@@ -72,10 +72,10 @@ async function main(): Promise<void> {
   // 1. 获取全站快照
   console.log("正在获取全站快照...");
   const snapshot = await fetchApi<SnapshotData>(
-    `${API_BASE_URL}/app-api/blog/other/snapshot?key=${SNAPSHOT_KEY}`
+    `${API_BASE_URL}/app-api/blog/website-info/snapshot?key=${SNAPSHOT_KEY}`
   );
 
-  console.log(`  网站信息: ${snapshot.websiteInfo?.websiteName || "OK"}`);
+  console.log(`  网站统计: ${snapshot.websiteInfo?.articleCount ?? 0} 篇文章`);
   console.log(`  文章: ${snapshot.articles?.length || 0} 篇`);
   console.log(`  分类: ${snapshot.categories?.length || 0} 个`);
   console.log(`  标签: ${snapshot.tags?.length || 0} 个`);
@@ -96,7 +96,7 @@ async function main(): Promise<void> {
   for (const article of snapshot.articles) {
     try {
       const full = await fetchApi<ArticleFull>(
-        `${API_BASE_URL}/app-api/blog/other/snapshot/article/${article.id}?key=${SNAPSHOT_KEY}`
+        `${API_BASE_URL}/app-api/blog/website-info/snapshot-article/${article.id}?key=${SNAPSHOT_KEY}`
       );
       // 只保留 id + content，其余元数据已在 snapshot.json 中
       fs.writeFileSync(

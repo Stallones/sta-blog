@@ -1,11 +1,17 @@
 ﻿<script setup lang="ts">
+import { computed } from "vue";
 import { useGalleryComponent } from "@/composables/useGalleryComponent";
+import { useSearchStore } from "@/store/useSearchStore";
 
 const { articlePagination } = useGalleryComponent();
+const searchStore = useSearchStore();
+
+/** 搜索联动 Gallery 时隐藏分页（搜索结果用自带的“显示更多”） */
+const hidden = computed(() => !!searchStore.searchResults);
 </script>
 
 <template>
-  <div class="pagination">
+  <div v-if="!hidden" class="pagination">
     <el-pagination
       background
       layout="prev, pager, next"
