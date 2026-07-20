@@ -73,7 +73,6 @@ onUnmounted(() => {
 }
 
 .hc-search {
-  @include surface-card;
   border-radius: 50px;
   display: flex;
   height: 50px;

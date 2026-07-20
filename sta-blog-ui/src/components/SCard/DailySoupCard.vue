@@ -1,20 +1,30 @@
 <script setup lang="ts">
-import { getYiyan } from "@/api/AppOtherController";
+import { useDemotion } from "@/composables/useDemotion";
 
+const { yiyuanOnline } = useDemotion();
 const soup = ref("");
 
 async function soupSub() {
-  const res: any = await getYiyan();
-  soup.value = typeof res === "string" ? res : "";
+  const url = import.meta.env.VITE_YIYAN_API;
+  if (!url) return;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    // 兼容 hitokoto 格式 { hitokoto: "..." } 和纯文本格式
+    soup.value = data?.hitokoto ?? data?.sentence ?? "";
+  } catch {
+    soup.value = "";
+  }
 }
 
 onMounted(async () => {
-  await soupSub();
+  if (yiyuanOnline.value) await soupSub();
 });
 </script>
 
 <template>
   <Card
+    v-if="yiyuanOnline"
     variant="refresh"
     title="每日鸡汤"
     prefix-icon="edit"

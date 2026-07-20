@@ -18,12 +18,14 @@ export const BlogType = {
   IMG_HOME: 52,
   /** banner图 */
   IMG_PAGE: 53,
+  /** 头像 */
+  IMG_AVATAR: 54,
 } as const;
 
 // Jwt 前缀常量
 export const JWT_PREFIX_CONS = 'Bearer ';
 
-// Token 名称常量
+// Token 名称常量（命名空间化，避免与 vben admin、ruoyi 系统用户冲突）
 export const TOKEN_KEY = 'sta-blog-app-token';
 
 // 文章访问量统计 前缀常量

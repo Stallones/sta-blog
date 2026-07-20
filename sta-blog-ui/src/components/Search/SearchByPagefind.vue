@@ -124,6 +124,7 @@ function clearQuery() {
 
 <style scoped lang="scss">
 .search-by-pagefind {
+  // @include surface-card;
   display: flex;
   height: 50px;
   padding: 0 16px;

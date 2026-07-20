@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { getArticleListByVisitCount, getArticleListByCategoryId } from "@/api/AppArticleController";
+import { readArticleListByVisitCount, readArticleListByCategoryId } from "@/utils/file-reader";
+import { useDemotion } from "@/composables/useDemotion";
 import { dayjs } from "element-plus";
 import { ref, watch } from "vue";
 
@@ -25,6 +27,7 @@ const props = defineProps({
 });
 
 const randomArticles = ref<any[]>([]);
+const { requestOrRead } = useDemotion();
 
 function randomArticleBtn() {
   imgRefresh.value = true;
@@ -32,8 +35,12 @@ function randomArticleBtn() {
 }
 
 async function getRandomArticleData() {
-  const res: any = await getArticleListByVisitCount({ limit: 5 });
-  const list = Array.isArray(res) ? res : [];
+  const res: any = await requestOrRead(
+    getArticleListByVisitCount,
+    readArticleListByVisitCount,
+    { limit: 5 }
+  );
+  const list = Array.isArray(res?.data ?? res) ? (res?.data ?? res) : [];
   formatDate(list);
   randomArticles.value = list;
 }
@@ -50,8 +57,12 @@ watch(
 
 // 相关推荐
 async function relatedRecommendBtn(categoryId: number, articleId: number) {
-  const res: any = await getArticleListByCategoryId({ categoryId, articleId });
-  const list = Array.isArray(res) ? res : [];
+  const res: any = await requestOrRead(
+    getArticleListByCategoryId,
+    readArticleListByCategoryId,
+    { categoryId, articleId }
+  );
+  const list = Array.isArray(res?.data ?? res) ? (res?.data ?? res) : [];
   formatDate(list);
   randomArticles.value = list;
 }

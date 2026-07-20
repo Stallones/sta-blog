@@ -82,7 +82,7 @@ function onEnter() {
 async function doSearch(q: string) {
   loading.value = true;
   try {
-    if (isOnline) {
+    if (isOnline.value) {
       await doOnlineSearch(q);
     } else {
       await doOfflineSearch(q);
@@ -213,9 +213,9 @@ onUnmounted(() => {
       class="search-overlay"
       @click="onOverlayClick"
     >
-      <div class="search-dialog">
+      <div class="search-dialog"v-slide-in>
         <!-- 搜索条 -->
-        <div class="search-bar">
+        <div class="search-bar" >
           <el-icon class="search-bar__icon"><Search /></el-icon>
           <input
             ref="inputRef"
@@ -298,6 +298,12 @@ onUnmounted(() => {
             <span>输入关键词开始搜索</span>
           </div>
         </div>
+
+        <!-- 底部快捷键 -->
+        <div class="search-footer">
+          <span><kbd>↵</kbd> 搜索</span>
+          <span><kbd>Esc</kbd> 关闭</span>
+        </div>
       </div>
     </div>
   </Transition>
@@ -309,18 +315,24 @@ onUnmounted(() => {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 15vh;
+  padding-top: 12vh;
 
   /* ── 统一搜索容器 ── */
   .search-dialog {
-    width: min(680px, 90vw);
-    background-color: var(--bg-page);
-    border-radius: 12px;
-    box-shadow: 0 8px 30px hsla(0, 0%, 0%, 0.15);
+    width: min(640px, 92vw);
+    background-color: var(--surface-bg);
+    backdrop-filter: var(--surface-blur);
+    -webkit-backdrop-filter: var(--surface-blur);
+    border-radius: 16px;
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.06) inset;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -329,15 +341,16 @@ onUnmounted(() => {
     .search-bar {
       display: flex;
       align-items: center;
-      height: 52px;
-      padding: 0 18px;
-      gap: 10px;
+      height: 56px;
+      padding: 0 20px;
+      gap: 12px;
       border-bottom: 1px solid var(--border-lighter);
 
       &__icon {
-        font-size: 20px;
-        color: var(--text-secondary);
+        font-size: 22px;
+        color: var(--accent-primary);
         flex-shrink: 0;
+        opacity: 0.8;
       }
 
       &__input {
@@ -348,6 +361,7 @@ onUnmounted(() => {
         background: transparent;
         color: var(--text-primary);
         font-size: 16px;
+        letter-spacing: 0.3px;
 
         &::placeholder {
           color: var(--text-placeholder);
@@ -355,27 +369,31 @@ onUnmounted(() => {
       }
 
       &__clear {
-        font-size: 17px;
-        color: var(--text-secondary);
+        font-size: 18px;
+        color: var(--text-placeholder);
         cursor: pointer;
         flex-shrink: 0;
-        transition: color 0.2s;
+        transition: color 0.2s, transform 0.2s;
 
         &:hover {
-          color: var(--text-primary);
+          color: var(--text-secondary);
+          transform: scale(1.1);
         }
       }
 
       &__close {
-        font-size: 16px;
+        font-size: 14px;
         color: var(--text-placeholder);
         cursor: pointer;
         flex-shrink: 0;
-        margin-left: 4px;
-        transition: color 0.2s;
+        padding: 4px 8px;
+        border-radius: 4px;
+        border: 1px solid var(--border-lighter);
+        transition: all 0.2s;
 
         &:hover {
           color: var(--text-primary);
+          border-color: var(--border-color);
         }
       }
     }
@@ -392,12 +410,14 @@ onUnmounted(() => {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 20px;
+          padding: 14px 20px;
           cursor: pointer;
-          transition: background-color 0.2s;
+          transition: all 0.2s ease;
+          border-left: 3px solid transparent;
 
           &:hover {
             background-color: var(--fill-color-light);
+            border-left-color: var(--accent-primary);
           }
 
           &__main {
@@ -406,7 +426,7 @@ onUnmounted(() => {
           }
 
           &__title {
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 500;
             color: var(--text-primary);
             line-height: 1.4;
@@ -419,7 +439,7 @@ onUnmounted(() => {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-top: 4px;
+            margin-top: 6px;
           }
 
           &__content {
@@ -446,14 +466,14 @@ onUnmounted(() => {
 
       /* 搜索历史 */
       .search-history {
-        padding: 16px 20px;
+        padding: 18px 20px;
 
         &__header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 10px;
-          font-size: 0.85rem;
+          margin-bottom: 12px;
+          font-size: 0.82rem;
           font-weight: 600;
           color: var(--text-primary);
         }
@@ -462,31 +482,64 @@ onUnmounted(() => {
           display: flex;
           align-items: center;
           gap: 4px;
-          font-size: 0.78rem;
+          font-size: 0.75rem;
           font-weight: 400;
           color: var(--text-secondary);
           cursor: pointer;
+          padding: 2px 6px;
+          border-radius: 4px;
+          transition: all 0.2s;
 
           &:hover {
             color: var(--status-danger);
+            background-color: var(--fill-color-light);
           }
         }
 
         &__tags {
           display: flex;
           flex-wrap: wrap;
+          gap: 6px;
         }
       }
 
       /* 空状态 / 加载中 */
       .search-empty {
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 12px;
         padding: 48px 20px;
         font-size: 0.85rem;
         color: var(--text-placeholder);
+
+        .is-loading {
+          font-size: 24px;
+          animation: spin 1s linear infinite;
+        }
+      }
+    }
+
+    /* ── 底部快捷键提示 ── */
+    .search-footer {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 20px;
+      border-top: 1px solid var(--border-lighter);
+      font-size: 0.72rem;
+      color: var(--text-placeholder);
+
+      kbd {
+        display: inline-block;
+        padding: 2px 6px;
+        font-size: 0.7rem;
+        font-family: inherit;
+        border: 1px solid var(--border-lighter);
+        border-radius: 4px;
+        background-color: var(--fill-color-light);
+        margin-right: 4px;
       }
     }
   }
@@ -495,14 +548,14 @@ onUnmounted(() => {
 /* ── 高亮 ── */
 :deep(.search-hl) {
   background-color: var(--color-warning-light);
-  border-radius: 2px;
-  padding: 0 2px;
+  border-radius: 3px;
+  padding: 1px 3px;
 }
 
 /* ── 过渡动画 ── */
 .search-fade-enter-active,
 .search-fade-leave-active {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.25s ease;
 }
 
 .search-fade-enter-from,
@@ -510,22 +563,33 @@ onUnmounted(() => {
   opacity: 0;
 }
 
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 /* ── 移动端适配 ── */
 @media screen and (max-width: 650px) {
   .search-overlay {
-    padding-top: 10vh;
+    padding-top: 8vh;
 
     .search-dialog {
       width: 94vw;
-      max-height: 70vh;
+      max-height: 75vh;
+      border-radius: 12px;
     }
 
     .search-bar {
-      height: 48px;
+      height: 50px;
+      padding: 0 16px;
     }
 
     .search-body {
       max-height: 60vh;
+    }
+
+    .search-footer {
+      display: none;
     }
   }
 }

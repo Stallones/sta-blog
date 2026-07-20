@@ -59,7 +59,8 @@ export function useUserCard() {
     // 默认：博主信息（Pinia 自动解包 shallowRef）
     const w = websiteStore.webInfo;
     return {
-      avatar: w?.webmasterAvatar || "",
+      // 博主头像固定使用 GitHub 头像，不依赖图片服务
+      avatar: "https://avatars.githubusercontent.com/u/38835624?v=4",
       name: w?.webmasterName || "博主",
       description: w?.webmasterCopy || "",
       stats: [

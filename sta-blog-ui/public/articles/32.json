@@ -1,1 +1,0 @@
-{"id":32,"articleContent":"## 这是一篇测试文章\n> 你看见这篇文章说明后台发布文章功能成功\n\n```mermaid\ngantt\ntitle A Gantt Diagram\ndateFormat  YYYY-MM-DD\nsection Section\nA task  :a1, 2014-01-01, 30d\nAnother task  :after a1, 20d\n```\n\n### 图表\n```mermaid\nclassDiagram\n  class Animal\n  Vehicle <|-- Car\n```\n"}

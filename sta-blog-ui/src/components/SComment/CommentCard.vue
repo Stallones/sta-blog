@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import CommentContent from "./CommentContent.vue";
 import { useReply } from "@/composables/useReply";
+import { useDemotion } from "@/composables/useDemotion";
+import { avatarFallbackStyle, fallbackChar } from "@/utils/avatar";
 import { dayjs } from "element-plus";
 
 const props = withDefaults(
@@ -19,6 +21,7 @@ const props = withDefaults(
   }
 );
 
+const { imageOnline } = useDemotion();
 const { openReply, toggleItemLike } = useReply();
 
 const nickname = computed(
@@ -50,8 +53,15 @@ function handleLike() {
       shape="square"
       :size="40"
       class="s-comment__avatar"
-      :src="item.userAvatar"
-    />
+      :src="imageOnline ? item.userAvatar : undefined"
+    >
+      <div
+        class="avatar-fallback"
+        :style="avatarFallbackStyle(nickname)"
+      >
+        {{ fallbackChar(nickname) }}
+      </div>
+    </el-avatar>
     <div class="s-comment__body">
       <!-- 元信息行：昵称 + 标签 -->
       <div class="s-comment__meta">
@@ -90,6 +100,18 @@ function handleLike() {
 
 .s-comment__avatar {
   flex-shrink: 0;
+
+  .avatar-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 4px;
+    user-select: none;
+  }
 }
 
 .s-comment__body {

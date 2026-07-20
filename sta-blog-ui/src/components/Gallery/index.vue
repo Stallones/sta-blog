@@ -35,18 +35,29 @@ const isExternal = computed(() => props.articles !== undefined);
 // ── 本地：fetch 计算逻辑 ──
 async function fetchArticles() {
   if (searchStore.searchResults) {
-    setCardList(searchStore.searchResults.list.slice(0, searchDisplayLimit.value));
+    setCardList(
+      searchStore.searchResults.list.slice(0, searchDisplayLimit.value),
+    );
     setArticleTotal(searchStore.searchResults.total);
     return;
   }
 
-  const params = { pageNo: articlePagination.current, pageSize: articlePagination.pageSize };
+  const params = {
+    pageNo: articlePagination.current,
+    pageSize: articlePagination.pageSize,
+  };
 
   // 瀑布流模式：双 fetch 不同摘要长度，奇偶交错制造高度差
   if ([6, 7].includes(effectiveMode.value) && !isMobile.value) {
     const [shortRes, longRes] = await Promise.all([
-      requestOrRead(getArticlePage, readArticlePage, { ...params, summaryLength: 100 }),
-      requestOrRead(getArticlePage, readArticlePage, { ...params, summaryLength: 1000 }),
+      requestOrRead(getArticlePage, readArticlePage, {
+        ...params,
+        summaryLength: 100,
+      }),
+      requestOrRead(getArticlePage, readArticlePage, {
+        ...params,
+        summaryLength: 1000,
+      }),
     ]);
     const shortPage = shortRes.data || shortRes;
     const longPage = longRes.data || longRes;
@@ -54,7 +65,8 @@ async function fetchArticles() {
       setArticleTotal(shortPage.total);
       const merged = shortPage.list.map((item: any, i: number) => ({
         ...item,
-        summary: i % 2 === 0 ? shortPage.list[i].summary : longPage.list[i].summary,
+        summary:
+          i % 2 === 0 ? shortPage.list[i].summary : longPage.list[i].summary,
       }));
       setCardList(merged);
     }
@@ -73,13 +85,15 @@ async function fetchArticles() {
 function showMoreResults() {
   if (!searchStore.searchResults) return;
   setSearchDisplayLimit(searchStore.searchResults.total);
-  setCardList(searchStore.searchResults.list.slice(0, searchStore.searchResults.total));
+  setCardList(
+    searchStore.searchResults.list.slice(0, searchStore.searchResults.total),
+  );
 }
 
 const hasMore = computed(() =>
   searchStore.searchResults
     ? searchStore.searchResults.total > searchDisplayLimit.value
-    : false
+    : false,
 );
 
 // ── 本地：watch 触发 fetch ──
@@ -89,7 +103,7 @@ watch(
     if (searchStore.searchResults) return;
     await fetchArticles();
     scrollToMainShell();
-  }
+  },
 );
 
 watch(
@@ -104,7 +118,7 @@ watch(
       articlePagination.current = 1;
       fetchArticles();
     }
-  }
+  },
 );
 
 // ── 布局模式 ──
@@ -113,7 +127,7 @@ const MOBILE_BREAKPOINT = 768;
 /** 移动端统一降级为 VerticalCard */
 const isMobile = computed(() => width.value < MOBILE_BREAKPOINT);
 const effectiveMode = computed<GalleryLayoutMode>(() =>
-  isMobile.value ? 4 : layoutMode.value
+  isMobile.value ? 4 : layoutMode.value,
 );
 
 /** 网格 class（外部数据与 hook 共用） */
@@ -130,18 +144,28 @@ import WaterfallCard from "./GalleryCard/WaterfallCard.vue";
 
 function resolveComponent(mode: GalleryLayoutMode) {
   switch (mode) {
-    case 1: return HorizontalCard;  // direction="left" 在 props 中设置
-    case 2: return HorizontalCard;
-    case 3: return HorizontalCard;
-    case 4: return VerticalCard;
-    case 5: return OverlayCard;
-    case 6: return WaterfallCard;
-    case 7: return WaterfallCard;
+    case 1:
+      return HorizontalCard; // direction="left" 在 props 中设置
+    case 2:
+      return HorizontalCard;
+    case 3:
+      return HorizontalCard;
+    case 4:
+      return VerticalCard;
+    case 5:
+      return OverlayCard;
+    case 6:
+      return WaterfallCard;
+    case 7:
+      return WaterfallCard;
   }
 }
 
 /** 模式 1/2/3 的 direction */
-function resolveDirection(mode: GalleryLayoutMode, index: number): "left" | "right" {
+function resolveDirection(
+  mode: GalleryLayoutMode,
+  index: number,
+): "left" | "right" {
   if (mode === 1) return "left";
   if (mode === 2) return "right";
   // 模式 3：交替 — 奇数左 偶数右
@@ -157,7 +181,9 @@ function resolveOverlay(mode: GalleryLayoutMode): boolean {
 <template>
   <div v-if="!isExternal" v-view-request="{ callback: fetchArticles }">
     <!-- 卡片列表：带 fade 过渡 -->
-    <TransitionGroup name="gallery-fade" tag="div"
+    <TransitionGroup
+      name="gallery-fade"
+      tag="div"
       :key="effectiveMode"
       :class="gridClass"
     >
@@ -176,10 +202,7 @@ function resolveOverlay(mode: GalleryLayoutMode): boolean {
     </TransitionGroup>
 
     <!-- 搜索展开更多 -->
-    <div
-      v-if="hasMore"
-      class="show-more-wrap"
-    >
+    <div v-if="hasMore" class="show-more-wrap">
       <el-button type="primary" plain @click="showMoreResults">
         显示更多结果（共 {{ articlePagination.total }} 篇）
       </el-button>
@@ -228,13 +251,17 @@ function resolveOverlay(mode: GalleryLayoutMode): boolean {
     break-inside: avoid;
   }
 
-  @media (max-width: 900px) { column-count: 1; }
+  @media (max-width: 900px) {
+    column-count: 1;
+  }
 }
 
 /* ── Fade 过渡动画（布局切换时）── */
 .gallery-fade-enter-active,
 .gallery-fade-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 
 .gallery-fade-enter-from {

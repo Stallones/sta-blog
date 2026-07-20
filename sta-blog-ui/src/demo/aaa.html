@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>科技感炫彩 Border 演示</title>
+  <style>
+   .rainbow-glow {
+  position: relative;
+  width: 200px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  color: #fff;
+  font-size: 18px;
+  border-radius: 12px;
+  background: #1a1a2e;       /* 卡片内部底色 */
+  z-index: 1;                /* 确保内容在辉光之上 */
+}
+
+/* 用伪元素作为旋转的彩虹光源 */
+.rainbow-glow::before {
+  content: '';
+  position: absolute;
+  inset: -3px;               /* 控制辉光的扩散范围（类似 box-shadow spread） */
+  border-radius: 14px;
+  background: conic-gradient(
+    from 0deg,
+    #ff0000, #ff8800, #ffff00,
+    #00ff00, #00ffff, #0000ff,
+    #8800ff, #ff0088, #ff0000
+  );
+  filter: blur(10px);        /* 🔑 关键：模糊后产生辉光感 */
+  opacity: 0.8;
+  z-index: -1;
+  animation: rainbow-spin 3s linear infinite;
+}
+
+@keyframes rainbow-spin {
+  to { transform: rotate(360deg); }
+}
+  </style>
+</head>
+<body>
+  <div class="rainbow-glow">Hello Rainbow</div>
+</body>
+</html>
+
+
+

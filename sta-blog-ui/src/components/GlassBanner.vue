@@ -15,8 +15,6 @@ defineProps<{
 </script>
 
 <style scoped lang="scss">
-@use "@/styles/_layout.scss" as *;
-
 .glass-banner {
   // @include surface-card;
   width: 100%;

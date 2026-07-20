@@ -5,7 +5,7 @@ const { articlePagination } = useGalleryComponent();
 </script>
 
 <template>
-  <div v-slide-in class="pagination">
+  <div class="pagination">
     <el-pagination
       background
       layout="prev, pager, next"

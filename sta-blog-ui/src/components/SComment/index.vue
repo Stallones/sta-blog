@@ -234,6 +234,7 @@ watch(
         v-for="item in items"
         :key="item.id"
         class="s-comment__item"
+        v-slide-in
       >
         <!-- 评论卡片 -->
         <CommentCard

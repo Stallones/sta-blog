@@ -16,3 +16,18 @@ export async function getImageList(
     ...(options || {}),
   });
 }
+
+/** 上传图片 POST /app-api/blog/image/upload */
+export async function uploadImage(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.uploadImageParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.AppImageUploadRespVO>("/app-api/blog/image/upload", {
+    method: "POST",
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}

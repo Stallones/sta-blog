@@ -4,8 +4,9 @@
   <div
     v-if="!isReadingMode"
     class="article-cover"
+    :class="{ 'article-cover--offline': !imageOnline }"
     :style="
-      articleCover ? `background-image: url('${articleCover}')` : undefined
+      articleCover && imageOnline ? `background-image: url('${articleCover}')` : undefined
     "
   >
     <ArticleHeader
@@ -20,7 +21,7 @@
     <div class="article-flex">
       <div class="article-content">
         <div class="article-scroll"></div>
-        <div class="article-surface">
+        <div v-slide-in class="article-surface" :class="{ 'img-offline': !imageOnline }">
           <MdEditor
             :content="articleVO.content ?? ''"
             :editorId="editorId"
@@ -28,7 +29,7 @@
             @htmlChanged="mdHtml"
             @getToc="setTocList"
           />
-          <ArticleFooter v-if="articleVO.id" :article="articleVO" />
+          <ArticleFooter v-if="articleVO.id && isOnline" :article="articleVO" />
         </div>
       </div>
       <div v-if="sidebarVisible" class="article-sidebar">
@@ -97,7 +98,7 @@ const MdEditor = defineAsyncComponent(() => import("@/components/Article/MdEdito
 
 // ── 本地状态（原 useArticleStore 降级）──
 const route = useRoute();
-const { isOnline, requestOrRead } = useDemotion();
+const { isOnline, imageOnline, requestOrRead } = useDemotion();
 const articleVO = ref<AppArticleRespVO>({} as AppArticleRespVO);
 const countMd = ref<string | number>(0);
 const articleLoading = ref(false);
@@ -159,7 +160,7 @@ async function getArticleDetailById() {
       articleId
     );
 
-    if (res.code !== 200) {
+    if (res.code !== 0) {
       ElMessage.warning({ message: res.msg });
       router.push({ path: "/" });
       return;
@@ -209,8 +210,6 @@ function mdHtml(htmlText: string) {
 </script>
 
 <style scoped lang="scss">
-@use "@/styles/_layout.scss" as *;
-
 // 单根容器（供 v-slide-in 指令使用）
 .article-page {
   width: 100%;
@@ -236,6 +235,31 @@ function mdHtml(htmlText: string) {
     width: 100%;
     height: 100%;
     background: var(--cover-shadow); /* 固定暗色遮罩，不随玻璃/实体切换 */
+  }
+
+  // 图片服务离线：渐变背景 + 玻璃模糊 + “图片”文字
+  &--offline {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+
+    &::before {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    &::after {
+      content: "图片";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
   }
 }
 
@@ -319,6 +343,35 @@ function mdHtml(htmlText: string) {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     padding: 0;
+  }
+
+  // 图片服务离线：隐藏内嵌图并显示占位
+  &.img-offline :deep(img) {
+    visibility: hidden;
+    display: block;
+    max-height: 200px;
+  }
+
+  // 用父元素 p 的伪元素显示占位块
+  &.img-offline :deep(p) {
+    position: relative;
+
+    &:has(img)::after {
+      content: "图片";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      max-height: 200px;
+    }
   }
 }
 

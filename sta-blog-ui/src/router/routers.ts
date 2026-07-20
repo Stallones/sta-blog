@@ -39,7 +39,7 @@ export const constantRouter = [
       // ── 时间轴 ──
       {
         path: "/timeline",
-        component: () => import("@/views/Archive/Archive.vue"),
+        component: () => import("@/views/Archive/Timeline.vue"),
         name: "timeline",
         meta: {
           headerType: "page",

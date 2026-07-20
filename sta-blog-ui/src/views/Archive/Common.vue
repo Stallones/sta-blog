@@ -7,11 +7,19 @@ import {
   getArticleListByCategory,
   getArticleListByTag,
 } from "@/api/AppArticleController";
+import {
+  readCategoryList,
+  readTagList,
+  readArticleListByCategory,
+  readArticleListByTag,
+} from "@/utils/file-reader";
+import { useDemotion } from "@/composables/useDemotion";
 import Gallery from "@/components/Gallery/index.vue";
 
 const route = useRoute();
 const type = computed(() => route.params.type as string); // 'category' | 'tag'
 const id = computed(() => Number(route.params.id));
+const { requestOrRead } = useDemotion();
 
 const title = ref("");
 const subTitle = ref("");
@@ -22,21 +30,31 @@ async function fetchData() {
   loading.value = true;
   try {
     if (type.value === "category") {
-      const res: any = await getCategoryList();
-      const cats = Array.isArray(res) ? res : [];
+      const res: any = await requestOrRead(getCategoryList, readCategoryList);
+      const cats = Array.isArray(res?.data ?? res) ? (res?.data ?? res) : [];
       const cat = cats.find((c: any) => c.id === id.value);
       title.value = "分类";
       subTitle.value = cat?.categoryName || "";
-      const artRes: any = await getArticleListByCategory({ categoryId: id.value });
-      articles.value = Array.isArray(artRes) ? artRes : [];
+      const artRes: any = await requestOrRead(
+        getArticleListByCategory,
+        readArticleListByCategory,
+        { categoryId: id.value }
+      );
+      const artList = artRes?.data ?? artRes;
+      articles.value = Array.isArray(artList) ? artList : [];
     } else if (type.value === "tag") {
-      const res: any = await getTagList();
-      const tags = Array.isArray(res) ? res : [];
+      const res: any = await requestOrRead(getTagList, readTagList);
+      const tags = Array.isArray(res?.data ?? res) ? (res?.data ?? res) : [];
       const tag = tags.find((t: any) => t.id === id.value);
       title.value = "标签";
       subTitle.value = tag?.tagName || "";
-      const artRes: any = await getArticleListByTag({ tagId: id.value });
-      articles.value = Array.isArray(artRes) ? artRes : [];
+      const artRes: any = await requestOrRead(
+        getArticleListByTag,
+        readArticleListByTag,
+        { tagId: id.value }
+      );
+      const artList = artRes?.data ?? artRes;
+      articles.value = Array.isArray(artList) ? artList : [];
     }
   } finally {
     loading.value = false;
@@ -50,7 +68,7 @@ onMounted(fetchData);
   <div class="common-archive-page">
     <div class="common-header">
       <h1 class="common-title">{{ title }} - {{ subTitle }}</h1>
-      <div class="common-count" v-if="articles.length">
+      <div class="common-count" v-if="articles.length" v-slide-in>
         共 {{ articles.length }} 篇文章
       </div>
     </div>

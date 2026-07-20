@@ -17,7 +17,7 @@
   --surface-border:    var(--color-black-a08);
   --surface-shadow:    0 2px 8px var(--color-black-a05);
   --surface-highlight: transparent;
-  --surface-inner-bg:  var(--color-white);
+  --surface-inner-bg:  var(--color-blue-50);
   --surface-blur:      none;
 
   /* ─── 向下兼容旧命名 ─── */
@@ -55,11 +55,11 @@ html.dark {
 
 /* ─────────── 玻璃模式 — 亮色 ─────────── */
 html.glass.light {
-  --surface-bg:        hsla(0, 0%, 100%, 0.7);
+  --surface-bg:        hsla(0, 0%, 100%, 0.5);
   --surface-border:    hsla(0, 0%, 0%, 0.08);
   --surface-shadow:    0 8px 32px hsla(0, 0%, 0%, 0.08);
   --surface-highlight: hsla(0, 0%, 100%, 0.5);
-  --surface-inner-bg:  hsla(0, 0%, 100%, 0.35);
+  --surface-inner-bg:  hsla(217, 91%, 91%, 0.5);
   --surface-blur:      blur(10px);
 
   /* 兼容 */

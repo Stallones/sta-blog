@@ -3,8 +3,8 @@
     <div class="brand-text">
       <!-- 标题 Glitch -->
       <GlitchText :text="useWebsite?.webInfo?.websiteName || ''" font-size="3rem" />
-      <!-- 打字机（渐变色 + 自动获取鸡汤） -->
-      <div class="typewriter">
+      <!-- 打字机（渐变色 + 自动获取鸡汤，一言离线时隐藏） -->
+      <div v-if="yiyuanOnline" class="typewriter" v-slide-in>
         <GradientText :text="output" :mode="'rainbow'" class="title" />
       </div>
     </div>
@@ -21,10 +21,12 @@
 import { useWebsiteStore } from "@/store/useWebsiteStore";
 import { onMounted, onUnmounted } from "vue";
 import { GlitchText, GradientText, useTypewriter } from "@/components/TextTech";
+import { useDemotion } from "@/composables/useDemotion";
 
 const useWebsite = useWebsiteStore();
+const { yiyuanOnline } = useDemotion();
 
-// 打字机 — URL 模式自动获取一言
+// 打字机 — URL 模式自动获取一言（一言离线时不启动）
 const { output, start, stop } = useTypewriter({
   url: import.meta.env.VITE_YIYAN_API || "https://v1.hitokoto.cn/?c=a&encode=json",
   speed: 120,
@@ -34,7 +36,9 @@ const { output, start, stop } = useTypewriter({
   showCursor: false,
 });
 
-onMounted(() => start());
+onMounted(() => {
+  if (yiyuanOnline.value) start();
+});
 onUnmounted(() => stop());
 
 const scrollDown = () => {

@@ -10,7 +10,7 @@
       <div class="main-wrapper">
         <div class="main-content">
           <router-view v-slot="{ Component, route: r }">
-            <component v-slide-in :is="Component" :key="r.fullPath" />
+            <component :is="Component" :key="r.fullPath" />
           </router-view>
         </div>
 
@@ -68,7 +68,6 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-@use "@/styles/_layout.scss" as *;
 
 /*
  * 布局架构（参考 Butterfly 主题）

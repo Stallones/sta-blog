@@ -24,7 +24,7 @@ import { throttle } from "@/utils/optimize";
 import Loading from "@/components/Loading.vue";
 import CanvasLayer from "@/components/CanvasLayer/index.vue";
 
-const { isReady, checkService } = useDemotion();
+const { isReady, setReady, checkService, checkYiyuan, checkImage } = useDemotion();
 const { show: showLoading, hide: hideLoading } = useLoading();
 const { scrollPercentage } = useArticleView();
 const useWebsite = useWebsiteStore();
@@ -48,8 +48,8 @@ onMounted(async () => {
   // 全局 Loading：启动时一次性显示
   showLoading();
 
-  // 1. 先做健康检查（设定 isOnline，供后续 requestOrRead 判断）
-  await checkService();
+  // 1. 并行健康检查（后端 + 一言 + 图片，各自独立，一次性判定）
+  await Promise.all([checkService(), checkYiyuan(), checkImage()]);
 
   // 2. 并行获取数据
   const tasks: Promise<any>[] = [useWebsite.getInfo()];
@@ -61,8 +61,9 @@ onMounted(async () => {
 
   await Promise.all(tasks);
 
-  // 全部完成后关闭全局 Loading
+  // 全部完成后关闭全局 Loading，并触发 router-view 渲染
   hideLoading();
+  setReady();
 
   // 启动全局 scroll 监听（写入共享 scrollPercentage）
   window.addEventListener("scroll", throttledScroll);

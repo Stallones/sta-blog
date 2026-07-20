@@ -78,7 +78,7 @@ declare namespace API {
     /** 评论编号 */
     id: number;
     /** 评论类型（10文章 20评论 21评论回复 30留言 31留言回复 51封面图 52轮播图 53banner图） */
-    type?: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53;
+    type?: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53 | 54;
     /** 文章ID */
     articleId?: number;
     /** 父级ID */
@@ -137,7 +137,7 @@ declare namespace API {
 
   type AppFavoriteReqVO = {
     /** 收藏类型（10文章） */
-    type: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53;
+    type: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53 | 54;
     /** 目标ID（文章ID） */
     typeId: number;
   };
@@ -146,7 +146,7 @@ declare namespace API {
     /** 收藏编号 */
     id: number;
     /** 收藏类型（1文章 2留言板） */
-    type?: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53;
+    type?: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53 | 54;
     /** 目标ID */
     dataId?: number;
     /** 是否有效（0否 1是） */
@@ -158,8 +158,8 @@ declare namespace API {
   type AppImageRespVO = {
     /** 图片编号 */
     id: number;
-    /** 图类型（51封面图 52轮播图 53banner图） */
-    type?: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53;
+    /** 图类型（51封面图 52轮播图 53banner图 54头像） */
+    type?: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53 | 54;
     /** 关联ID */
     coverId?: number;
     /** 图片路径 */
@@ -174,9 +174,16 @@ declare namespace API {
     createTime?: string;
   };
 
+  type AppImageUploadRespVO = {
+    /** 图片访问 URL */
+    url: string;
+    /** 图片编号 */
+    id?: number;
+  };
+
   type AppLikeReqVO = {
     /** 点赞类型（10文章 20评论 30留言） */
-    type: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53;
+    type: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53 | 54;
     /** 目标ID（文章ID/评论ID/留言ID） */
     typeId: number;
   };
@@ -226,7 +233,7 @@ declare namespace API {
     /** 留言编号 */
     id: number;
     /** 留言类型（30留言 31留言回复） */
-    type?: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53;
+    type?: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53 | 54;
     /** 父级ID */
     parentId?: number;
     /** 根节点ID（顶级留言为0，回复指向根留言） */
@@ -277,6 +284,19 @@ declare namespace API {
     email: string;
     /** 发送场景（register 注册 / reset 重置密码 / resetEmail 修改邮箱） */
     scene: string;
+  };
+
+  type AppSnapshotRespVO = {
+    /** 网站信息 */
+    websiteInfo?: AppWebsiteInfoRespVO;
+    /** 文章列表（含摘要，不含全文） */
+    articles?: AppArticleRespVO[];
+    /** 分类列表 */
+    categories?: AppCategoryRespVO[];
+    /** 标签列表 */
+    tags?: AppTagRespVO[];
+    /** 图片列表 */
+    images?: AppImageRespVO[];
   };
 
   type AppSocialLoginReqVO = {
@@ -361,6 +381,18 @@ declare namespace API {
     createTime?: string;
     /** 更新时间 */
     updateTime?: string;
+    /** 文章数量 */
+    articleCount?: number;
+    /** 分类数量 */
+    categoryCount?: number;
+    /** 评论数量 */
+    commentCount?: number;
+    /** 总访问量 */
+    visitCount?: number;
+    /** 最后更新时间 */
+    lastUpdateTime?: string;
+    /** 标签数量 */
+    tagCount?: number;
   };
 
   type CommonResultAppArticleRespVO = {
@@ -379,6 +411,18 @@ declare namespace API {
     code?: number;
     msg?: string;
     data?: AppCategoryRespVO;
+  };
+
+  type CommonResultAppImageUploadRespVO = {
+    code?: number;
+    msg?: string;
+    data?: AppImageUploadRespVO;
+  };
+
+  type CommonResultAppSnapshotRespVO = {
+    code?: number;
+    msg?: string;
+    data?: AppSnapshotRespVO;
   };
 
   type CommonResultAppUserInfoRespVO = {
@@ -566,7 +610,7 @@ declare namespace API {
   };
 
   type getImageListParams = {
-    /** 图片类型（51封面图 52轮播图 53banner图） */
+    /** 图片类型（51封面图 52轮播图 53banner图 54头像） */
     type?: number;
   };
 
@@ -596,16 +640,27 @@ declare namespace API {
     pageSize: number;
   };
 
+  type getSnapshotArticleParams = {
+    /** 文章ID */
+    id: number;
+    key: string;
+  };
+
+  type getSnapshotParams = {
+    /** 快照密钥 */
+    key: string;
+  };
+
   type isFavoriteParams = {
     /** 收藏类型（10文章） */
-    type: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53;
+    type: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53 | 54;
     /** 目标ID（文章ID） */
     typeId: number;
   };
 
   type isLikeParams = {
     /** 点赞类型（10文章 20评论 30留言） */
-    type: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53;
+    type: 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53 | 54;
     /** 目标ID（文章ID/评论ID/留言ID） */
     typeId: number;
   };
@@ -643,5 +698,14 @@ declare namespace API {
     redirectUri: string;
   };
 
-  type TypeEnum = 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53;
+  type TypeEnum = 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53 | 54;
+
+  type uploadImageParams = {
+    /** 图片类型（54头像 51封面 52轮播 53banner） */
+    type: number;
+    /** 关联数据 ID（头像上传无需填写，后端取当前登录用户） */
+    dataId?: number;
+    /** 图片附件 */
+    file: string;
+  };
 }

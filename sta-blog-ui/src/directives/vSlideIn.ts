@@ -3,11 +3,8 @@ const DURATION = 750;
 
 const map = new WeakMap()
 
-// 仅对视口外滚动触发的动画做路由去重（后退导航不重复）
-const animatedRoutes = new Set<string>();
-function routeKey(): string {
-    return window.location.pathname;
-}
+// 元素级去重：已播放过动画的元素不再重复（替代路由级去重，避免父组件抢占子组件动画）
+const animatedElements = new WeakSet<Element>();
 
 const ob = new IntersectionObserver((entries) => {
     for (const entry of entries){
@@ -16,7 +13,7 @@ const ob = new IntersectionObserver((entries) => {
             if (animation){
                 animation.play()
                 ob.unobserve(entry.target)
-                animatedRoutes.add(routeKey())
+                animatedElements.add(entry.target)
             }
         }
     }
@@ -52,8 +49,9 @@ export default {
                     el.style.transform = '';
                 };
             }, 150);
-        } else if (!animatedRoutes.has(routeKey())) {
-            // 视口外：滚动触发（首次，后退不重复）
+        } else if (!animatedElements.has(el)) {
+            // 视口外：滚动触发（每个元素仅一次）
+            animatedElements.add(el)
             const animation = createAnimation(el);
             animation.pause();
             ob.observe(el);

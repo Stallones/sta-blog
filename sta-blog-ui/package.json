@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "page": "node src/utils/pagefind-dev.mjs",
-    "build": "vite build --mode production && node src/utils/generate-article-pages.mjs",
+    "page": "node scripts/generate-pagefind.mjs --dev",
+    "generate:data": "tsx scripts/generate-static-data.ts",
+    "build": "pnpm generate:data && vite build --mode production && node scripts/generate-pagefind.mjs",
     "preview": "vite preview",
     "openapi": "tsx openapi2ts.config.ts && tsx scripts/gen-enum-consts.ts"
   },

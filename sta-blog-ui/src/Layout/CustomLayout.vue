@@ -6,7 +6,7 @@
     <!-- 裸露内容区：路由页面完全自主管理 -->
     <div class="custom-content">
       <router-view v-slot="{ Component, route: r }">
-        <component v-slide-in :is="Component" :key="r.fullPath" />
+        <component :is="Component" :key="r.fullPath" />
       </router-view>
     </div>
 

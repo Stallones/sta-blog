@@ -2,7 +2,9 @@
 import type { AppArticleRespVO } from "@/types";
 import { Calendar, Folder, View } from "@element-plus/icons-vue";
 import { dayjs } from "element-plus";
+import { useDemotion } from "@/composables/useDemotion";
 
+const { imageOnline } = useDemotion();
 defineProps<{
   article: AppArticleRespVO;
   /** true = 模式7（信息浮于封面），false = 模式6（封面上+信息下） */
@@ -14,7 +16,10 @@ defineProps<{
   <div class="w-card" :class="{ 'w-card--overlay': overlay }">
     <!-- 封面 -->
     <div class="g-cover">
-      <img class="g-img" v-lazy="true" :data-src="article.coverPath" alt="" />
+      <img v-if="imageOnline" class="g-img" v-lazy="true" :data-src="article.coverPath" alt="" />
+      <div v-else class="img-placeholder" :class="{ 'img-placeholder--tall': !overlay }">
+        <!-- <span class="img-placeholder__text">图片</span> -->
+      </div>
 
       <!-- overlay 模式的遮罩和浮动内容 -->
       <template v-if="overlay">
@@ -191,5 +196,41 @@ $bp: 768px;
   line-height: 1.4;
   margin: 0;
   /* 不限行数，让不同长度 summary 自然撑出瀑布流高度差 */
+}
+
+/* 图片服务离线占位（固定样式，不跟随主题） */
+.img-placeholder {
+  width: 100%;
+  height: 170px; /* 与 .g-img max-height 一致 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  position: relative;
+  overflow: hidden;
+
+  &--tall {
+    min-height: 170px;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &__text {
+    position: relative;
+    z-index: 1;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    user-select: none;
+  }
 }
 </style>

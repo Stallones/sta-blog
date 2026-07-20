@@ -150,6 +150,9 @@ function getCanvasBg(): string {
 
 /** 缓存的飘带点序列 */
 let ribbonPoints: { x: number; y: number }[] | null = null;
+/** 飘带点序列对应的画布尺寸（用于 scale 缩放） */
+let ribbonBaseW = 0;
+let ribbonBaseH = 0;
 /** 飘带尺寸因子 */
 const RIBBON_SIZE = 120;
 /**
@@ -190,14 +193,21 @@ export function ribbonDrawFn(ctx: CanvasRenderingContext2D, w: number, h: number
   ctx.fillStyle = getCanvasBg();
   ctx.fillRect(0, 0, w, h);
 
-  // 路径缓存：仅在首次或尺寸变化时生成
+  // 路径缓存：仅在首次生成（后续 resize 通过 scale 等比缩放，不重建点序列）
   if (!ribbonPoints) {
     ribbonPoints = generateRibbonPoints(w, h);
+    ribbonBaseW = w;
+    ribbonBaseH = h;
   }
 
   const pts = ribbonPoints;
 
+  // 等比缩放：画布尺寸变化时，像图片一样整体压缩/拉伸
+  const scaleX = w / ribbonBaseW;
+  const scaleY = h / ribbonBaseH;
+
   ctx.save();
+  ctx.scale(scaleX, scaleY);
   ctx.globalAlpha = 0.55;
 
   // 三角形链绘制（同 ribbon.js 算法）
@@ -259,6 +269,7 @@ function darkBgDrawFn(ctx: CanvasRenderingContext2D, w: number, h: number, _p: n
 export function modeDrawFn(ctx: CanvasRenderingContext2D, w: number, h: number, p: number) {
   if (isDark.value && glassEnabled.value) {
     darkBgDrawFn(ctx, w, h, p);
+    // ribbonDrawFn(ctx, w, h, p);
   } else {
     ribbonDrawFn(ctx, w, h, p);
   }
@@ -336,6 +347,8 @@ export function createParallax(): ParallaxInstance {
       darkBgImage = null;
       darkBgLoaded = false;
       ribbonPoints = null;
+      ribbonBaseW = 0;
+      ribbonBaseH = 0;
       solidDraw = null;
       glassDraw = null;
       activeDraw = null;

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { getTagList } from '@/api/AppTagController';
+import { readTagList } from '@/utils/file-reader';
+import { useDemotion } from '@/composables/useDemotion';
 import { useRouter } from 'vue-router';
 
 interface TagItem {
@@ -10,6 +12,7 @@ interface TagItem {
 }
 
 const router = useRouter();
+const { requestOrRead } = useDemotion();
 
 const tags = ref<TagItem[]>([]);
 const loading = ref(true);
@@ -18,8 +21,8 @@ const loading = ref(true);
 async function loadContent() {
   loading.value = true;
   try {
-    const res: any = await getTagList();
-    const list = Array.isArray(res) ? res : [];
+    const res: any = await requestOrRead(getTagList, readTagList);
+    const list = Array.isArray(res?.data ?? res) ? (res?.data ?? res) : [];
     // 按文章数排序并取前10个
     tags.value = list
       .sort((a: TagItem, b: TagItem) => (b.articleCount ?? 0) - (a.articleCount ?? 0))

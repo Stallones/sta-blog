@@ -3,6 +3,7 @@
     class="h-nav"
     :class="{ 'nav-hidden': isHidden, 'nav-transparent': isTransparent }"
   >
+    <!-- <div class="nav-bg"></div> -->
     <!-- 左侧：品牌名 -->
     <span class="blog-info">
       <a href="/">{{ useWebsite.webInfo?.websiteName }}</a>
@@ -24,7 +25,6 @@ import { useWebsiteStore } from "@/store/useWebsiteStore";
 
 const useWebsite = useWebsiteStore();
 const route = useRoute();
-
 
 const isHidden = ref(false);
 const isTransparent = ref(false);
@@ -89,7 +89,9 @@ nav {
   backdrop-filter: var(--nav-blur);
   border-bottom: 1px solid var(--nav-border);
   box-shadow: var(--nav-shadow);
-  transition: top 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  transition:
+    top 0.3s ease-in-out,
+    background-color 0.3s ease-in-out;
   padding: 0 1.5rem;
   box-sizing: border-box;
 
@@ -126,6 +128,18 @@ nav {
     display: none;
   }
 
+  // .nav-bg {
+  //   position: absolute;
+  //   inset: 0;
+  //   background: linear-gradient(
+  //     135deg,
+  //     hsla(220, 70%, 50%, 0.15) 0%,
+  //     hsla(280, 60%, 50%, 0.1) 50%,
+  //     hsla(180, 60%, 40%, 0.1) 100%
+  //   );
+  //   z-index: 0;
+  // }
+
   .blog-info {
     height: 100%;
     display: flex;
@@ -142,6 +156,5 @@ nav {
       color: inherit;
     }
   }
-
 }
 </style>
