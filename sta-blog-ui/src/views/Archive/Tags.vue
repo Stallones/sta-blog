@@ -79,7 +79,7 @@ onMounted(async () => {
   position: relative;
   width: 100%;
   @include surface-card;
-  padding: $page-padding;
+  padding: var(--page-padding);
 }
 
 .page-header {
@@ -155,7 +155,7 @@ onMounted(async () => {
 
   &:hover {
     // hover 时使用强调色（橙色）并上浮，同时提升到遮罩之上
-    background: var(--mao-orange) !important;
+    background: var(--brand-orange) !important;
     color: #fff !important;
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(230, 162, 60, 0.3);

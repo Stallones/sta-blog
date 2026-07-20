@@ -138,7 +138,7 @@ function handleLike() {
   padding: 1px 6px;
   border: 1px solid var(--border-lighter);
   border-radius: 3px;
-  background-color: var(--fill-color-lighter);
+  background-color: var(--bg-hover);
   white-space: nowrap;
 }
 

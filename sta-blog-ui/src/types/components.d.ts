@@ -7,8 +7,6 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    ArticleFooter: typeof import('./../components/Article/ArticleFooter.vue')['default']
-    ArticleHeader: typeof import('./../components/Article/ArticleHeader.vue')['default']
     ArticleSideBar: typeof import('./../components/SideBar/ArticleSideBar.vue')['default']
     BloggerInfoCard: typeof import('./../components/SCard/BloggerInfoCard.vue')['default']
     Brand: typeof import('./../components/Header/Brand.vue')['default']
@@ -60,7 +58,6 @@ declare module 'vue' {
     HorizontalCard: typeof import('./../components/Gallery/GalleryCard/HorizontalCard.vue')['default']
     Images: typeof import('./../components/Header/Images.vue')['default']
     Loading: typeof import('./../components/Loading.vue')['default']
-    MdEditor: typeof import('./../components/Article/MdEditor.vue')['default']
     MenuList: typeof import('./../components/Nav/MenuList.vue')['default']
     MenuListMob: typeof import('./../components/Nav/NavMob/MenuListMob.vue')['default']
     Music: typeof import('./../components/Music/index.vue')['default']
@@ -70,7 +67,6 @@ declare module 'vue' {
     Pagination: typeof import('./../components/Pagination.vue')['default']
     PublicCard: typeof import('./../components/SCard/PublicCard.vue')['default']
     RandomCard: typeof import('./../components/SCard/RandomCard.vue')['default']
-    RecommendArticle: typeof import('./../components/RecommendArticle.vue')['default']
     ReplyBox: typeof import('./../components/SComment/ReplyBox.vue')['default']
     ReplyItem: typeof import('./../components/SComment/ReplyItem.vue')['default']
     ReplySection: typeof import('./../components/SComment/ReplySection.vue')['default']
@@ -78,7 +74,6 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SComment: typeof import('./../components/SComment/index.vue')['default']
-    SearchByDB: typeof import('./../components/Search/SearchByDB.vue')['default']
     SearchByPagefind: typeof import('./../components/Search/SearchByPagefind.vue')['default']
     SearchDialog: typeof import('./../components/Search/SearchDialog.vue')['default']
     SideBar: typeof import('./../components/SideBar/index.vue')['default']
@@ -86,7 +81,6 @@ declare module 'vue' {
     TagListCard: typeof import('./../components/SCard/TagListCard.vue')['default']
     TocCard: typeof import('./../components/SCard/TocCard.vue')['default']
     TocItem: typeof import('./../components/SCard/TocItem.vue')['default']
-    TypewriterText: typeof import('./../components/TextTech/TypewriterText.vue')['default']
     UserLogin: typeof import('./../components/Nav/UserLogin.vue')['default']
     VerticalCard: typeof import('./../components/Gallery/GalleryCard/VerticalCard.vue')['default']
     WaterfallCard: typeof import('./../components/Gallery/GalleryCard/WaterfallCard.vue')['default']

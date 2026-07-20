@@ -12,7 +12,6 @@
       <div class="hc-search" v-if="!isOnline">
         <SearchByPagefind  />
       </div>
-      <!-- <RecommendArticle /> -->
     </div>
 
     <div>

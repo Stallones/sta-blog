@@ -323,12 +323,11 @@ onUnmounted(() => {
   align-items: center;
   padding-top: 12vh;
 
-  /* ── 统一搜索容器 ── */
+  /* ── 统一搜索容器（始终实体黑白底，不随玻璃切换） ── */
   .search-dialog {
     width: min(640px, 92vw);
-    background-color: var(--surface-bg);
-    backdrop-filter: var(--surface-blur);
-    -webkit-backdrop-filter: var(--surface-blur);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 16px;
     box-shadow:
       0 20px 60px rgba(0, 0, 0, 0.2),
@@ -416,7 +415,7 @@ onUnmounted(() => {
           border-left: 3px solid transparent;
 
           &:hover {
-            background-color: var(--fill-color-light);
+            background-color: var(--bg-hover);
             border-left-color: var(--accent-primary);
           }
 
@@ -492,7 +491,7 @@ onUnmounted(() => {
 
           &:hover {
             color: var(--status-danger);
-            background-color: var(--fill-color-light);
+            background-color: var(--bg-hover);
           }
         }
 
@@ -538,7 +537,7 @@ onUnmounted(() => {
         font-family: inherit;
         border: 1px solid var(--border-lighter);
         border-radius: 4px;
-        background-color: var(--fill-color-light);
+        background-color: var(--bg-hover);
         margin-right: 4px;
       }
     }

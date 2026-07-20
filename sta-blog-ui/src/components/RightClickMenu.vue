@@ -377,8 +377,8 @@ html.dark .menu-container {
   display: flex;
   align-items: center;
   padding: 14px 16px;
-  border-bottom: 1px solid var(--mao-context-divider);
-  background: var(--mao-context-header-bg);
+  border-bottom: 1px solid var(--context-divider);
+  background: var(--context-header-bg);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   position: relative;
@@ -415,7 +415,7 @@ html.dark .menu-container {
 .menu-divider {
   height: 1px;
   margin: 10px 0;
-  background: var(--mao-context-divider);
+  background: var(--context-divider);
 }
 
 .menu-item {

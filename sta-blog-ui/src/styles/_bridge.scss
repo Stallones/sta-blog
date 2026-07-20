@@ -71,9 +71,9 @@
   --el-color-info:            var(--color-gray-400);
   --el-color-error:           var(--status-danger);
 
-  /* ═══ 弹窗 ═══ */
-  --el-dialog-bg-color: var(--surface-bg);
-  --el-dialog-border-color: var(--surface-border);
+  /* ═══ 弹窗（实体黑白底，不随玻璃切换） ═══ */
+  --el-dialog-bg-color: var(--bg-card);
+  --el-dialog-border-color: var(--border-color);
 
   /* ═══ 阴影 ═══ */
   --el-box-shadow-light: var(--surface-shadow);
@@ -95,4 +95,15 @@
 /* EP 桥接 — 暗色覆盖 */
 html.dark {
   --el-color-primary-rgb: 249, 115, 22;  /* hsl(25, 95%, 53%) */
+}
+
+/* EP 桥接 — 弹窗容器居中 */
+.el-overlay-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .el-dialog {
+    margin: 0 !important;
+  }
 }

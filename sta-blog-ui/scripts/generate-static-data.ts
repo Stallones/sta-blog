@@ -45,6 +45,7 @@ interface SnapshotData {
   categories: any[];
   tags: any[];
   images: any[];
+  links: any[];
 }
 
 interface ArticleFull {
@@ -80,6 +81,7 @@ async function main(): Promise<void> {
   console.log(`  分类: ${snapshot.categories?.length || 0} 个`);
   console.log(`  标签: ${snapshot.tags?.length || 0} 个`);
   console.log(`  图片: ${snapshot.images?.length || 0} 张`);
+  console.log(`  友链: ${snapshot.links?.length || 0} 个`);
 
   // 保存 snapshot.json
   fs.writeFileSync(

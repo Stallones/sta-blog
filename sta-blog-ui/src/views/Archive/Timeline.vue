@@ -156,7 +156,7 @@ $year-dot-size: 8px;
 .timeline-page {
   width: 100%;
   @include surface-card;
-  padding: $page-padding;
+  padding: var(--page-padding);
 }
 
 // ===== 页面标题 =====
@@ -237,7 +237,7 @@ $year-dot-size: 8px;
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    border: 5px solid var(--mao-blue);
+    border: 5px solid var(--brand-blue);
     background: var(--surface-bg);
     box-sizing: border-box;
     z-index: 1;
@@ -269,8 +269,8 @@ $year-dot-size: 8px;
     width: $dot-size;
     height: $dot-size;
     border-radius: 50%;
-    border: 2px solid var(--mao-orange);
-    background: var(--mao-orange);
+    border: 2px solid var(--brand-orange);
+    background: var(--brand-orange);
     box-sizing: border-box;
     z-index: 1;
   }
@@ -289,7 +289,7 @@ $year-dot-size: 8px;
     width: $dot-size;
     height: $dot-size;
     border-radius: 50%;
-    border: 2px solid var(--mao-blue);
+    border: 2px solid var(--brand-blue);
     background: var(--surface-bg);
     box-sizing: border-box;
     z-index: 1;
@@ -297,7 +297,7 @@ $year-dot-size: 8px;
   }
 
   &:hover .timeline-dot {
-    border-color: var(--mao-orange);
+    border-color: var(--brand-orange);
   }
 }
 
@@ -379,7 +379,7 @@ $year-dot-size: 8px;
   $year-dot-size: 7px;
 
   .timeline-page {
-    padding: $page-padding * 0.6;
+    padding: var(--page-padding);
   }
 
   .archive-title {

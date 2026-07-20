@@ -281,11 +281,11 @@ const { cardData, isSettingUser } = useUserCard();
     .icon-wrapper {
       padding: 8px;
       border-radius: 50%;
-      background: var(--fill-color-light);
+      background: var(--bg-hover);
       transition: all 0.3s ease;
 
       &:hover {
-        background: var(--fill-color);
+        background: var(--bg-active);
         transform: translateY(-2px);
       }
 

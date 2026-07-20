@@ -90,11 +90,11 @@ import { getArticle, addVisitCount } from "@/api/AppArticleController";
 import { readArticleDetail } from "@/utils/file-reader";
 import type { AppArticleRespVO } from "@/types";
 import router from "@/router";
-import ArticleFooter from "@/components/Article/ArticleFooter.vue";
-import ArticleHeader from "@/components/Article/ArticleHeader.vue";
+import ArticleFooter from "./ArticleFooter.vue";
+import ArticleHeader from "./ArticleHeader.vue";
 import ArticleSideBar from "@/components/SideBar/ArticleSideBar.vue";
 const SComment = defineAsyncComponent(() => import("@/components/SComment/index.vue"));
-const MdEditor = defineAsyncComponent(() => import("@/components/Article/MdEditor.vue"));
+const MdEditor = defineAsyncComponent(() => import("./MdEditor.vue"));
 
 // ── 本地状态（原 useArticleStore 降级）──
 const route = useRoute();
@@ -175,9 +175,6 @@ async function getArticleDetailById() {
       articleVO.value.createTime = typeof rawTime === 'number'
         ? new Date(rawTime).toLocaleDateString('zh-CN')
         : String(rawTime).split(" ")[0];
-    }
-    if ((articleVO.value as any).updateTime) {
-      (articleVO.value as any).updateTime = (articleVO.value as any).updateTime?.split(" ")[0];
     }
 
     // 访问统计
@@ -437,20 +434,16 @@ function mdHtml(htmlText: string) {
   transition: background-color 0.3s, transform 0.3s;
 
   &:hover {
-    background-color: var(--fill-color-light);
+    background-color: var(--bg-hover);
   }
 
   @media (min-width: 1024px) {
     right: 5em;
   }
+}
 
-  .reading-content {
-    // max-width: 1000px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem;
-    // background-color: var(--el-fill-color-blank);
-    // border-radius: $border-radius;
-    // box-shadow: var(--el-box-shadow-light);
-  }
+.reading-content {
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
 }
 </style>

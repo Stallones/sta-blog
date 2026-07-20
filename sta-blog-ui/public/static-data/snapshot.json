@@ -7,8 +7,8 @@
     "favoriteCount": 54,
     "categoryCount": 10,
     "tagCount": 20,
-    "visitCount": 97617,
-    "lastUpdateTime": 1784500262000
+    "visitCount": 97620,
+    "lastUpdateTime": 1784585975000
   },
   "articles": [
     {
@@ -275,7 +275,7 @@
       "content": null,
       "summary": "##  1. 新建 Maven 模块\r\n\r\n###  1.1 新建 demo 模块\r\n\r\n① 选择 File -> New -> Module 菜单，如下图所示：\r\n\r\n![打开 New Module](./assets/p01_img_001.png)\r\n\r\n② 选择 Maven 类型，选择父模块为 `yudao`，输入名字为 `yudao-module-demo`，并点击 Create 按钮，",
       "wordCount": 12395,
-      "visitCount": 3520,
+      "visitCount": 3523,
       "likeCount": 2,
       "favoriteCount": 2,
       "commentCount": 53,
@@ -1041,6 +1041,68 @@
       "size": 204800,
       "extension": "jpg",
       "sort": 2,
+      "createTime": 1782792000000
+    }
+  ],
+  "links": [
+    {
+      "id": 6,
+      "name": "Spring 官方文档",
+      "url": "https://spring.io/docs",
+      "description": "Spring 框架官方参考文档",
+      "background": "http://192.168.20.128:19000/yudao/blog/avatar/20260717/38835624.jpg",
+      "email": "",
+      "isCheck": null,
+      "createTime": 1782792000000
+    },
+    {
+      "id": 5,
+      "name": "Gitee",
+      "url": "https://gitee.com",
+      "description": "国内领先的开源托管平台",
+      "background": "http://192.168.20.128:19000/yudao/blog/avatar/20260717/38835624.jpg",
+      "email": "",
+      "isCheck": null,
+      "createTime": 1782792000000
+    },
+    {
+      "id": 4,
+      "name": "CSDN",
+      "url": "https://blog.csdn.net",
+      "description": "专业IT技术社区",
+      "background": "http://192.168.20.128:19000/yudao/blog/avatar/20260717/38835624.jpg",
+      "email": "",
+      "isCheck": null,
+      "createTime": 1782792000000
+    },
+    {
+      "id": 3,
+      "name": "掘金",
+      "url": "https://juejin.cn",
+      "description": "一个帮助开发者成长的技术社区",
+      "background": "http://192.168.20.128:19000/yudao/blog/avatar/20260717/38835624.jpg",
+      "email": "",
+      "isCheck": null,
+      "createTime": 1782792000000
+    },
+    {
+      "id": 2,
+      "name": "GitHub",
+      "url": "https://github.com",
+      "description": "全球最大的开源社区",
+      "background": "http://192.168.20.128:19000/yudao/blog/avatar/20260717/38835624.jpg",
+      "email": "",
+      "isCheck": null,
+      "createTime": 1782792000000
+    },
+    {
+      "id": 1,
+      "name": "芋道源码",
+      "url": "https://www.iocoder.cn",
+      "description": "专注于 Java 后端源码解析",
+      "background": "http://192.168.20.128:19000/yudao/blog/avatar/20260717/38835624.jpg",
+      "email": "iocoder@iocoder.cn",
+      "isCheck": null,
       "createTime": 1782792000000
     }
   ]

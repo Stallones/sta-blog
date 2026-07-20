@@ -58,7 +58,7 @@ export const constantRouter = [
       },
       {
         path: "/message",
-        component: () => import("@/views/Message/MessageList.vue"),
+        component: () => import("@/views/Message/index.vue"),
         name: "message",
         meta: {
           headerType: "page",
@@ -111,7 +111,7 @@ export const constantRouter = [
       // ── 文章详情（自含 header + sidebar，完整自主布局）──
       {
         path: "article/:id",
-        component: () => import("@/views/Article.vue"),
+        component: () => import("@/views/article/index.vue"),
         name: "article",
         meta: { title: "文章详情", showFooter: true, showNav: true },
       },

@@ -53,12 +53,12 @@ const hidden = computed(() => !!searchStore.searchResults);
   :deep(.btn-prev:hover),
   :deep(.btn-next:hover) {
     color: var(--color-white);
-    background-color: var(--mao-orange);
+    background-color: var(--brand-orange);
   }
 
   :deep(.el-pager li:hover) {
     color: var(--color-white);
-    background-color: var(--mao-orange);
+    background-color: var(--brand-orange);
   }
 
   // 当前页码：绿松石色背景 + 白字

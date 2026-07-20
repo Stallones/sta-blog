@@ -45,7 +45,7 @@ onMounted(async () => {
 .cat-page {
   width: 100%;
   @include surface-card;
-  padding: $page-padding;
+  padding: var(--page-padding);
 }
 
 .page-header {

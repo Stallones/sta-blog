@@ -59,7 +59,7 @@ function handleClick() {
 
   &:hover {
     color: var(--accent-primary);
-    background-color: var(--fill-color-light);
+    background-color: var(--bg-hover);
   }
 
   &--active {

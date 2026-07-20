@@ -190,7 +190,7 @@ const pageButtons = computed(() => {
 
   /* "共N条回复" 灰色 */
   .s-reply-section__toggle-label {
-    color: #999;
+    color: var(--text-secondary);
     cursor:text;
   }
 
@@ -253,7 +253,7 @@ const pageButtons = computed(() => {
 }
 
 .s-reply-section__pager-info {
-  color: #333;
+  color: var(--text-regular);
 }
 
 .s-reply-section__page-btn {
@@ -265,7 +265,7 @@ const pageButtons = computed(() => {
   padding: 0 6px;
   border: none;
   background: transparent;
-  color: #333;
+  color: var(--text-regular);
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s;
@@ -294,7 +294,7 @@ const pageButtons = computed(() => {
   height: 22px;
   border: none;
   background: transparent;
-  color: #333;
+  color: var(--text-regular);
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s;
@@ -304,7 +304,7 @@ const pageButtons = computed(() => {
   }
 
   &:disabled {
-    color: #ccc;
+    color: var(--text-disabled);
     cursor: not-allowed;
   }
 }
@@ -318,7 +318,7 @@ const pageButtons = computed(() => {
   padding: 0 4px;
   border: none;
   background: transparent;
-  color: #666;
+  color: var(--text-secondary);
   font-size: 13px;
   cursor: pointer;
   transition: color 0.2s;

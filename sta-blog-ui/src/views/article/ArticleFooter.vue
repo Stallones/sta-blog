@@ -51,17 +51,45 @@ async function handleFavorite() {
 <template>
   <div class="article-footer">
     <span class="action-btn" :class="{ active: liked }" @click="handleLike">
-      👍 {{ likeCount }}
+      <SvgIcon :name="liked ? 'like-selected' : 'like'" class="action-icon" />
+      <span class="action-count">{{ likeCount }}</span>
     </span>
     <span class="action-btn" :class="{ active: favorited }" @click="handleFavorite">
-      ⭐ {{ favoriteCount }}
+      <SvgIcon :name="favorited ? 'collection-selected' : 'collection'" class="action-icon" />
+      <span class="action-count">{{ favoriteCount }}</span>
     </span>
   </div>
 </template>
 
-<style scoped>
-.article-footer { display: flex; gap: 20px; padding: 16px 0; }
-.action-btn { cursor: pointer; padding: 8px 16px; border-radius: 8px; transition: all 0.2s; }
-.action-btn:hover { background: var(--color-blue-50); }
-.action-btn.active { color: var(--accent-primary); font-weight: bold; }
+<style scoped lang="scss">
+.article-footer {
+  display: flex;
+  gap: 20px;
+  padding: 16px 0;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: $glass-radius-sm;
+  color: var(--text-regular);
+  transition: all 0.2s;
+
+  &:hover {
+    background: var(--accent-halo);
+  }
+
+  &.active {
+    color: var(--accent-primary);
+    font-weight: bold;
+  }
+}
+
+.action-icon {
+  font-size: 1.15em;
+  flex-shrink: 0;
+}
 </style>

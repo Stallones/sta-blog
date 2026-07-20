@@ -14,6 +14,7 @@ interface SnapshotData {
   categories: any[];
   tags: any[];
   images: any[];
+  links: any[];
 }
 
 let snapshotCache: SnapshotData | null = null;
@@ -173,6 +174,16 @@ export async function readArticleListByCategoryId(params: { categoryId: number; 
       (a: any) => a.categoryId === params.categoryId && a.id !== params.articleId
     );
     return wrap(list);
+  } catch {
+    return { code: 500, msg: "读取失败", data: [] };
+  }
+}
+
+/** 读取友链列表（离线） */
+export async function readLinkList(): Promise<ApiResponse<any[]>> {
+  try {
+    const s = await loadSnapshot();
+    return wrap(s.links || []);
   } catch {
     return { code: 500, msg: "读取失败", data: [] };
   }

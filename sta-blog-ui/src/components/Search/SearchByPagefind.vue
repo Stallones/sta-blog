@@ -130,7 +130,7 @@ function clearQuery() {
   padding: 0 16px;
   border-radius: 50px;
   align-items: center;
-  background: var(--fill-color-light);
+  background: var(--bg-hover);
   // border: 1px solid hsla(0, 0%, 100%, 0.1);
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: text;
@@ -146,7 +146,7 @@ function clearQuery() {
   // 展开态：撑满容器
   &.expanded {
     width: 100%;
-    border: 2px solid var(--mao-accent);
+    border: 2px solid var(--accent-primary);
 
     input {
       width: auto;
@@ -154,7 +154,7 @@ function clearQuery() {
     }
 
     &.foucused {
-      border: 2px solid var(--mao-accent);
+      border: 2px solid var(--accent-primary);
     }
   }
 

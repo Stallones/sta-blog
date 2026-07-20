@@ -6,23 +6,29 @@ import {
   FormRules,
 } from "element-plus";
 import { applyForLink, getLinkList } from "@/api/AppLinkController";
+import { readLinkList } from "@/utils/file-reader";
 import { useDemotion } from "@/composables/useDemotion";
 
 const dialogVisible = ref(false);
 const { isOnline } = useDemotion();
 
 onMounted(() => {
-  if (isOnline.value) linkListFunc();
+  linkListFunc();
 });
 
 const links = ref<API.AppLinkRespVO[]>([]);
 
 async function linkListFunc() {
-  try {
-    const res: any = await getLinkList();
-    links.value = Array.isArray(res) ? res : [];
-  } catch {
-    links.value = [];
+  if (isOnline.value) {
+    try {
+      const res: any = await getLinkList();
+      links.value = Array.isArray(res) ? res : [];
+    } catch {
+      links.value = [];
+    }
+  } else {
+    const res = await readLinkList();
+    links.value = res.code === 0 ? res.data : [];
   }
 }
 
@@ -216,7 +222,7 @@ function applyLinkFunc() {
 .link-page {
   width: 100%;
   @include surface-card;
-  padding: $page-padding;
+  padding: var(--page-padding);
 }
 
 /* ── 弹窗样式 ── */

@@ -371,10 +371,10 @@ function handleButtonClick(id: string) {
   font-size: 15px;
   font-weight: 600;
   transition: background-color 0.25s, transform 0.15s;
-  background-color: var(--mao-fm-btn-color);
+  background-color: var(--fm-btn-color);
 
   &:hover {
-    background-color: var(--mao-orange);
+    background-color: var(--brand-orange);
     transform: scale(1.05);
   }
 
@@ -391,7 +391,7 @@ function handleButtonClick(id: string) {
 
 /* 展开时设置按钮高亮橙色 */
 .fm-btn--active {
-  background-color: var(--mao-orange) !important;
+  background-color: var(--brand-orange) !important;
 }
 
 /* 未展开时设置按钮持续旋转 */
@@ -474,13 +474,13 @@ function handleButtonClick(id: string) {
     transition: background 0.15s, color 0.15s;
 
     &:hover {
-      background: var(--mao-fm-layout-hover);
-      color: var(--mao-accent);
+      background: var(--fm-layout-hover);
+      color: var(--accent-primary);
     }
 
     &--active {
       background: var(--color-blue-50);
-      color: var(--mao-accent);
+      color: var(--accent-primary);
     }
   }
 
@@ -503,7 +503,7 @@ function handleButtonClick(id: string) {
   &__check {
     width: 16px;
     height: 16px;
-    color: var(--mao-accent, #409eff);
+    color: var(--accent-primary);
     flex-shrink: 0;
     font-weight: 700;
     font-size: 14px;

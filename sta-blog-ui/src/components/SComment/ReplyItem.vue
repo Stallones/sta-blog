@@ -157,7 +157,7 @@ function handleLike() {
   padding: 0 4px;
   border: 1px solid var(--border-lighter);
   border-radius: 2px;
-  background-color: var(--fill-color-lighter);
+  background-color: var(--bg-hover);
   white-space: nowrap;
 }
 
@@ -170,7 +170,7 @@ function handleLike() {
   margin-top: 4px;
   font-size: 14px;
   line-height: 1.7;
-  color: #555;
+  color: var(--text-regular);
 
   .s-reply-item__reply-text {
     color: var(--text-regular);

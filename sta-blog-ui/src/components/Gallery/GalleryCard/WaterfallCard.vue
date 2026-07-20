@@ -175,7 +175,7 @@ $bp: 768px;
   text-overflow: ellipsis;
 
   &:hover {
-    color: var(--mao-accent);
+    color: var(--accent-primary);
   }
 }
 

@@ -27,7 +27,7 @@
   --bg-hover:   var(--color-gray-50);
   --bg-active:  var(--color-gray-100);
 
-  /* Fill（Element 填充色桥接用） */
+  /* Fill（纯桥接：仅供 bridge 映射 --el-fill-color-*，组件禁用，用 --bg-hover/--bg-active 代替） */
   --fill-color:         var(--color-gray-100);
   --fill-color-light:   var(--color-gray-50);
   --fill-color-lighter: var(--color-gray-50);
@@ -59,7 +59,7 @@
   --status-danger:  var(--color-danger);
   --status-hot:     var(--color-hot);
 
-  /* ═══ [MAO-KEPT] Markdown 预览 ═══ */
+  /* ═══ Markdown 预览 ═══ */
   --md-quote-bg:  hsl(210, 14%, 96%);
   --md-code-bg:   hsl(210, 17%, 98%);
 
@@ -84,49 +84,15 @@
   --context-header-bg: linear-gradient(to right, hsl(270, 100%, 97%), hsl(260, 60%, 97%));
   --context-divider:   hsl(270, 100%, 94%);
 
+  /* ═══ 布局 ═══ */
+  --page-padding: 3rem;  /* 页面统一内边距 */
+
   /* ═══ 通用 ═══ */
   --hr-border: hsl(210, 14%, 90%);
 
-  /* ─── 向下兼容旧变量名（同名覆盖旧 theme.scss）─── */
-  --mao-blue:   var(--color-blue-500);
-  --mao-orange: var(--color-orange-500);
-  --mao-accent:          var(--color-blue-500);
-  --mao-accent-gradient: linear-gradient(135deg, hsl(217, 91%, 60%), hsl(258, 64%, 61%));
-  --mao-overlay-text-primary:     var(--color-white);
-  --mao-overlay-text-regular:     hsl(0, 0%, 90%);
-  --mao-overlay-text-secondary:   hsl(0, 0%, 80%);
-  --mao-overlay-text-placeholder: hsl(0, 0%, 75%);
-  --mao-md-preview-quote-bg: hsl(210, 14%, 96%);
-  --mao-md-preview-code-bg:  hsl(210, 17%, 98%);
-  --mao-nav-bg:              var(--nav-bg);
-  --mao-nav-border-transparent: var(--nav-border-transparent);
-  --mao-fm-btn-color:    var(--color-blue-500);
-  --mao-fm-layout-hover: var(--color-black-a05);
-  --mao-cover-shadow:    hsla(0, 0%, 0%, 0.35);
-  --mao-context-header-bg: linear-gradient(to right, hsl(270, 100%, 97%), hsl(260, 60%, 97%));
-  --mao-context-divider:   hsl(270, 100%, 94%);
-
-  /* ═══ 音乐播放器兼容变量 ═══ */
-  --primary:          var(--accent-primary);
-  --router-color:     var(--color-gray-200);
-  --font-color:       var(--color-gray-600);
-  --dark-font-color:  var(--color-gray-500);
-  --second-font-color: var(--color-gray-200);
-  --hot-color:        var(--status-hot);
-  --md-active:        var(--accent-primary);
-  --global-white:     var(--color-gray-50);    /* 旧 W1 */
-  --global-black:     var(--color-gray-700);   /* 旧 B1 */
-  --global-shadow-white: var(--color-gray-100); /* 旧 W2 */
-  --header-bg-color:  var(--color-gray-100);
-  --meta-color:       var(--color-gray-500);
-  --comment-grey:     var(--color-gray-500);
-  --border-color-old: var(--accent-primary);   /* old usage: border-color=accent */
-  --hr-border-old:    var(--hr-border);
-  --top:              hsl(4, 80%, 66%);
-  --error:            var(--status-danger);
-  --music-main-active: hsl(160, 84%, 39%);
-  --music-main-bg:    var(--color-gray-700);
-  --global-font-size: 14px;
+  /* ═══ 品牌固定色（不随主题切换） ═══ */
+  --brand-blue:   var(--color-blue-500);
+  --brand-orange: var(--color-orange-500);
 }
 
 /* ─────────── 暗色模式 ─────────── */
@@ -145,7 +111,7 @@ html.dark {
   --bg-hover:   var(--color-gray-800);
   --bg-active:  var(--color-gray-700);
 
-  /* Fill */
+  /* Fill（纯桥接，组件禁用） */
   --fill-color:         var(--color-gray-700);
   --fill-color-light:   var(--color-gray-800);
   --fill-color-lighter: var(--color-gray-900);
@@ -186,31 +152,4 @@ html.dark {
 
   /* ═══ 通用 ═══ */
   --hr-border: hsl(215, 15%, 20%);
-
-  /* ─── 向下兼容 ─── */
-  --mao-accent:          var(--color-orange-500);
-  --mao-accent-gradient: linear-gradient(135deg, hsl(215, 79%, 51%), hsl(270, 51%, 44%));
-  --mao-md-preview-quote-bg: hsl(0, 0%, 15%);
-  --mao-md-preview-code-bg:  hsl(0, 0%, 0%);
-  --mao-nav-bg:              var(--nav-bg);
-  --mao-nav-border-transparent: var(--nav-border-transparent);
-  --mao-fm-btn-color:    var(--color-gray-800);
-  --mao-fm-layout-hover: var(--color-white-a10);
-  --mao-context-header-bg: linear-gradient(to right, hsl(263, 30%, 21%), hsl(258, 25%, 21%));
-  --mao-context-divider:   hsl(258, 27%, 25%);
-
-  /* ═══ 音乐播放器兼容 ═══ */
-  --primary:          hsl(210, 100%, 67%);
-  --router-color:     hsl(215, 15%, 20%);
-  --font-color:       hsl(210, 10%, 55%);
-  --dark-font-color:  hsl(215, 8%, 40%);
-  --second-font-color: hsl(215, 8%, 40%);
-  --md-active:        hsl(210, 100%, 67%);
-  --global-white:     var(--color-gray-800);    /* 旧暗色 B2 */
-  --global-shadow-white: var(--color-gray-900); /* 旧暗色 B1 */
-  --header-bg-color:  var(--color-gray-800);
-  --meta-color:       hsl(210, 10%, 55%);
-  --comment-grey:     hsl(210, 10%, 55%);
-  --border-color-old: hsl(210, 100%, 67%);
-  --hr-border-old:    hsl(215, 15%, 20%);
 }

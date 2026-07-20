@@ -415,7 +415,7 @@ onUnmounted(() => {
 .warning-svg {
   width: 100%;
   height: 100%;
-  stroke: var(--mao-accent);
+  stroke: var(--accent-primary);
   animation: pulse 2s infinite ease-in-out;
 }
 
@@ -433,7 +433,7 @@ onUnmounted(() => {
   font-size: 1.1rem;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: var(--mao-accent);
+  color: var(--accent-primary);
 }
 
 .warning-text p {
@@ -461,14 +461,14 @@ onUnmounted(() => {
 }
 
 .close-button:hover {
-  background: var(--fill-color-light);
+  background: var(--bg-hover);
   transform: scale(1.1);
 }
 
 .close-button svg {
   width: 20px;
   height: 20px;
-  fill: var(--mao-accent);
+  fill: var(--accent-primary);
 }
 
 

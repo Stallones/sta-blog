@@ -97,7 +97,7 @@ async function handleSubmit() {
   border-radius: 8px;
   font-size: 14px;
   line-height: 1.5;
-  background: var(--fill-color-light);
+  background: var(--surface-bg);
   color: var(--text-primary);
   outline: none;
   &::placeholder {
@@ -106,7 +106,7 @@ async function handleSubmit() {
   }
   &:focus {
     border-color: var(--accent-primary);
-    background: var(--color-white);
+    background: var(--surface-inner-bg);
   }
 }
 .s-reply-box__actions {
@@ -124,7 +124,7 @@ async function handleSubmit() {
   height: 30px;
   border-radius: 4px;
   &:hover {
-    background-color: var(--fill-color-light);
+    background-color: var(--bg-hover);
   }
   .emoji-icon {
     font-size: 18px;

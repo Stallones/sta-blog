@@ -297,6 +297,8 @@ declare namespace API {
     tags?: AppTagRespVO[];
     /** 图片列表 */
     images?: AppImageRespVO[];
+    /** 友链列表（已审核） */
+    links?: AppLinkRespVO[];
   };
 
   type AppSocialLoginReqVO = {

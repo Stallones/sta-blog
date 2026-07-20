@@ -120,7 +120,7 @@ watch(
   }
 
   &:disabled {
-    background-color: var(--fill-color-light);
+    background-color: var(--bg-hover);
     cursor: not-allowed;
   }
 }
@@ -154,7 +154,7 @@ watch(
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: var(--fill-color-light);
+    background-color: var(--bg-hover);
   }
 
   .emoji-icon {
@@ -168,7 +168,7 @@ watch(
   padding: 0.8rem;
   border: 1px solid var(--border-lighter);
   border-radius: 0.5em;
-  background-color: var(--fill-color-lighter);
+  background-color: var(--bg-hover);
   min-height: 3em;
 }
 </style>

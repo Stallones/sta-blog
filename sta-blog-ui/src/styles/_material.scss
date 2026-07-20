@@ -19,17 +19,6 @@
   --surface-highlight: transparent;
   --surface-inner-bg:  var(--color-blue-50);
   --surface-blur:      none;
-
-  /* ─── 向下兼容旧命名 ─── */
-  --glass-bg:           var(--surface-bg);
-  --glass-border:       var(--surface-border);
-  --glass-shadow:       var(--surface-shadow);
-  --glass-highlight:    var(--surface-highlight);
-  --glass-inner-bg:     var(--surface-inner-bg);
-  --glass-blur-filter:  var(--surface-blur);
-  --solid-bg:           var(--surface-bg);
-  --solid-border:       var(--surface-border);
-  --solid-shadow:       var(--surface-shadow);
 }
 
 /* ─────────── 实体模式 — 暗色 ─────────── */
@@ -40,17 +29,6 @@ html.dark {
   --surface-highlight: transparent;
   --surface-inner-bg:  hsl(0, 0%, 10%);
   --surface-blur:      none;
-
-  /* 兼容 */
-  --glass-bg:           var(--surface-bg);
-  --glass-border:       var(--surface-border);
-  --glass-shadow:       var(--surface-shadow);
-  --glass-highlight:    var(--surface-highlight);
-  --glass-inner-bg:     var(--surface-inner-bg);
-  --glass-blur-filter:  var(--surface-blur);
-  --solid-bg:           var(--surface-bg);
-  --solid-border:       var(--surface-border);
-  --solid-shadow:       var(--surface-shadow);
 }
 
 /* ─────────── 玻璃模式 — 亮色 ─────────── */
@@ -61,19 +39,10 @@ html.glass.light {
   --surface-highlight: hsla(0, 0%, 100%, 0.5);
   --surface-inner-bg:  hsla(217, 91%, 91%, 0.5);
   --surface-blur:      blur(10px);
-
-  /* 兼容 */
-  --glass-bg:           var(--surface-bg);
-  --glass-border:       var(--surface-border);
-  --glass-shadow:       var(--surface-shadow);
-  --glass-highlight:    var(--surface-highlight);
-  --glass-inner-bg:     var(--surface-inner-bg);
-  --glass-blur-filter:  var(--surface-blur);
 }
 
 /* ─────────── 玻璃模式 — 暗色 ─────────── */
 html.glass.dark {
-//   --surface-bg:        hsla(240, 33%, 9%, 0.7);
   --surface-bg:        hsla(0, 0%, 12%, 0.7);
   --surface-border:    hsla(0, 0%, 100%, 0.08);
   --surface-shadow:    0 12px 48px hsla(0, 0%, 0%, 0.5),
@@ -81,12 +50,4 @@ html.glass.dark {
   --surface-highlight: hsla(0, 0%, 100%, 0.12);
   --surface-inner-bg:  hsla(0, 0%, 100%, 0.06);
   --surface-blur:      blur(10px);
-
-  /* 兼容 */
-  --glass-bg:           var(--surface-bg);
-  --glass-border:       var(--surface-border);
-  --glass-shadow:       var(--surface-shadow);
-  --glass-highlight:    var(--surface-highlight);
-  --glass-inner-bg:     var(--surface-inner-bg);
-  --glass-blur-filter:  var(--surface-blur);
 }

@@ -11,7 +11,7 @@ const { isOnline } = useDemotion();
     <div class="page-header">
       <h1 class="page-title">
         <svg class="page-title-icon" viewBox="0 0 1024 1024" width="1.4rem" height="1.4rem" fill="currentColor">
-          <path d="M512 64L64 384v512h896V384L512 64z m0 73.824L873.52 384H150.48L512 137.824zM128 448h768v384H128V448z m224 96c-17.664 0-32 14.336-32 32s14.336 32 32 32h320c17.664 0 32-14.336 32-32s-14.336-32-32-32H352z"/>
+          <path d="M512 64L64 384v512h896V384L512 64z m0 73.824L873.52 384H150.48L512 137.824zM128 448h768v384H128V448z m224 96c-17.664 0-32 14.336-32 32s14.336 32 32 32h320c14.336 0 32-14.336 32-32s-14.336-32-32-32H352z"/>
         </svg>
         留言板
       </h1>
@@ -22,7 +22,7 @@ const { isOnline } = useDemotion();
           留言板是一个方便与其他用户交流、分享观点和意见的平台。通过留言板，您可以：
         </p>
         <p>
-          1、留下自己的留言：无论是对特定主题的讨论、对某篇文章的评论，还是向其他用户的提问，您都可以在留言板发表自己的留言。
+          1、留下自己的留言：无论是对特定主题的讨论、某篇文章的评论，还是向其他用户的提问，您都可以在留言板发表自己的留言。
         </p>
         <p>
           2、回复其他用户：看到其他用户的留言后，您可以进行回复和互动，分享自己的观点，提供帮助或者表达共鸣。
@@ -41,7 +41,7 @@ const { isOnline } = useDemotion();
 .message-page {
   width: 100%;
   @include surface-card;
-  padding: $page-padding;
+  padding: var(--page-padding);
 }
 
 .page-header {
