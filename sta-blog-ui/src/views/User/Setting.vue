@@ -66,11 +66,10 @@ const submitUploadAndUpdate = () => {
   } else updateUser();
 };
 
-// 上传头像：使用博客专用上传接口，文件存储到 MinIO /blog/avatar 并在 blog_image 记录
+// 上传头像：后端转发到 MinIO，文件存储到 blog/avatar 并记录 infra_file
 const uploadAvatarUrl = "/api/app-api/blog/image/upload";
 
 const handleAvatarSuccess: UploadProps["onSuccess"] = (response: any) => {
-  // 后端返回 CommonResult<AppImageUploadRespVO>，response.data.url 为图片地址
   const data = response?.data || response;
   const url = typeof data === "string" ? data : data?.url || data?.path;
   if (url) {

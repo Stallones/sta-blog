@@ -17,7 +17,7 @@ export async function getImageList(
   });
 }
 
-/** 上传图片 POST /app-api/blog/image/upload */
+/** 上传图片（后端转发到 MinIO 并记录 infra_file） POST /app-api/blog/image/upload */
 export async function uploadImage(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.uploadImageParams,

@@ -177,8 +177,6 @@ declare namespace API {
   type AppImageUploadRespVO = {
     /** 图片访问 URL */
     url: string;
-    /** 图片编号 */
-    id?: number;
   };
 
   type AppLikeReqVO = {
@@ -680,11 +678,6 @@ declare namespace API {
   type TypeEnum = 10 | 20 | 21 | 30 | 31 | 51 | 52 | 53 | 54;
 
   type uploadImageParams = {
-    /** 图片类型（54头像 51封面 52轮播 53banner） */
     type: number;
-    /** 关联数据 ID（头像上传无需填写，后端取当前登录用户） */
-    dataId?: number;
-    /** 图片附件 */
-    file: string;
   };
 }
