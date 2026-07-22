@@ -17,9 +17,10 @@ application-dev.yml
 application-prod.yml
 sta-blog-ui/tsc-output.txt
 sta-blog-ui/.agents/*
-!sta-blog-ui/.agents/this-pro
 sta-blog-ui/visualizer.html
 sta-blog-ui/visualizer.html
 sta-blog-ui/.env.development
+.omo
+.trae
 .gitignore
 *.log
