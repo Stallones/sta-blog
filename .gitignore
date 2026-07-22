@@ -15,11 +15,10 @@ ruyu-blog-doc/
 .codebuddy
 application-dev.yml
 application-prod.yml
-sta-blog-ui/tsc-output.txt
-sta-blog-ui/.agents/*
-sta-blog-ui/visualizer.html
-sta-blog-ui/visualizer.html
-sta-blog-ui/.env.development
+tsc-output.txt
+.agents/*
+visualizer.html
+.env.development
 .omo
 .trae
 .gitignore
